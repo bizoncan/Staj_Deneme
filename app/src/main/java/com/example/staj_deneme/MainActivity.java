@@ -2,8 +2,8 @@ package com.example.staj_deneme;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +11,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.Firebase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     List<MachineModel> machineList;
     FirebaseFirestore firestore;
     String inputID;
-    TextView arizaTuru;
+    EditText arizaTuru;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        arizaTuru=findViewById(R.id.arizaTuru);
+        arizaTuru=findViewById(R.id.arizaTuruEdt);
         machineListView = findViewById(R.id.machineList);
         machineList = new ArrayList<>();
         adapter = new MachineAdapter(this,machineList);
@@ -55,9 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Fireeee",documentId);
                 if(documentId.equals(inputID)){
                     MachineModel model = document.toObject(MachineModel.class);
-
                     machineList.add(model);
-                    fetchSubCollection(documentId);
                 }
 
             }
@@ -66,14 +63,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         });
     }
-    private void fetchSubCollection(String documentId) {
-        CollectionReference collection = firestore.collection("Makineler/"+documentId+"/ArizaKayitlari");
-        collection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                 arizaTuru.setText(document.getString("arizaTuru"));
-                }
-        }).addOnFailureListener(e -> {
-            e.printStackTrace();
-        });
+    private void ArizaEkle(){
+        String a_t = arizaTuru.getText().toString();
+        CollectionReference collection = firestore.collection("Makineler/"+ documentId +"/ArizaKayitlari");
     }
 }

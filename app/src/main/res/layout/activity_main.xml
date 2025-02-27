@@ -17,16 +17,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.372" />
 
-    <TextView
-        android:id="@+id/arizaTuru"
+    <EditText
+        android:id="@+id/arizaTuruEdt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/machineList"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Arıza Türü"
+        app:layout_constraintStart_toStartOf="@+id/machineList"
+        app:layout_constraintTop_toBottomOf="@+id/machineList" />
+
+    <Button
+        android:id="@+id/btn_ArızaEkle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:onClick="ArizaEkle"
+        android:text="Arıza Ekle"
+        app:layout_constraintStart_toStartOf="@+id/arizaTuruEdt"
+        app:layout_constraintTop_toBottomOf="@+id/arizaTuruEdt" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Geçmiş Arızaları Görüntüle"
+        app:layout_constraintStart_toStartOf="@+id/btn_ArızaEkle"
+        app:layout_constraintTop_toBottomOf="@+id/btn_ArızaEkle" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
