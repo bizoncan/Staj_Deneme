@@ -7,11 +7,21 @@
     android:layout_height="match_parent"
     tools:context=".PastErrorsActivity">
 
-    <TextView
-        android:id="@+id/arizaTuruEdt"
+    <ListView
+        android:id="@+id/listAriza"
+        android:layout_width="match_parent"
+        android:layout_height="650dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="3dp" />
+
+    <Button
+        android:id="@+id/geriDon_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="180dp"
-        tools:layout_editor_absoluteY="228dp" />
+        android:onClick="geri"
+        android:text="Geri"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listAriza" />
 </androidx.constraintlayout.widget.ConstraintLayout>

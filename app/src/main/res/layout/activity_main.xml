@@ -8,43 +8,65 @@
     tools:context=".MainActivity">
 
     <ListView
-        android:id="@+id/machineList"
+        android:id="@+id/machineInfo_Lst"
         android:layout_width="313dp"
         android:layout_height="256dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.372" />
+        app:layout_constraintVertical_bias="0.101" />
 
     <EditText
-        android:id="@+id/arizaTuruEdt"
+        android:id="@+id/arizaTuru_Edt"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="40dp"
         android:ems="10"
+        android:hint="Arıza Türü"
         android:inputType="text"
-        android:text="Arıza Türü"
-        app:layout_constraintStart_toStartOf="@+id/machineList"
-        app:layout_constraintTop_toBottomOf="@+id/machineList" />
+        app:layout_constraintStart_toStartOf="@+id/machineInfo_Lst"
+        app:layout_constraintTop_toBottomOf="@+id/machineInfo_Lst" />
 
     <Button
-        android:id="@+id/btn_ArızaEkle"
+        android:id="@+id/ArızaEkle_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:onClick="ArizaEkle"
+        android:layout_marginTop="36dp"
+        android:onClick="addError"
         android:text="Arıza Ekle"
-        app:layout_constraintStart_toStartOf="@+id/arizaTuruEdt"
-        app:layout_constraintTop_toBottomOf="@+id/arizaTuruEdt" />
+        app:layout_constraintStart_toStartOf="@+id/errorDesc_edt"
+        app:layout_constraintTop_toBottomOf="@+id/errorDesc_edt" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="36dp"
+        android:onClick="PastErrors"
         android:text="Geçmiş Arızaları Görüntüle"
-        app:layout_constraintStart_toStartOf="@+id/btn_ArızaEkle"
-        app:layout_constraintTop_toBottomOf="@+id/btn_ArızaEkle" />
+        app:layout_constraintStart_toStartOf="@+id/ArızaEkle_btn"
+        app:layout_constraintTop_toBottomOf="@+id/ArızaEkle_btn" />
+
+    <EditText
+        android:id="@+id/errorDesc_edt"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:hint="Arıza Açıklaması"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/arizaTuru_Edt"
+        app:layout_constraintTop_toBottomOf="@+id/arizaTuru_Edt" />
+
+    <Button
+        android:id="@+id/geri_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:onClick="geri"
+        android:text="Geri"
+        app:layout_constraintStart_toStartOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

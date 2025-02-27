@@ -24,19 +24,19 @@
             >
 
             <TextView
-                android:id="@+id/Name"
+                android:id="@+id/Name_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
 
             <TextView
-                android:id="@+id/Number"
+                android:id="@+id/Number_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
 
             <TextView
-                android:id="@+id/Desc"
+                android:id="@+id/Desc_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView" />

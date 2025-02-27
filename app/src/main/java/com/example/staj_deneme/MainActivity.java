@@ -1,9 +1,11 @@
 package com.example.staj_deneme;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,12 +13,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     ListView machineListView;
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     String inputID;
     EditText arizaTuru;
+    EditText arizaAciklama;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,36 +40,73 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        arizaTuru=findViewById(R.id.arizaTuruEdt);
-        machineListView = findViewById(R.id.machineList);
+        arizaTuru=findViewById(R.id.arizaTuru_Edt);
+        arizaAciklama=findViewById(R.id.errorDesc_edt);
+        machineListView = findViewById(R.id.machineInfo_Lst);
         machineList = new ArrayList<>();
         adapter = new MachineAdapter(this,machineList);
         machineListView.setAdapter(adapter);
         firestore = FirebaseFirestore.getInstance();
         inputID= getIntent().getStringExtra("QR");
-
         fetchMachine();
     }
     private void fetchMachine(){
-        CollectionReference collection = firestore.collection("Makineler"); // Koleksiyon adı
-        collection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            machineList.clear();
-            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                String documentId = document.getId();
-                Log.d("Fireeee",documentId);
-                if(documentId.equals(inputID)){
-                    MachineModel model = document.toObject(MachineModel.class);
-                    machineList.add(model);
-                }
-
+        firestore.collection("Makineler").document(inputID).get().addOnSuccessListener(documentSnapshot -> {
+            if(documentSnapshot.exists()){
+                MachineModel machineModel = documentSnapshot.toObject(MachineModel.class);
+                machineList.add(machineModel);
+                adapter.notifyDataSetChanged();
             }
-            adapter.notifyDataSetChanged();
-        }).addOnFailureListener(e -> {
-            e.printStackTrace();
+            else {
+                Toast.makeText(this,"Makine bulunamadı",Toast.LENGTH_LONG).show();
+            }
         });
     }
-    private void ArizaEkle(){
+    public void addError(View view){
         String a_t = arizaTuru.getText().toString();
-        CollectionReference collection = firestore.collection("Makineler/"+ documentId +"/ArizaKayitlari");
+        String a_d = arizaAciklama.getText().toString();
+        if(a_t.isEmpty()){
+            Toast.makeText(this,"Arıza türü boş olamaz.",Toast.LENGTH_LONG).show();
+            return;
+        }
+        firestore.collection("Makineler").document(inputID).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+                String formattedDate = sdf.format(new Date());
+                HashMap<String, Object> arizaData = new HashMap<>();
+                arizaData.put("ArizaTuru", a_t);
+                arizaData.put("ArizaZamani", formattedDate );
+                arizaData.put("ArizaAciklama", a_d);
+                firestore.collection("Makineler").document(inputID)
+                        .collection("ArizaKayitlari")
+                        .add(arizaData)
+                        .addOnSuccessListener(documentReference ->
+                                Toast.makeText(this, "Arıza kaydı eklendi", Toast.LENGTH_SHORT).show()
+                        )
+                        .addOnFailureListener(e ->
+                                Toast.makeText(this, "Hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                        );
+            } else {
+                Toast.makeText(this, "Makine bulunamadı", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+    public void PastErrors(View view){
+        firestore.collection("Makineler").document(inputID).get().addOnSuccessListener(documentSnapshot -> {
+            if(documentSnapshot.exists()){
+                Intent sayfa = new Intent(this,PastErrorsActivity.class);
+                sayfa.putExtra("inputID",inputID);
+                startActivity(sayfa);
+            }
+            else{
+                Toast.makeText(this,"Makine bulunamadı.",Toast.LENGTH_LONG).show();
+            }
+                });
+
+    }
+    public void geri(View view){
+        Intent sayfa=new Intent(this,QrScanActivity.class);
+        startActivity(sayfa);
     }
 }

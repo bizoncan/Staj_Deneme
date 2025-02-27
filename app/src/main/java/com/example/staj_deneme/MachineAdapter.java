@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MachineAdapter extends BaseAdapter {
@@ -51,9 +49,9 @@ public class MachineAdapter extends BaseAdapter {
 
         MachineModel curr = machines.get(position);
 
-        TextView name= convertView.findViewById(R.id.Name);
-        TextView number= convertView.findViewById(R.id.Number);
-        TextView desc= convertView.findViewById(R.id.Desc);
+        TextView name= convertView.findViewById(R.id.Name_textview);
+        TextView number= convertView.findViewById(R.id.Number_textview);
+        TextView desc= convertView.findViewById(R.id.Desc_textview);
         ImageView imgUrl= convertView.findViewById(R.id.imgURL);
 
         name.setText(curr.getName());

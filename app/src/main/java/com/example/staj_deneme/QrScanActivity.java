@@ -26,7 +26,7 @@ public class QrScanActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        findViewById(R.id.QRTara).setOnClickListener(v -> {
+        findViewById(R.id.QRTara_btn).setOnClickListener(v -> {
             new IntentIntegrator(QrScanActivity.this).initiateScan();
         });
 
@@ -39,7 +39,7 @@ public class QrScanActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(result!=null){
             if(result.getContents()==null){
-                Toast.makeText(this,"QR kod okunamadı",Toast.LENGTH_LONG);
+                Toast.makeText(this,"QR kod okunamadı",Toast.LENGTH_LONG).show();
 
             }
             else{

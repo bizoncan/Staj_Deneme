@@ -8,7 +8,7 @@
     tools:context=".QrScanActivity">
 
     <Button
-        android:id="@+id/QRTara"
+        android:id="@+id/QRTara_btn"
         android:layout_width="173dp"
         android:layout_height="136dp"
         android:text="QR Tara"
