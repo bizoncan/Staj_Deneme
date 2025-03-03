@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:onClick="addError"
+        android:backgroundTint="#FF0000"
         android:text="Arıza Ekle"
         app:layout_constraintStart_toStartOf="@+id/errorDesc_edt"
         app:layout_constraintTop_toBottomOf="@+id/errorDesc_edt" />
@@ -44,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:onClick="PastErrors"
+        android:backgroundTint="#FF0000"
         android:text="Geçmiş Arızaları Görüntüle"
         app:layout_constraintStart_toStartOf="@+id/ArızaEkle_btn"
         app:layout_constraintTop_toBottomOf="@+id/ArızaEkle_btn" />
@@ -65,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:onClick="geri"
+        android:backgroundTint="#FF0000"
         android:text="Geri"
         app:layout_constraintStart_toStartOf="@+id/button2"
         app:layout_constraintTop_toBottomOf="@+id/button2" />

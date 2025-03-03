@@ -94,9 +94,9 @@ public class PastErrorsActivity extends AppCompatActivity {
                 String a_a = document.getString("ArizaAciklama");
 
                 if(a_t != null && a_z!= null){
-                    errorList.add(a_t);
-                    zamanList.add(a_z);
-                    errorDescList.add(a_a);
+                    errorList.add("Arıza türü: "+a_t);
+                    zamanList.add("Arıza zamanı: "+a_z);
+                    errorDescList.add("Arıza açıklaması: "+a_a);
                 }
                 adapter.notifyDataSetChanged();
             }

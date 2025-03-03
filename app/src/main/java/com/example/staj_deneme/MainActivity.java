@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     String inputID;
     EditText arizaTuru;
     EditText arizaAciklama;
+    FirebaseAuth myAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +51,15 @@ public class MainActivity extends AppCompatActivity {
         machineListView.setAdapter(adapter);
         firestore = FirebaseFirestore.getInstance();
         inputID= getIntent().getStringExtra("QR");
+        myAuth = FirebaseAuth.getInstance();
         fetchMachine();
+
     }
     private void fetchMachine(){
+        FirebaseUser currentUser= myAuth.getCurrentUser();
+        if(currentUser != null){
+            
+        }
         firestore.collection("Makineler").document(inputID).get().addOnSuccessListener(documentSnapshot -> {
             if(documentSnapshot.exists()){
                 MachineModel machineModel = documentSnapshot.toObject(MachineModel.class);
