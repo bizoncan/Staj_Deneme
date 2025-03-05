@@ -1,10 +1,17 @@
 package com.example.staj_deneme;
 
+import com.google.gson.annotations.SerializedName;
+
 public class MachineModel {
+    @SerializedName("id")
     private int id;
+    @SerializedName("name")
     private String name;
+    @SerializedName("desc")
     private String desc;
+    @SerializedName("number")
     private int number;
+    @SerializedName("imgURL")
     private String imgURL;
 
     public MachineModel() {
@@ -16,6 +23,10 @@ public class MachineModel {
         this.desc = desc;
         this.number = number;
         this.imgURL = imgURL;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setId(int id) {
