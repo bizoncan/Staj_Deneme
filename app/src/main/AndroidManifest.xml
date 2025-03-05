@@ -29,11 +29,7 @@
         <activity
             android:name=".RecieveNotificationActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ApiTestActivity"
@@ -50,6 +46,11 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         <activity
             android:name=".PastErrorsActivity"
             android:exported="false" />

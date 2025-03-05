@@ -1,6 +1,7 @@
 package com.example.staj_deneme;
 
-import android.hardware.HardwareBuffer;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +17,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.microsoft.signalr.HubConnection;
-import com.microsoft.signalr.HubConnectionBuilder;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +24,14 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.os.Handler;
 
 public class RecieveNotificationActivity extends AppCompatActivity {
-
+    boolean opened=false;
     TextView notificationText;
     BaseAdapter adapter;
     ListView notificationsListView;
-    List<String> titleList,machineIdList,descList;
+    List<String> titleList,machineIdList,descList,idList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +42,7 @@ public class RecieveNotificationActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
 
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
         recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
@@ -70,6 +70,7 @@ public class RecieveNotificationActivity extends AppCompatActivity {
     titleList = new ArrayList<>();
     machineIdList = new ArrayList<>();
     descList = new ArrayList<>();
+    idList= new ArrayList<>();
     adapter = new BaseAdapter() {
         @Override
         public int getCount() {
@@ -103,8 +104,36 @@ public class RecieveNotificationActivity extends AppCompatActivity {
     };
     notificationText=findViewById(R.id.notification_textview);
     notificationsListView.setAdapter(adapter);
+    startDatabasePolling();
     }
     public void bildirim_yukle(View view){
+        checkForNewNotifications();
+
+        if(opened){
+            notificationsListView.setVisibility(View.GONE);
+            opened=false;
+        }
+        else{
+            notificationsListView.setVisibility(View.VISIBLE);
+            opened=true;
+        }
+
+    }
+    private void startDatabasePolling() {
+        final int POLL_INTERVAL = 2500;
+
+        Handler handler = new Handler();
+        Runnable pollRunnable = new Runnable() {
+            @Override
+            public void run() {
+                checkForNewNotifications();
+                handler.postDelayed(this, POLL_INTERVAL); // Tekrar çalıştır
+            }
+        };
+
+        handler.post(pollRunnable); // Başlat
+    }
+    public void checkForNewNotifications(){
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
         recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
             @Override
@@ -112,9 +141,13 @@ public class RecieveNotificationActivity extends AppCompatActivity {
                 if(response.body()!= null && response.isSuccessful()){
                     List<NotificationModel> notifications = response.body();
                     for(NotificationModel n: notifications){
-                        titleList.add(n.getTitle());
-                        machineIdList.add(Integer.toString(n.getMachineId()));
-                        descList.add(n.getDescription());
+                        if(!idList.contains(Integer.toString(n.getId()))){
+                            idList.add(Integer.toString(n.getId()));
+                            titleList.add(n.getTitle());
+                            machineIdList.add(Integer.toString(n.getMachineId()));
+                            descList.add(n.getDescription());
+                            notificationText.setText(Integer.toString(response.body().size()));
+                        }
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -133,8 +166,7 @@ public class RecieveNotificationActivity extends AppCompatActivity {
 
             }
         });
-        notificationsListView.setVisibility(View.VISIBLE);
-    }
 
+    }
 
 }
