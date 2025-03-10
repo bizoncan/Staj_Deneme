@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +18,15 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.staj_deneme.Models.NotificationModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.RetrofitClient;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.skydoves.transformationlayout.TransformationLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,8 +36,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TestActivity extends BaseActivity {
-    boolean opened=false;
+public class TestActivity extends BaseActivity implements BaseActivity.NotificationButtonListener {
+    boolean opened=true;
+    ImageButton notificationButton;
+    TransformationLayout transformationLayout;
     TextView notificationText;
     BaseAdapter adapter;
     ListView notificationsListView;
@@ -44,11 +51,12 @@ public class TestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_test);
-
+        notificationButton = findViewById(R.id.notification_btn);
         findViewById(R.id.QRTara_btn).setOnClickListener(v -> {
             new IntentIntegrator(TestActivity.this).initiateScan();
         });
-
+        transformationLayout = findViewById(R.id.transition_layout);
+        setNotificationButtonListener(this);
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
         recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
             @Override
@@ -151,15 +159,17 @@ public class TestActivity extends BaseActivity {
         checkForNewNotifications();
 
         if(opened){
-            notificationsListView.setVisibility(View.GONE);
+            transformationLayout.startTransform();
+
             opened=false;
         }
         else{
-            notificationsListView.setVisibility(View.VISIBLE);
+            transformationLayout.finishTransform();
             opened=true;
         }
 
     }
+
     private void startDatabasePolling() {
         final int POLL_INTERVAL = 2500;
 
@@ -214,4 +224,8 @@ public class TestActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onNotificationButtonClicked() {
+        bildirim_yukle(null);
+    }
 }

@@ -12,12 +12,13 @@
         android:id="@+id/QRTara_btn"
         android:layout_width="113dp"
         android:layout_height="100dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="76dp"
+
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="40dp"
         android:backgroundTint="#CB2F2F"
         android:text="QR Tara"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/notification_btn" />
 
     <TextView
         android:id="@+id/notification_textview"
@@ -38,18 +39,39 @@
         android:id="@+id/notification_btn"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="588dp"
         android:background="@drawable/ic_notification"
         android:backgroundTint="#CB2F2F"
+        android:elevation="5dp"
         android:onClick="bildirim_yukle"
-        app:layout_constraintStart_toStartOf="@+id/QRTara_btn"
-        app:layout_constraintTop_toBottomOf="@+id/QRTara_btn" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.skydoves.transformationlayout.TransformationLayout
+        android:id="@+id/transition_layout"
+        android:layout_width="41dp"
+        android:layout_height="43dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:transformation_duration="500"
+        app:transformation_targetView="@id/notifications_listview">
+
+    </com.skydoves.transformationlayout.TransformationLayout>
 
     <ListView
         android:id="@+id/notifications_listview"
-        android:layout_width="256dp"
-        android:layout_height="295dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/notification_btn"
-        app:layout_constraintTop_toTopOf="@+id/notification_btn" />
+        android:layout_width="291dp"
+        android:layout_height="513dp"
+
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

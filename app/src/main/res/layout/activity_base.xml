@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".Activities.BaseActivity"
     tools:openDrawer="start"
-    android:background="#DDDDDD"
+    android:background="#EFEFEF"
 
     >
 
@@ -17,34 +17,46 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:id="@+id/constraint_layout">
 
+
+
             <FrameLayout
                 android:id="@+id/content_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
 
-                tools:layout_editor_absoluteX="-5dp" />
+                tools:layout_editor_absoluteX="-5dp">
+
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+
+            >
+
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="#CB2F2F"
                 app:title="Arıza Kayıt"
+                android:elevation="1dp"
                 app:titleTextColor="@color/white"
                 app:navigationIcon="@drawable/baseline_menu_24"
-                app:menu="@menu/nav_menu"
-                />
+                app:menu="@menu/nav_menu">
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
         </com.google.android.material.appbar.AppBarLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

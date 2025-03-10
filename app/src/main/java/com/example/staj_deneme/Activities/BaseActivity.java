@@ -2,7 +2,11 @@ package com.example.staj_deneme.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -13,17 +17,21 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.staj_deneme.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.skydoves.transformationlayout.TransformationLayout;
+
+import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     MaterialToolbar materialToolbar;
     NavigationView navigationView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         //setContentView(R.layout.activity_base);
-
 
     }
     @Override
@@ -58,8 +66,9 @@ public class BaseActivity extends AppCompatActivity {
 
         // Toolbar click listener
         materialToolbar.setOnMenuItemClickListener(item -> {
-            if(item.getItemId() == R.id.share) {
-                Toast.makeText(getApplicationContext(), "share", Toast.LENGTH_SHORT).show();
+            if(item.getItemId() == R.id.notification) {
+
+                onNotificationButtonClick(null);
             }
             return false;
         });
@@ -86,4 +95,20 @@ public class BaseActivity extends AppCompatActivity {
             return true;
         });
     }
+    public interface NotificationButtonListener {
+        void onNotificationButtonClicked();
+    }
+    private NotificationButtonListener notificationListener;
+
+    public void setNotificationButtonListener(NotificationButtonListener listener) {
+        this.notificationListener = listener;
+    }
+
+    // When the button is clicked in BaseActivity
+    public void onNotificationButtonClick(View view) {
+        if (notificationListener != null) {
+            notificationListener.onNotificationButtonClicked();
+        }
+    }
+
 }
