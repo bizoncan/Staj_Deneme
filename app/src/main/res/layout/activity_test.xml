@@ -5,55 +5,51 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.QrScanActivity">
+    tools:context=".Activities.TestActivity">
+
 
     <Button
         android:id="@+id/QRTara_btn"
-        android:layout_width="173dp"
-        android:layout_height="136dp"
+        android:layout_width="113dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="76dp"
+        android:backgroundTint="#CB2F2F"
         android:text="QR Tara"
-        android:backgroundTint="#FF0000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.099" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/notification_textview"
         android:layout_width="35dp"
         android:layout_height="31dp"
+        android:elevation="10dp"
         android:text="0"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="@+id/notification_btn"
         app:layout_constraintEnd_toEndOf="@+id/notification_btn"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="@+id/notification_btn"
         app:layout_constraintTop_toTopOf="@+id/notification_btn"
         app:layout_constraintVertical_bias="0.478" />
 
-    <Button
+    <ImageButton
         android:id="@+id/notification_btn"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="4dp"
-
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="108dp"
         android:background="@drawable/ic_notification"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="#CB2F2F"
         android:onClick="bildirim_yukle"
         app:layout_constraintStart_toStartOf="@+id/QRTara_btn"
         app:layout_constraintTop_toBottomOf="@+id/QRTara_btn" />
 
     <ListView
         android:id="@+id/notifications_listview"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notification_btn"
-        app:layout_constraintVertical_bias="0.142" />
+        android:layout_width="256dp"
+        android:layout_height="295dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/notification_btn"
+        app:layout_constraintTop_toTopOf="@+id/notification_btn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

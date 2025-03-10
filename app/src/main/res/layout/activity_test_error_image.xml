@@ -5,24 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.PastErrorsActivity">
+    tools:context=".Activities.TestErrorImage">
 
     <ListView
-        android:id="@+id/listAriza"
-        android:layout_width="match_parent"
-        android:layout_height="650dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
-
-    <Button
-        android:id="@+id/geriDon_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="geri"
-        android:text="Geri"
-        android:backgroundTint="#FF0000"
+        android:id="@+id/errrrrrrrrr"
+        android:layout_width="357dp"
+        android:layout_height="360dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listAriza" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.291" />
 </androidx.constraintlayout.widget.ConstraintLayout>

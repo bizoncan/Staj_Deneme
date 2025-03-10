@@ -22,43 +22,52 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".AddNotificationTestActivity"
-            android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".RecieveNotificationActivity"
-            android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".ApiTestActivity"
-            android:exported="true">
-
-
-        </activity>
-        <activity
-            android:name=".SendNotificationActivity"
-            android:exported="true" />
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="true" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true" />
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        <activity
-            android:name=".PastErrorsActivity"
+            android:name=".Activities.ErrorDetails"
             android:exported="false" />
         <activity
-            android:name=".QrScanActivity"
+            android:name=".Activities.TestErrorImage"
+            android:exported="true"></activity>
+        <activity
+            android:name=".Activities.NotificationAddErrorActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.BaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.TestActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.AddNotificationTestActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.RecieveNotificationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.ApiTestActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.SendNotificationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.SignUpActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.PastErrorsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.QrScanActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.MainActivity"
             android:exported="true" />
     </application>
 

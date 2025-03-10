@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Ana Ekran"
+        android:icon="@drawable/baseline_home_24"
+        />
+    <item
+        android:id="@+id/person"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Hata Kayıtları"
+        android:icon="@drawable/baseline_person_outline_24"
+        />
+    <item
+        android:id="@+id/nufus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Nüfus Bilgisi"
+        android:icon="@drawable/baseline_stacked_bar_chart_24"
+        />
+    <item
+        android:id="@+id/tarihi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Tarihi ve Turistik Yerler"
+        android:icon="@drawable/baseline_mosque_24"
+        />
+
+</menu>

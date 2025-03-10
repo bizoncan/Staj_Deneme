@@ -1,39 +1,67 @@
-package com.example.staj_deneme;
+    package com.example.staj_deneme;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+    import com.example.staj_deneme.InterFaces.ApiDeneme;
+    import com.example.staj_deneme.InterFaces.ErrorInterface;
+    import com.example.staj_deneme.InterFaces.MachineApiInterface;
+    import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
+    import com.google.gson.Gson;
+    import com.google.gson.GsonBuilder;
 
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+    import okhttp3.OkHttpClient;
+    import retrofit2.Retrofit;
+    import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
-    private static final String BASE_URL="https://10.0.2.2:7296/";
-    private static Retrofit retrofit=null;
-    public static ApiDeneme getApiService(){
+    public class RetrofitClient {
+        private static final String BASE_URL="https://10.0.2.2:7296/";
+        private static Retrofit retrofit=null;
 
-        if(retrofit==null){
-            OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
-            retrofit = new Retrofit.Builder()
-                    .baseUrl("https://10.0.2.2:7296/")
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+        public static ApiDeneme getApiService(){
+
+            if(retrofit==null){
+                OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://10.0.2.2:7296/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
+            return retrofit.create(ApiDeneme.class);
         }
-        return retrofit.create(ApiDeneme.class);
-    }
-    public static RecieveNotificationInterface getApiServiceNotification(){
-        if(retrofit==null){
-            OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
-            retrofit = new Retrofit.Builder()
-                    .baseUrl("https://10.10.82.11:7296/")
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+        public static RecieveNotificationInterface getApiServiceNotification(){
+            if(retrofit==null){
+                OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://10.0.2.2:7296/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
+            return retrofit.create(RecieveNotificationInterface.class);
         }
-        return retrofit.create(RecieveNotificationInterface.class);
-    }
 
-}
+        public static MachineApiInterface getApiServiceMachine(){
+            if(retrofit==null){
+                OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://10.0.2.2:7296/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
+            return retrofit.create(MachineApiInterface.class);
+        }
+        public static ErrorInterface getApiServiceError(){
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")  // Burada tarih formatını belirleyebilirsiniz
+                    .create();
+            if(retrofit==null){
+                OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://10.0.2.2:7296/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .build();
+            }
+            return retrofit.create(ErrorInterface.class);
+        }
+    }

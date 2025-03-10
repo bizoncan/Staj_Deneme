@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.NotificationAddErrorActivity">
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginEnd="48dp"
+        android:backgroundTint="#CB2F2F"
+        android:onClick="takePicture"
+        android:text="Resim Çek"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/button4"
+        app:layout_constraintTop_toTopOf="@+id/button4" />
+
+    <EditText
+        android:id="@+id/machineId_edt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:clickable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="text"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.293"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/machinePartId_edt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:clickable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="text"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="@+id/machineId_edt"
+        app:layout_constraintTop_toBottomOf="@+id/machineId_edt" />
+
+    <EditText
+        android:id="@+id/errorType_edt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="Hata Tipi"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/machinePartId_edt"
+        app:layout_constraintTop_toBottomOf="@+id/machinePartId_edt" />
+
+    <EditText
+        android:id="@+id/errorDesc_edt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="Hata Açıklama"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/errorType_edt"
+        app:layout_constraintTop_toBottomOf="@+id/errorType_edt" />
+
+    <EditText
+        android:id="@+id/errorDate_edt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:clickable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:hint="Hata Tarihi"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="@+id/errorDesc_edt"
+        app:layout_constraintTop_toBottomOf="@+id/errorDesc_edt" />
+
+    <Button
+        android:id="@+id/kaydet_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="#CB2F2F"
+        android:onClick="hata_ekle"
+        android:text="Hata Kaydı Ekle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/errorDate_edt"
+        app:layout_constraintVertical_bias="0.061"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="#CB2F2F"
+        android:onClick="selectImage"
+        android:text="Resim Yükle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/kaydet_btn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
