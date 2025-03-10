@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="383dp"
+        android:layout_height="187dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="31dp">
+
+        <ImageView
+            android:id="@+id/errorImage_imageview"
+            android:layout_width="306dp"
+            android:layout_height="187dp"
+            android:layout_weight="1"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/errorMachineId_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MachineId" />
+
+            <TextView
+                android:id="@+id/errorMachinePartId_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MachinePartId" />
+
+            <TextView
+                android:id="@+id/errorType_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ErrorType" />
+
+            <TextView
+                android:id="@+id/errorDesc_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ErrorDescription" />
+
+            <TextView
+                android:id="@+id/errorStartDate_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ErrorStartDate" />
+
+            <TextView
+                android:id="@+id/errorEndDate_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ErrorEndDate" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

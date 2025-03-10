@@ -71,7 +71,7 @@ public class BaseActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.home) {
                 sayfa = new Intent(getApplicationContext(), TestActivity.class);
             } else if (item.getItemId() == R.id.person) {
-                sayfa = new Intent(getApplicationContext(), TestErrorImage.class);
+                sayfa = new Intent(getApplicationContext(), ErrorDetailsActivity.class);
             } else if (item.getItemId() == R.id.nufus) {
                 sayfa = new Intent(getApplicationContext(), MainActivity.class);
             } else if (item.getItemId() == R.id.tarihi) {

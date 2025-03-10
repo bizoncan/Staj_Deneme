@@ -9,6 +9,7 @@ public class ErrorModel {
     public Integer machineId;
     public String errorDesc;
     public String errorDate;
+    public String errorEndDate;
     public String errorType;
     public Integer machinePartId;
     public  String errorImage;
@@ -17,11 +18,12 @@ public class ErrorModel {
     public ErrorModel() {
     }
 
-    public ErrorModel(int id, Integer machineId, String errorDesc, String errorDate, String errorType, Integer machinePartId, String errorImage, String errorImageType, byte[] errorImageBytes) {
+    public ErrorModel(int id, Integer machineId, String errorDesc, String errorDate, String errorEndDate, String errorType, Integer machinePartId, String errorImage, String errorImageType, byte[] errorImageBytes) {
         this.id = id;
         this.machineId = machineId;
         this.errorDesc = errorDesc;
         this.errorDate = errorDate;
+        this.errorEndDate = errorEndDate;
         this.errorType = errorType;
         this.machinePartId = machinePartId;
         this.errorImage = errorImage;
@@ -99,5 +101,13 @@ public class ErrorModel {
 
     public void setErrorImageBytes(byte[] errorImageBytes) {
         this.errorImageBytes = errorImageBytes;
+    }
+
+    public String getErrorEndDate() {
+        return errorEndDate;
+    }
+
+    public void setErrorEndDate(String errorEndDate) {
+        this.errorEndDate = errorEndDate;
     }
 }

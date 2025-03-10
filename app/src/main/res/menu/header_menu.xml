@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="Hata Kayıtları"
-        android:icon="@drawable/baseline_person_outline_24"
+        android:icon="@drawable/baseline_error_outline_24"
         />
     <item
         android:id="@+id/nufus"

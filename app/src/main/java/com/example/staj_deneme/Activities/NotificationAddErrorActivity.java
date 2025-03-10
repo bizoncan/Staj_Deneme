@@ -105,6 +105,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
         errorModel.setErrorType(errorTypeEdt.getText().toString());
         errorModel.setErrorDesc(errorDescEdt.getText().toString());
         errorModel.setErrorDate(currentDate);
+        errorModel.setErrorEndDate(dateFormat.format(new Date()));
 
         if(!machinePartIdEditText.getText().toString().isEmpty()) errorModel.setMachinePartId(Integer.parseInt(machinePartIdEditText.getText().toString()));
         if(selectedImageUri != null) {

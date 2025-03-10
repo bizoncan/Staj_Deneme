@@ -22,7 +22,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Activities.ErrorDetails"
+            android:name=".Activities.ErrorDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.TestErrorImage"
