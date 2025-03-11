@@ -56,9 +56,9 @@ public class MachineAdapter extends BaseAdapter {
         TextView desc= convertView.findViewById(R.id.Desc_textview);
         ImageView imgUrl= convertView.findViewById(R.id.imgURL);
 
-        name.setText(curr.getName());
-        number.setText(String.valueOf(curr.getNumber()));
-        desc.setText(curr.getDesc());
+        name.setText("Adı: "+curr.getName());
+        number.setText("Sayısı: "+String.valueOf(curr.getNumber()));
+        desc.setText("Açıklama: "+curr.getDesc());
         Log.d("FirebaseData", "Image URL: " + curr.getImgURL());
         Glide.with(context).load(curr.getImgURL()).into(imgUrl);
 

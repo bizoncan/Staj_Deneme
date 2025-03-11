@@ -25,13 +25,13 @@
             android:id="@+id/constraint_layout">
 
 
-
             <FrameLayout
                 android:id="@+id/content_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
 
-                tools:layout_editor_absoluteX="-5dp">
+                tools:layout_editor_absoluteX="-203dp"
+                tools:layout_editor_absoluteY="16dp">
 
             </FrameLayout>
 
@@ -43,19 +43,38 @@
             android:layout_gravity="top"
 
             >
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/materialToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="#CB2F2F"
-                app:title="Arıza Kayıt"
-                android:elevation="1dp"
-                app:titleTextColor="@color/white"
-                app:navigationIcon="@drawable/baseline_menu_24"
-                app:menu="@menu/nav_menu">
+    <TextView
+        android:id="@+id/notificationCount_textview"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="14sp"
 
-            </com.google.android.material.appbar.MaterialToolbar>
+
+        android:text="0"
+
+     />
+
+    <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/materialToolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="#CB2F2F"
+    app:title="Arıza Kayıt"
+    android:elevation="1dp"
+    app:titleTextColor="@color/white"
+    app:navigationIcon="@drawable/baseline_menu_24"
+    app:menu="@menu/nav_menu">
+
+</com.google.android.material.appbar.MaterialToolbar>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </com.google.android.material.appbar.AppBarLayout>
 

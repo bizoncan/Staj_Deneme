@@ -81,7 +81,8 @@ public class AddNotificationTestActivity extends AppCompatActivity {
     public void bildirimEkle(View view){
 
         NotificationModel n = new NotificationModel();
-        n.setMachineId(null);
+        n.setMachineId(2);
+        n.setMachinePartId(null);
         n.setTitle(title.getText().toString());
         n.setDescription(desc.getText().toString());
 

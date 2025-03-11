@@ -1,6 +1,7 @@
 package com.example.staj_deneme.Activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,25 +34,72 @@ public class ErrorDetailsActivity extends BaseActivity {
     adapter = new ErrorAdapter(errorModelList,ErrorDetailsActivity.this);
     errorDetailListView.setAdapter(adapter);
     ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-    errorInterface.getAll().enqueue(new Callback<List<ErrorModel>>() {
-        @Override
-        public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
-            if(response.body() != null && response.isSuccessful() ){
-                for(ErrorModel e: response.body()){
-                    errorModelList.add(e);
+    if(getIntent().getStringExtra("machineId")== null){
+        errorInterface.getAll().enqueue(new Callback<List<ErrorModel>>() {
+            @Override
+            public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
+                if(response.body() != null && response.isSuccessful() ){
+                    for(ErrorModel e: response.body()){
+                        errorModelList.add(e);
+                    }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
+                else{
+                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                }
             }
-            else{
+
+            @Override
+            public void onFailure(Call<List<ErrorModel>> call, Throwable t) {
                 Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
             }
-        }
+        });}
+    else if (getIntent().getStringExtra("machinePartId")==null && getIntent().getStringExtra("machineId")!=null){
+        int mm = Integer.parseInt(getIntent().getStringExtra("machineId"));
+        errorInterface.getByMachineId(mm).enqueue(new Callback<List<ErrorModel>>() {
+            @Override
+            public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
+                if(response.body() != null && response.isSuccessful() ){
+                    for(ErrorModel e: response.body()){
+                        errorModelList.add(e);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                }
+            }
 
-        @Override
-        public void onFailure(Call<List<ErrorModel>> call, Throwable t) {
-            Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
-        }
-    });
+            @Override
+            public void onFailure(Call<List<ErrorModel>> call, Throwable t) {
+                Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                Log.e("pop",t.getMessage());
+            }
+        });
+    }
+    else{
+        int mm = Integer.parseInt(getIntent().getStringExtra("machinePartId"));
+        errorInterface.getByMachinePartId(mm).enqueue(new Callback<List<ErrorModel>>() {
+            @Override
+            public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
+                if(response.body() != null && response.isSuccessful() ){
+                    for(ErrorModel e: response.body()){
+                        errorModelList.add(e);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ErrorModel>> call, Throwable t) {
+                Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                Log.e("pop",t.getMessage());
+            }
+        });
+    }
 
     }
 }

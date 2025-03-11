@@ -1,6 +1,7 @@
 package com.example.staj_deneme.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,6 +21,9 @@ import androidx.annotation.Nullable;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.staj_deneme.Adapter.MachineAdapter;
+import com.example.staj_deneme.InterFaces.MachineApiInterface;
+import com.example.staj_deneme.Models.MachineModel;
 import com.example.staj_deneme.Models.NotificationModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
@@ -42,9 +46,10 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
     TransformationLayout transformationLayout;
     TextView notificationText;
     BaseAdapter adapter;
-    ListView notificationsListView;
+    MachineAdapter m_adapter;
+    ListView notificationsListView,machinesListView;
     List<String> titleList,machineIdList,descList,idList,machinePartIdList;
-
+    List<MachineModel> machineModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +85,28 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
             }
         });
         notificationsListView = findViewById(R.id.notifications_listview);
+        machineModelList = new ArrayList<>();
+        machinesListView = findViewById(R.id.machines_listview);
+        m_adapter = new MachineAdapter(this,machineModelList );
+        MachineApiInterface machineApiInterface = RetrofitClient.getApiServiceMachine();
+        machineApiInterface.getAll().enqueue(new Callback<List<MachineModel>>() {
+            @Override
+            public void onResponse(Call<List<MachineModel>> call, Response<List<MachineModel>> response) {
+                if(response.body() != null && response.isSuccessful()){
+                    for (MachineModel m: response.body()){
+
+                        machineModelList.add(m);
+                    }
+                    m_adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MachineModel>> call, Throwable t) {
+
+            }
+        });
+        machinesListView.setAdapter(m_adapter);
         titleList = new ArrayList<>();
         machineIdList = new ArrayList<>();
         descList = new ArrayList<>();
@@ -130,6 +157,14 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
                 sayfa.putExtra("machinePartID",machinePartIdList.get(position));
                 startActivity(sayfa);
 
+            }
+        });
+        machinesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent sayfa = new Intent(TestActivity.this,MachineDetailActivity.class);
+                sayfa.putExtra("machineId",Integer.toString(machineModelList.get(position).getId()));
+                startActivity(sayfa);
             }
         });
         startDatabasePolling();

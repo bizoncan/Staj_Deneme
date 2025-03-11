@@ -15,16 +15,16 @@
 
         <ImageView
             android:id="@+id/errorImage_imageview"
-            android:layout_width="306dp"
-            android:layout_height="187dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_weight="1"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
