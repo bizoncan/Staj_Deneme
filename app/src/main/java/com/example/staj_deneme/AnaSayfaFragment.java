@@ -49,7 +49,7 @@ public class AnaSayfaFragment extends Fragment {
         handler = new Handler(Looper.getMainLooper());
 
         // Initialize views
-        notificationsListView = rootView.findViewById(R.id.notifications_listview);
+        notificationsListView = rootView.findViewById(R.id.notificationsbase_listview);
         notificationText = rootView.findViewById(R.id.notification_textview);
 
         // Set up QR scan button

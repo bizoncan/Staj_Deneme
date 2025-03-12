@@ -69,7 +69,7 @@ public class RecieveNotificationActivity extends AppCompatActivity {
 
             }
         });
-    notificationsListView = findViewById(R.id.notifications_listview);
+    notificationsListView = findViewById(R.id.notificationsbase_listview);
     titleList = new ArrayList<>();
     machineIdList = new ArrayList<>();
     descList = new ArrayList<>();

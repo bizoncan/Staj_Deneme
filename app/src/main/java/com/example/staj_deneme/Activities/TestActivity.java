@@ -1,7 +1,6 @@
 package com.example.staj_deneme.Activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,8 +17,6 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.example.staj_deneme.Adapter.MachineAdapter;
 import com.example.staj_deneme.InterFaces.MachineApiInterface;
 import com.example.staj_deneme.Models.MachineModel;
@@ -84,7 +80,7 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
 
             }
         });
-        notificationsListView = findViewById(R.id.notifications_listview);
+        notificationsListView = findViewById(R.id.notificationsbase_listview);
         machineModelList = new ArrayList<>();
         machinesListView = findViewById(R.id.machines_listview);
         m_adapter = new MachineAdapter(this,machineModelList );
@@ -155,6 +151,7 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
                 Intent sayfa = new Intent(TestActivity.this, NotificationAddErrorActivity.class);
                 sayfa.putExtra("machineID",machineIdList.get(position));
                 sayfa.putExtra("machinePartID",machinePartIdList.get(position));
+                sayfa.putExtra("notificationId",idList.get(position));
                 startActivity(sayfa);
 
             }
@@ -206,7 +203,7 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
     }
 
     private void startDatabasePolling() {
-        final int POLL_INTERVAL = 2500;
+        final int POLL_INTERVAL = 500;
 
         Handler handler = new Handler();
         Runnable pollRunnable = new Runnable() {

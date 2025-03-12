@@ -67,7 +67,7 @@ public class ErrorAdapter extends BaseAdapter {
         Long seconds= durr.getSeconds()%60;
         String durs = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours,minutes, seconds);
         TextView machindeId = convertView.findViewById(R.id.errorMachineId_textview);
-        TextView machindePartId = convertView.findViewById(R.id.machinePartId_textview);
+        TextView machindePartId = convertView.findViewById(R.id.errorMachinePartId_textview);
         TextView errorType = convertView.findViewById(R.id.errorType_textview);
         TextView errorDesc = convertView.findViewById(R.id.errorDesc_textview);
         TextView errorStartDate = convertView.findViewById(R.id.errorStartDate_textview);
@@ -75,7 +75,8 @@ public class ErrorAdapter extends BaseAdapter {
         ImageView imgURL = convertView.findViewById(R.id.errorImage_imageview);
 
         machindeId.setText("Makine Id: "+curr.getMachineId().toString());
-        if(machindePartId != null)machindePartId.setText("Makine parçasi Id: "+curr.getMachinePartId().toString());
+        if(curr.getMachinePartId() != null)machindePartId.setText("Makine parçası Id: "+curr.getMachinePartId().toString());
+        else machindePartId.setText("Makine Parçası Id'si yok");
         errorType.setText("Hata tipi: "+curr.getErrorType());
         errorDesc.setText("Hata açıklama: "+curr.getErrorDesc());
         errorStartDate.setText("Arıza kaydı giriş tarihi: "+curr.getErrorDate());

@@ -5,6 +5,7 @@
     import com.example.staj_deneme.InterFaces.MachineApiInterface;
     import com.example.staj_deneme.InterFaces.MachinePartsApiInterface;
     import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
+    import com.example.staj_deneme.InterFaces.UserApiInterface;
     import com.google.gson.Gson;
     import com.google.gson.GsonBuilder;
 
@@ -75,5 +76,16 @@
                         .build();
             }
             return retrofit.create(MachinePartsApiInterface.class);
+        }
+        public static UserApiInterface getApiServiceUser(){
+            if(retrofit==null){
+                OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://10.0.2.2:7296/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
+            return retrofit.create(UserApiInterface.class);
         }
     }

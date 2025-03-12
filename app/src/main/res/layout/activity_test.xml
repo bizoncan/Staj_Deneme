@@ -59,14 +59,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:transformation_duration="500"
-        app:transformation_targetView="@id/notifications_listview">
+        app:transformation_targetView="@id/notificationsbase_listview">
 
     </com.skydoves.transformationlayout.TransformationLayout>
 
-    <ListView
-        android:id="@+id/notifications_listview"
-        android:layout_width="337dp"
-        android:layout_height="523dp"
+   <!-- <ListView
+        android:id="@+id/notificationsbase_listview"
+        android:layout_width="164dp"
+        android:layout_height="47dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/listview_background"
         android:dividerHeight="8dp"
@@ -77,7 +77,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.206"
-        tools:visibility="gone" />
+        tools:visibility="visible" />  -->
 
     <ListView
         android:id="@+id/machines_listview"

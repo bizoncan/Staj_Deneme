@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/QRTara_btn" />
 
     <ListView
-        android:id="@+id/notifications_listview"
+        android:id="@+id/notificationsbase_listview"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:visibility="visible"

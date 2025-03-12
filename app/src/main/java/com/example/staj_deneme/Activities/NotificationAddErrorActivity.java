@@ -1,11 +1,13 @@
 package com.example.staj_deneme.Activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaActionSound;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -16,14 +18,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.example.staj_deneme.InterFaces.ErrorInterface;
+import android.Manifest;
+
+import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.Models.ErrorModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
 import com.google.type.DateTime;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -54,7 +64,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
     private Uri selectedImageUri = null;
     byte[] tempPhotoBytes;
     private static final int PICK_IMAGE_REQUEST = 1;
-
+    private static final int CAMERA_PERMISSION_CODE = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,6 +159,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
                     Intent sayfa = new Intent(NotificationAddErrorActivity.this,TestActivity.class);
                     stopTimer();
                     Log.e("Geçen Zaman:",formatedTime);
+                    del_not();
                     startActivity(sayfa);
                 }
                 else{
@@ -194,9 +205,33 @@ public class NotificationAddErrorActivity extends BaseActivity {
         }
     }
     public void takePicture(View view){
+        requestCameraPermission();
+    }
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
+            openCamera();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private Uri cameraImageUri;
+    private void openCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
+
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
@@ -248,5 +283,26 @@ public class NotificationAddErrorActivity extends BaseActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream); // 70% quality
         return outputStream.toByteArray();
     }
+
+    public void del_not(){
+        RecieveNotificationInterface recieveNotificationInterface = RetrofitClient.getApiServiceNotification();
+        int pi = Integer.parseInt(getIntent().getStringExtra("notificationId"));
+        recieveNotificationInterface.deleteNotification(Integer.parseInt(getIntent().getStringExtra("notificationId"))).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    Log.e("acaba","oldu mu");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+    }
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
+
 
 }

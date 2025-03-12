@@ -33,6 +33,26 @@
                 tools:layout_editor_absoluteX="-203dp"
                 tools:layout_editor_absoluteY="16dp">
 
+                    <ListView
+                        android:id="@+id/notificationsbase_listview"
+                        android:layout_width="337dp"
+                        android:layout_height="523dp"
+                        android:layout_marginStart="69dp"
+                        android:layout_marginTop="68dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/listview_background"
+                        android:dividerHeight="8dp"
+                        android:elevation="10dp"
+                        android:overScrollMode="never"
+                        android:scrollbarStyle="outsideOverlay"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.206"
+                        tools:visibility="gone" />
+
+
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -46,20 +66,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <com.skydoves.transformationlayout.TransformationLayout
+        android:id="@+id/transition_layout"
+        android:layout_width="41dp"
+        android:layout_height="43dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:transformation_duration="500"
+        app:transformation_targetView="@id/notificationsbase_listview">
 
+    </com.skydoves.transformationlayout.TransformationLayout>
     <TextView
         android:id="@+id/notificationCount_textview"
-        android:layout_width="20sp"
-        android:layout_height="20sp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:elevation="10dp"
         android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="14sp"
-
-
         android:text="0"
-
-     />
+        android:textColor="#000000"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
 
     <com.google.android.material.appbar.MaterialToolbar
     android:id="@+id/materialToolbar"
