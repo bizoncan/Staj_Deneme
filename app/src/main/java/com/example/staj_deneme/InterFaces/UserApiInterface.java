@@ -1,6 +1,9 @@
 package com.example.staj_deneme.InterFaces;
 
+import com.example.staj_deneme.Models.ResponseModel;
 import com.example.staj_deneme.Models.UserModel;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -13,4 +16,6 @@ public interface UserApiInterface {
     Call<Void> addUser(@Body UserModel userModel);
     @GET("api/User")
     Call<Boolean> checkUser(@Query("username") String username,@Query("email") String email);
+    @GET("api/User/GetUsers")
+    Call<ResponseModel> getUsers(@Query("username") String username, @Query("password") String password);
 }

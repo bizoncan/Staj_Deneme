@@ -1,5 +1,6 @@
 package com.example.staj_deneme.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -79,8 +80,9 @@ public class TestRegisterActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if(response.isSuccessful()){
-                                Log.e("hadi","oglus");
-                                Toast.makeText(TestRegisterActivity.this, "oldu be",Toast.LENGTH_LONG).show();
+                                Toast.makeText(TestRegisterActivity.this,"Hesap oluşturma başarılı",Toast.LENGTH_LONG).show();
+                                Intent sayfa = new Intent(TestRegisterActivity.this,TestLoginActivity.class);
+                                startActivity(sayfa);
                             }
                             else{
                                 try {
@@ -108,14 +110,8 @@ public class TestRegisterActivity extends AppCompatActivity {
                     hataMesaji.setText("Bu kullanıcı adı yada email başka bir kullanıcı tarafından kullanılıyor");
                     hataMesaji.setVisibility(View.VISIBLE);
                 }
-
             }
         });
-
-
-
-
-
     }
     public  boolean passwordCheck(String p){
         String specialCharacters = "!@#$%^&*()_+{}[]|:;<>,.?/~`";
