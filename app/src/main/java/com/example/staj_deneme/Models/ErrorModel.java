@@ -15,10 +15,11 @@ public class ErrorModel {
     public  String errorImage;
     public String errorImageType;
     public byte[] errorImageBytes;
+    public Integer userId;
     public ErrorModel() {
     }
 
-    public ErrorModel(int id, Integer machineId, String errorDesc, String errorDate, String errorEndDate, String errorType, Integer machinePartId, String errorImage, String errorImageType, byte[] errorImageBytes) {
+    public ErrorModel(int id, Integer machineId, String errorDesc, String errorDate, String errorEndDate, String errorType, Integer machinePartId, String errorImage, String errorImageType, byte[] errorImageBytes, Integer userId) {
         this.id = id;
         this.machineId = machineId;
         this.errorDesc = errorDesc;
@@ -29,6 +30,7 @@ public class ErrorModel {
         this.errorImage = errorImage;
         this.errorImageType = errorImageType;
         this.errorImageBytes = errorImageBytes;
+        this.userId = userId;
     }
 
     public int getId() {
@@ -109,5 +111,13 @@ public class ErrorModel {
 
     public void setErrorEndDate(String errorEndDate) {
         this.errorEndDate = errorEndDate;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

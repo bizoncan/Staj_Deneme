@@ -19,14 +19,14 @@
         android:id="@+id/nufus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Nüfus Bilgisi"
+        android:title="Manuel Hata Ekle"
         android:icon="@drawable/baseline_stacked_bar_chart_24"
         />
     <item
         android:id="@+id/tarihi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Tarihi ve Turistik Yerler"
+        android:title="Çıkış"
         android:icon="@drawable/baseline_mosque_24"
         />
 

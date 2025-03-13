@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.AddErrorManuel">
+
+    <EditText
+        android:id="@+id/manuelMachineId_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:ems="10"
+        android:hint="Makine"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.293"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/manuelMachinePartId_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Makine Parçası"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/manuelMachineId_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/manuelMachineId_edittext" />
+
+    <EditText
+        android:id="@+id/manuelErrorType_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Hata Tipi"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/manuelMachinePartId_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/manuelMachinePartId_edittext" />
+
+    <EditText
+        android:id="@+id/manuelErrorDesc_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Hata Açıklama"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/manuelErrorType_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/manuelErrorType_edittext" />
+
+    <EditText
+        android:id="@+id/manuelerrordate_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Hata Tarih"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/manuelErrorDesc_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/manuelErrorDesc_edittext" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:backgroundTint="#CB2F2F"
+        android:onClick="hata_ekle"
+        android:text="Hata Ekle"
+        app:layout_constraintTop_toBottomOf="@+id/manuelerrordate_edittext"
+        tools:layout_editor_absoluteX="160dp" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#CB2F2F"
+        android:onClick="selectImage"
+        android:text="Resim Yükle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button8"
+        app:layout_constraintVertical_bias="0.032"
+        tools:layout_editor_absoluteX="59dp" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:backgroundTint="#CB2F2F"
+        android:onClick="takePicture"
+        android:text="Resim Çek"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/button9"
+        app:layout_constraintTop_toTopOf="@+id/button9" />
+</androidx.constraintlayout.widget.ConstraintLayout>

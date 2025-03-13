@@ -11,6 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ErrorInterface {
     @GET("api/Error")
@@ -22,5 +23,6 @@ public interface ErrorInterface {
     @POST("api/Error")
     @Headers({"Content-Type: application/json"})
     Call<Void> add(@Body ErrorModel errorModel);
-
+    @GET("api/Error/GetUserId")
+    Call<Integer> getUserId(@Query("username") String username);
 }

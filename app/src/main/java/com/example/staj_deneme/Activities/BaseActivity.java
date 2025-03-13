@@ -1,6 +1,7 @@
 package com.example.staj_deneme.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -42,7 +43,7 @@ public class BaseActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     MaterialToolbar materialToolbar;
     NavigationView navigationView;
-    TextView notificationText;
+    TextView notificationText,usernameTextView;
     MenuItem menuItem;
     List<String> idList,titleList,machineIdList,machinePartIdList,descList;
     BaseAdapter adadpter;
@@ -123,8 +124,12 @@ public class BaseActivity extends AppCompatActivity {
 
     private void setupNavigationElements() {
         navigationView = findViewById(R.id.navigationView);
+        View headerView = navigationView.getHeaderView(0);
         materialToolbar = findViewById(R.id.materialToolbar);
         transformationLayout = findViewById(R.id.transition_layout);
+        usernameTextView = headerView.findViewById(R.id.textViewUsername);
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
+        usernameTextView.setText(sharedPreferences.getString("Username",""));
         notificationListView = findViewById(R.id.notificationsbase_listview);
         notificationListView.setAdapter(adadpter);
 
@@ -158,7 +163,7 @@ public class BaseActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.nufus) {
                 sayfa = new Intent(getApplicationContext(), MainActivity.class);
             } else if (item.getItemId() == R.id.tarihi) {
-                sayfa = new Intent(getApplicationContext(), MainActivity.class);
+                sayfa = new Intent(getApplicationContext(), TestLoginActivity.class);
             }
 
             if (sayfa != null) {
@@ -253,7 +258,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.nav_menu, menu);
-        new Handler().postDelayed(this::updateNotificationBadgePosition, 100);
+        //new Handler().postDelayed(this::updateNotificationBadgePosition, 100);
         return true;
     }
     @Override
@@ -308,7 +313,7 @@ public class BaseActivity extends AppCompatActivity {
         return result;
     }
 
-    private void updateNotificationBadgePosition() {
+   /* private void updateNotificationBadgePosition() {
         if (notificationText != null && materialToolbar != null) {
             final MenuItem notificationItem = materialToolbar.getMenu().findItem(R.id.notification);
             if (notificationItem != null) {
@@ -345,5 +350,5 @@ public class BaseActivity extends AppCompatActivity {
                 });
             }
         }
-    }
+    }*/
 }

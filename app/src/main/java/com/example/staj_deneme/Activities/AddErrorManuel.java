@@ -1,28 +1,26 @@
 package com.example.staj_deneme.Activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.staj_deneme.InterFaces.ErrorInterface;
-import android.Manifest;
-
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.Models.ErrorModel;
 import com.example.staj_deneme.R;
@@ -32,7 +30,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import android.util.Base64;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -41,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NotificationAddErrorActivity extends BaseActivity {
+public class AddErrorManuel extends BaseActivity {
     EditText machineIdEditText,machinePartIdEditText,errorTypeEdt,errorDateEdt,errorDescEdt;
 
     private static final int CAMERA_REQUEST = 100;
@@ -63,46 +60,25 @@ public class NotificationAddErrorActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_notification_add_error);
-        startTimer();
-        machineIdEditText= findViewById(R.id.machineId_edt);
-        machinePartIdEditText = findViewById(R.id.machinePartId_edt);
-        machineIdEditText.setText(getIntent().getStringExtra("machineID"));
-        machinePartIdEditText.setText(getIntent().getStringExtra("machinePartID"));
-        errorDateEdt = findViewById(R.id.errorDate_edt);
+        setContentView(R.layout.activity_add_error_manuel);
+
+
+        machineIdEditText= findViewById(R.id.manuelMachineId_edittext);
+        machinePartIdEditText = findViewById(R.id.manuelMachinePartId_edittext);
+
+        errorDateEdt = findViewById(R.id.manuelerrordate_edittext);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));//Türkiye Saat Dilimi
         currentDate = dateFormat.format(new Date());
         errorDateEdt.setText(currentDate);
-        errorTypeEdt=findViewById(R.id.errorType_edt);
-        errorDescEdt = findViewById(R.id.errorDesc_edt);
+        errorTypeEdt=findViewById(R.id.manuelErrorType_edittext);
+        errorDescEdt = findViewById(R.id.manuelErrorDesc_edittext);
         dateIn = new Date();
     }
-
-    private void startTimer() {
-        startTime = SystemClock.elapsedRealtime();
-        isTimerRunning = true;
-
-        // Update timer every 10 milliseconds (0.01 second)
-        timerHandler.postDelayed(timerRunnable, 10);
-    }
-    private void stopTimer() {
-        timerHandler.removeCallbacks(timerRunnable);
-        isTimerRunning = false;
-        formatedTime = formatElapsedTime(timeElapsed);
-    }
-    private String formatElapsedTime(long timeInMillis) {
-        int seconds = (int) (timeInMillis / 1000);
-        int minutes = seconds / 60;
-        seconds = seconds % 60;
-
-        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-    }
-
     public void hata_ekle(View view){
         ErrorModel errorModel = new ErrorModel();
         if(errorTypeEdt.getText().toString().isEmpty() || errorDescEdt.getText().toString().isEmpty() || errorDateEdt.getText().toString().isEmpty() || machineIdEditText.getText().toString().isEmpty()){
-            Toast.makeText(NotificationAddErrorActivity.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
+            Toast.makeText(AddErrorManuel.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
             return;
         }
         errorModel.setMachineId(Integer.parseInt(machineIdEditText.getText().toString()));
@@ -129,19 +105,19 @@ public class NotificationAddErrorActivity extends BaseActivity {
 
                 // Submit to API
             } catch (IOException e) {
-                Toast.makeText(NotificationAddErrorActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(AddErrorManuel.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
         else if(tempBitmapPhoto != null){
-                byte[] imageBytes = convertBitmapToByteArray(tempBitmapPhoto);
+            byte[] imageBytes = convertBitmapToByteArray(tempBitmapPhoto);
 
-                String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-                errorModel.setErrorImage(base64Image);
+            errorModel.setErrorImage(base64Image);
 
-                String imageType = "image/jpeg";
-                errorModel.setErrorImageType(imageType);
+            String imageType = "image/jpeg";
+            errorModel.setErrorImageType(imageType);
         }
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
         String us_na = sharedPreferences.getString("Username","");
@@ -166,15 +142,13 @@ public class NotificationAddErrorActivity extends BaseActivity {
                 Log.d("Retrofit", "Response code: " + response.code());
                 Log.d("Retrofit", "Response message: " + response.message());
                 if(response.isSuccessful() ){
-                    Toast.makeText(NotificationAddErrorActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
-                    Intent sayfa = new Intent(NotificationAddErrorActivity.this,TestActivity.class);
-                    stopTimer();
-                    Log.e("Geçen Zaman:",formatedTime);
+                    Toast.makeText(AddErrorManuel.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
+                    Intent sayfa = new Intent(AddErrorManuel.this,TestActivity.class);
                     del_not();
                     startActivity(sayfa);
                 }
                 else{
-                    Toast.makeText(NotificationAddErrorActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddErrorManuel.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
                     try {
                         String errorBody = response.errorBody() != null ?
                                 response.errorBody().string() : "No error body";
@@ -188,7 +162,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(NotificationAddErrorActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(AddErrorManuel.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
             }
         });
 
@@ -199,66 +173,23 @@ public class NotificationAddErrorActivity extends BaseActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Resim Seç"), PICK_IMAGE_REQUEST);
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            selectedImageUri = data.getData();
-            // Optionally show the selected image in an ImageView
-            // imageView.setImageURI(selectedImageUri);
-        }
-        else if(requestCode== CAMERA_REQUEST && resultCode == RESULT_OK
-        && data != null ){
-            tempBitmapPhoto = (Bitmap) data.getExtras().get("data");
-
-        }
-    }
-    public void takePicture(View view){
-        requestCameraPermission();
-    }
-    private void requestCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-        } else {
-            openCamera();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
-            } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+    public void del_not(){
+        RecieveNotificationInterface recieveNotificationInterface = RetrofitClient.getApiServiceNotification();
+        int pi = Integer.parseInt(getIntent().getStringExtra("notificationId"));
+        recieveNotificationInterface.deleteNotification(Integer.parseInt(getIntent().getStringExtra("notificationId"))).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    Log.e("acaba","oldu mu");
+                }
             }
-        }
-    }
-    private Uri cameraImageUri;
-    private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-    }
 
-    private Runnable timerRunnable = new Runnable() {
-        @Override
-        public void run() {
-            timeElapsed = SystemClock.elapsedRealtime() - startTime;
-            // You can log the time for debugging if needed
-            // Log.d("Timer", "Time elapsed: " + timeElapsed + " ms");
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
 
-            timerHandler.postDelayed(this, 10);
-        }
-    };
+            }
+        });
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Make sure to stop the timer when the activity is destroyed
-        timerHandler.removeCallbacks(timerRunnable);
     }
     private byte[] convertImageToByteArray(Uri imageUri) throws IOException {
         InputStream inputStream = getContentResolver().openInputStream(imageUri);
@@ -288,32 +219,51 @@ public class NotificationAddErrorActivity extends BaseActivity {
         }
         return byteArray;
     }
-    private byte[] compressImage(byte[] imageBytes) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream); // 70% quality
-        return outputStream.toByteArray();
+    public void takePicture(View view){
+        requestCameraPermission();
     }
-
-    public void del_not(){
-        RecieveNotificationInterface recieveNotificationInterface = RetrofitClient.getApiServiceNotification();
-        int pi = Integer.parseInt(getIntent().getStringExtra("notificationId"));
-        recieveNotificationInterface.deleteNotification(Integer.parseInt(getIntent().getStringExtra("notificationId"))).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()){
-                    Log.e("acaba","oldu mu");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-
-            }
-        });
-
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
+            openCamera();
+        }
     }
+    private void openCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+            // Optionally show the selected image in an ImageView
+            // imageView.setImageURI(selectedImageUri);
+        }
+        else if(requestCode== CAMERA_REQUEST && resultCode == RESULT_OK
+                && data != null ){
+            tempBitmapPhoto = (Bitmap) data.getExtras().get("data");
 
+        }
+    }
+    private Runnable timerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            timeElapsed = SystemClock.elapsedRealtime() - startTime;
+            // You can log the time for debugging if needed
+            // Log.d("Timer", "Time elapsed: " + timeElapsed + " ms");
 
+            timerHandler.postDelayed(this, 10);
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Make sure to stop the timer when the activity is destroyed
+        timerHandler.removeCallbacks(timerRunnable);
+    }
 }

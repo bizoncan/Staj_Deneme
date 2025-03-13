@@ -18,4 +18,5 @@ public interface UserApiInterface {
     Call<Boolean> checkUser(@Query("username") String username,@Query("email") String email);
     @GET("api/User/GetUsers")
     Call<ResponseModel> getUsers(@Query("username") String username, @Query("password") String password);
+
 }
