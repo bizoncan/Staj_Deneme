@@ -19,7 +19,7 @@
         android:id="@+id/button6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#BA0202"
+        android:backgroundTint="#CB2F2F"
         android:onClick="hatalari_gor"
         android:text="Makine Hatalarını Görüntüle"
         android:textSize="18sp"

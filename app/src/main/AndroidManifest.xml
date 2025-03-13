@@ -28,26 +28,6 @@
         <activity
             android:name=".Activities.TestRegisterActivity"
             android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".Activities.MachineDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.ErrorDetailsActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".Activities.TestErrorImage"
-            android:exported="true"></activity>
-        <activity
-            android:name=".Activities.NotificationAddErrorActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Activities.BaseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.TestActivity"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,32 +35,52 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Activities.MachineDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.ErrorDetailsActivity"
+            android:exported="false"></activity>
+        <activity
+            android:name=".Activities.TestErrorImage"
+            android:exported="false"></activity>
+        <activity
+            android:name=".Activities.NotificationAddErrorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.BaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.TestActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
             android:name=".Activities.AddNotificationTestActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Activities.RecieveNotificationActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Activities.ApiTestActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Activities.SendNotificationActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Activities.SignUpActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Activities.LoginActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Activities.PastErrorsActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.QrScanActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Activities.MainActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
