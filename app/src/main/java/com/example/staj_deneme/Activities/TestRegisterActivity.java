@@ -61,7 +61,7 @@ public class TestRegisterActivity extends AppCompatActivity {
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             Toast.makeText(TestRegisterActivity.this, "Lütfen geçerli bir email giriniz", Toast.LENGTH_LONG).show();
-            hataMesaji.setText("Bir alanı boş bıraktınız");
+            hataMesaji.setText("Lütfen geçerli bir email giriniz");
             hataMesaji.setVisibility(View.VISIBLE);
             return;
         }

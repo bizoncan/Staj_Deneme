@@ -110,7 +110,8 @@ public class MachineDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent sayfa = new Intent(MachineDetailActivity.this, ErrorDetailsActivity.class);
-                sayfa.putExtra("machinePartId",machinePartIdList.get(position));
+                sayfa.putExtra("machineId",getIntent().getStringExtra("machineId"));
+                sayfa.putExtra("machinePartId",machinePartIdList.get(position).toString());
                 startActivity(sayfa);
             }
         });

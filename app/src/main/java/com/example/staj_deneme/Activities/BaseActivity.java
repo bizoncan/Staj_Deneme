@@ -2,15 +2,18 @@ package com.example.staj_deneme.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ActionMenuView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -132,6 +135,17 @@ public class BaseActivity extends AppCompatActivity {
         usernameTextView.setText(sharedPreferences.getString("Username",""));
         notificationListView = findViewById(R.id.notificationsbase_listview);
         notificationListView.setAdapter(adadpter);
+        notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent sayfa = new Intent(BaseActivity.this, NotificationAddErrorActivity.class);
+                sayfa.putExtra("machineID",machineIdList.get(position));
+                sayfa.putExtra("machinePartID",machinePartIdList.get(position));
+                sayfa.putExtra("notificationId",idList.get(position));
+                startActivity(sayfa);
+
+            }
+        });
 
         setSupportActionBar(materialToolbar);
         // ActionBarDrawerToggle kurulumu
@@ -161,7 +175,7 @@ public class BaseActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.person) {
                 sayfa = new Intent(getApplicationContext(), ErrorDetailsActivity.class);
             } else if (item.getItemId() == R.id.nufus) {
-                sayfa = new Intent(getApplicationContext(), MainActivity.class);
+                sayfa = new Intent(getApplicationContext(), AddErrorManuelActivity.class);
             } else if (item.getItemId() == R.id.tarihi) {
                 sayfa = new Intent(getApplicationContext(), TestLoginActivity.class);
             }
@@ -198,6 +212,7 @@ public class BaseActivity extends AppCompatActivity {
         else{
             transformationLayout.finishTransform();
             opened=true;
+
         }
     }
 
@@ -312,6 +327,8 @@ public class BaseActivity extends AppCompatActivity {
 
         return result;
     }
+
+
 
    /* private void updateNotificationBadgePosition() {
         if (notificationText != null && materialToolbar != null) {

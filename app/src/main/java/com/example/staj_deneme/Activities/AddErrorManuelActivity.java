@@ -13,7 +13,10 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,6 +25,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.staj_deneme.InterFaces.ErrorInterface;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
+import com.example.staj_deneme.Models.ErrorIdModel;
 import com.example.staj_deneme.Models.ErrorModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
@@ -30,7 +34,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -38,8 +44,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddErrorManuel extends BaseActivity {
-    EditText machineIdEditText,machinePartIdEditText,errorTypeEdt,errorDateEdt,errorDescEdt;
+public class AddErrorManuelActivity extends BaseActivity {
+    EditText errorTypeEdt,errorDateEdt,errorDescEdt;
+    Spinner machineIdSpinner,machinePartSpinner;
+    ArrayAdapter<String> adapter,mpAdapter;
+    List<String> machineNameList = new ArrayList<>();
+    List<Integer> machineIdList= new ArrayList<>();
+    List<String> machinePartNameList = new ArrayList<>();
+    List<Integer> machinePartIdList= new ArrayList<>();
+    Integer machineId,machinePartId;
+    String machineName,machinePartName;
 
     private static final int CAMERA_REQUEST = 100;
     private long startTime = 0L;
@@ -62,9 +76,45 @@ public class AddErrorManuel extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_error_manuel);
 
+        machineIdSpinner = findViewById(R.id.machineId_spinner);
+        adapter = new ArrayAdapter<>(AddErrorManuelActivity.this, android.R.layout.simple_spinner_item,machineNameList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fillMachineSpinner();
+        machineIdSpinner.setAdapter(adapter);
+        machineIdSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                machineName = parent.getItemAtPosition(position).toString();
+                machineId = machineIdList.get(machineNameList.indexOf(machineName));
+                fillMachinePartSpinner();
+            }
 
-        machineIdEditText= findViewById(R.id.manuelMachineId_edittext);
-        machinePartIdEditText = findViewById(R.id.manuelMachinePartId_edittext);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                machineId = null;
+            }
+        });
+
+
+        machinePartSpinner = findViewById(R.id.machinePartId_spinner);
+        mpAdapter = new ArrayAdapter<>(AddErrorManuelActivity.this, android.R.layout.simple_spinner_item,machinePartNameList);
+        mpAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        machinePartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                machinePartName = parent.getItemAtPosition(position).toString();
+                machinePartId = machinePartIdList.get(machinePartNameList.indexOf(machinePartName));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                machinePartId = null;
+            }
+        });
+        machinePartSpinner.setAdapter(mpAdapter);
+
+
+
 
         errorDateEdt = findViewById(R.id.manuelerrordate_edittext);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
@@ -75,20 +125,23 @@ public class AddErrorManuel extends BaseActivity {
         errorDescEdt = findViewById(R.id.manuelErrorDesc_edittext);
         dateIn = new Date();
     }
+
+
+
     public void hata_ekle(View view){
         ErrorModel errorModel = new ErrorModel();
-        if(errorTypeEdt.getText().toString().isEmpty() || errorDescEdt.getText().toString().isEmpty() || errorDateEdt.getText().toString().isEmpty() || machineIdEditText.getText().toString().isEmpty()){
-            Toast.makeText(AddErrorManuel.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
+        if(errorTypeEdt.getText().toString().isEmpty() || errorDescEdt.getText().toString().isEmpty() || errorDateEdt.getText().toString().isEmpty() || machineId == null){
+            Toast.makeText(AddErrorManuelActivity.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
             return;
         }
-        errorModel.setMachineId(Integer.parseInt(machineIdEditText.getText().toString()));
+        errorModel.setMachineId(machineId);
         errorModel.setErrorType(errorTypeEdt.getText().toString());
         errorModel.setErrorDesc(errorDescEdt.getText().toString());
         errorModel.setErrorDate(currentDate);
         errorModel.setErrorEndDate(dateFormat.format(new Date()));
 
 
-        if(!machinePartIdEditText.getText().toString().isEmpty()) errorModel.setMachinePartId(Integer.parseInt(machinePartIdEditText.getText().toString()));
+        if(machinePartId != null) errorModel.setMachinePartId(machinePartId);
         if(selectedImageUri != null) {
             try {
                 // Convert image to byte array
@@ -105,7 +158,7 @@ public class AddErrorManuel extends BaseActivity {
 
                 // Submit to API
             } catch (IOException e) {
-                Toast.makeText(AddErrorManuel.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(AddErrorManuelActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
@@ -142,13 +195,12 @@ public class AddErrorManuel extends BaseActivity {
                 Log.d("Retrofit", "Response code: " + response.code());
                 Log.d("Retrofit", "Response message: " + response.message());
                 if(response.isSuccessful() ){
-                    Toast.makeText(AddErrorManuel.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
-                    Intent sayfa = new Intent(AddErrorManuel.this,TestActivity.class);
-                    del_not();
+                    Toast.makeText(AddErrorManuelActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
+                    Intent sayfa = new Intent(AddErrorManuelActivity.this,TestActivity.class);
                     startActivity(sayfa);
                 }
                 else{
-                    Toast.makeText(AddErrorManuel.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddErrorManuelActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
                     try {
                         String errorBody = response.errorBody() != null ?
                                 response.errorBody().string() : "No error body";
@@ -162,7 +214,7 @@ public class AddErrorManuel extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(AddErrorManuel.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(AddErrorManuelActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
             }
         });
 
@@ -172,24 +224,6 @@ public class AddErrorManuel extends BaseActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Resim Seç"), PICK_IMAGE_REQUEST);
-    }
-    public void del_not(){
-        RecieveNotificationInterface recieveNotificationInterface = RetrofitClient.getApiServiceNotification();
-        int pi = Integer.parseInt(getIntent().getStringExtra("notificationId"));
-        recieveNotificationInterface.deleteNotification(Integer.parseInt(getIntent().getStringExtra("notificationId"))).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()){
-                    Log.e("acaba","oldu mu");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-
-            }
-        });
-
     }
     private byte[] convertImageToByteArray(Uri imageUri) throws IOException {
         InputStream inputStream = getContentResolver().openInputStream(imageUri);
@@ -259,6 +293,53 @@ public class AddErrorManuel extends BaseActivity {
             timerHandler.postDelayed(this, 10);
         }
     };
+
+    public void fillMachineSpinner() {
+        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+        errorInterface.getNames().enqueue(new Callback<List<ErrorIdModel>>() {
+            @Override
+            public void onResponse(Call<List<ErrorIdModel>> call, Response<List<ErrorIdModel>> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                    for(ErrorIdModel e: response.body()){
+                        machineIdList.add(e.getId());
+                        machineNameList.add(e.getName());
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onFailure(Call<List<ErrorIdModel>> call, Throwable t) {
+
+            }
+        });
+    }
+    private void fillMachinePartSpinner() {
+        if (machineId != null) {
+            machinePartIdList.clear();
+            machinePartNameList.clear();
+
+            ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+            errorInterface.getPartNames(machineId).enqueue(new Callback<List<ErrorIdModel>>() {
+                @Override
+                public void onResponse(Call<List<ErrorIdModel>> call, Response<List<ErrorIdModel>> response) {
+                    if (response.isSuccessful() && response.body() != null){
+                        for(ErrorIdModel e : response.body()){
+                            machinePartIdList.add(e.getId());
+                            machinePartNameList.add(e.getName());
+                        }
+
+                    }
+                    mpAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(Call<List<ErrorIdModel>> call, Throwable t) {
+
+                }
+            });
+        }
+
+    }
 
     @Override
     protected void onDestroy() {

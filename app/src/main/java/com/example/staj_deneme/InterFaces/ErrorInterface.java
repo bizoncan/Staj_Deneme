@@ -1,5 +1,6 @@
 package com.example.staj_deneme.InterFaces;
 
+import com.example.staj_deneme.Models.ErrorIdModel;
 import com.example.staj_deneme.Models.ErrorModel;
 
 import java.util.List;
@@ -25,4 +26,8 @@ public interface ErrorInterface {
     Call<Void> add(@Body ErrorModel errorModel);
     @GET("api/Error/GetUserId")
     Call<Integer> getUserId(@Query("username") String username);
+    @GET("api/Error/GetIdName")
+    Call<List<ErrorIdModel>> getNames();
+    @GET("api/Error/GetPartIdName")
+    Call<List<ErrorIdModel>> getPartNames(@Query("id")int id);
 }

@@ -33,15 +33,15 @@ public class ErrorDetailsActivity extends BaseActivity {
     errorModelList = new ArrayList<>();
     adapter = new ErrorAdapter(errorModelList,ErrorDetailsActivity.this);
     errorDetailListView.setAdapter(adapter);
-    ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+    String ma = getIntent().getStringExtra("machinePartId");
     if(getIntent().getStringExtra("machineId")== null){
+        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.getAll().enqueue(new Callback<List<ErrorModel>>() {
             @Override
             public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
                 if(response.body() != null && response.isSuccessful() ){
-                    for(ErrorModel e: response.body()){
-                        errorModelList.add(e);
-                    }
+                    errorModelList.addAll(response.body());
+
                     adapter.notifyDataSetChanged();
                 }
                 else{
@@ -56,13 +56,12 @@ public class ErrorDetailsActivity extends BaseActivity {
         });}
     else if (getIntent().getStringExtra("machinePartId")==null && getIntent().getStringExtra("machineId")!=null){
         int mm = Integer.parseInt(getIntent().getStringExtra("machineId"));
+        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.getByMachineId(mm).enqueue(new Callback<List<ErrorModel>>() {
             @Override
             public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
                 if(response.body() != null && response.isSuccessful() ){
-                    for(ErrorModel e: response.body()){
-                        errorModelList.add(e);
-                    }
+                    errorModelList.addAll(response.body());
                     adapter.notifyDataSetChanged();
                 }
                 else{
@@ -79,13 +78,12 @@ public class ErrorDetailsActivity extends BaseActivity {
     }
     else{
         int mm = Integer.parseInt(getIntent().getStringExtra("machinePartId"));
+        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.getByMachinePartId(mm).enqueue(new Callback<List<ErrorModel>>() {
             @Override
             public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
                 if(response.body() != null && response.isSuccessful() ){
-                    for(ErrorModel e: response.body()){
-                        errorModelList.add(e);
-                    }
+                    errorModelList.addAll(response.body());
                     adapter.notifyDataSetChanged();
                 }
                 else{

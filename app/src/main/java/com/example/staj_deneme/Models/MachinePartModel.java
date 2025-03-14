@@ -1,7 +1,7 @@
 package com.example.staj_deneme.Models;
 
 public class MachinePartModel {
-    int Id;
+    int id;
     Integer machineId;
     String name;
     String desc;
@@ -11,7 +11,7 @@ public class MachinePartModel {
     }
 
     public MachinePartModel(int id, Integer machineId, String name, String desc, int number) {
-        Id = id;
+        this.id = id;
         this.machineId = machineId;
         this.name = name;
         this.desc = desc;
@@ -19,11 +19,11 @@ public class MachinePartModel {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public Integer getMachineId() {

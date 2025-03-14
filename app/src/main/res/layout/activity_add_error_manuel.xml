@@ -5,31 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.AddErrorManuel">
-
-    <EditText
-        android:id="@+id/manuelMachineId_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:ems="10"
-        android:hint="Makine"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.293"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/manuelMachinePartId_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:hint="Makine Parçası"
-        android:inputType="text"
-        app:layout_constraintStart_toStartOf="@+id/manuelMachineId_edittext"
-        app:layout_constraintTop_toBottomOf="@+id/manuelMachineId_edittext" />
+    tools:context=".Activities.AddErrorManuelActivity">
 
     <EditText
         android:id="@+id/manuelErrorType_edittext"
@@ -39,8 +15,8 @@
         android:ems="10"
         android:hint="Hata Tipi"
         android:inputType="text"
-        app:layout_constraintStart_toStartOf="@+id/manuelMachinePartId_edittext"
-        app:layout_constraintTop_toBottomOf="@+id/manuelMachinePartId_edittext" />
+        app:layout_constraintStart_toStartOf="@+id/machinePartId_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/machinePartId_spinner" />
 
     <EditText
         android:id="@+id/manuelErrorDesc_edittext"
@@ -68,36 +44,53 @@
         android:id="@+id/button8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
         android:backgroundTint="#CB2F2F"
         android:onClick="hata_ekle"
         android:text="Hata Ekle"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/manuelerrordate_edittext"
-        tools:layout_editor_absoluteX="160dp" />
+        app:layout_constraintVertical_bias="0.061"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/button9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="28dp"
         android:backgroundTint="#CB2F2F"
         android:onClick="selectImage"
         android:text="Resim Yükle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button8"
-        app:layout_constraintVertical_bias="0.032"
-        tools:layout_editor_absoluteX="59dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button8" />
 
     <Button
         android:id="@+id/button10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
+        android:layout_marginEnd="48dp"
         android:backgroundTint="#CB2F2F"
         android:onClick="takePicture"
         android:text="Resim Çek"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/button9"
         app:layout_constraintTop_toTopOf="@+id/button9" />
+
+    <Spinner
+        android:id="@+id/machineId_spinner"
+        android:layout_width="210dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.293"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/machinePartId_spinner"
+        android:layout_width="210dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="@+id/machineId_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/machineId_spinner" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

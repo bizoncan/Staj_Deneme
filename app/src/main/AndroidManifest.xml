@@ -26,18 +26,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Activities.AddErrorManuel"
+            android:name=".Activities.AddErrorManuelActivity"
             android:exported="true" >
+
+        </activity>
+        <activity
+            android:name=".Activities.TestLoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".Activities.TestLoginActivity"
-            android:exported="true">
-
         </activity>
         <activity
             android:name=".Activities.TestRegisterActivity"
@@ -59,7 +59,9 @@
             android:exported="false" />
         <activity
             android:name=".Activities.TestActivity"
-            android:exported="true" />
+            android:exported="true" >
+
+        </activity>
         <activity
             android:name=".Activities.AddNotificationTestActivity"
             android:exported="false" />
