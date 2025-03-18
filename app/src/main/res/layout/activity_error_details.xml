@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#CB2F2F"
             android:onClick="filtrele"
-            android:text="Fitrele" />
+            android:text="Filtre Ekle" />
 
         <ExpandableListView
             android:id="@+id/ex_listview"
@@ -78,10 +78,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#CB2F2F"
         android:onClick="gorunur_ol"
         android:text="Filtreler"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:icon="@drawable/baseline_add_24"
+        app:iconTint="#FFFFFF"
+
+        style="@style/Widget.Material3.Button.TonalButton.Icon"
+
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

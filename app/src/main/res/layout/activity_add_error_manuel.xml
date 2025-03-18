@@ -15,8 +15,8 @@
         android:ems="10"
         android:hint="Hata Tipi"
         android:inputType="text"
-        app:layout_constraintStart_toStartOf="@+id/machinePartId_spinner"
-        app:layout_constraintTop_toBottomOf="@+id/machinePartId_spinner" />
+        app:layout_constraintStart_toStartOf="@+id/machinePartId_spinner_layout"
+        app:layout_constraintTop_toBottomOf="@+id/machinePartId_spinner_layout" />
 
     <EditText
         android:id="@+id/manuelErrorDesc_edittext"
@@ -75,22 +75,49 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button9" />
 
-    <Spinner
-        android:id="@+id/machineId_spinner"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/machineId_spinner_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="210dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
+        android:hint="Makine Seç"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.293"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Spinner
-        android:id="@+id/machinePartId_spinner"
+
+        <AutoCompleteTextView
+            android:id="@+id/machineId_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            app:dropDownBackgroundTint="#FFDBDB" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/machinePartId_spinner_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="210dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        app:layout_constraintStart_toStartOf="@+id/machineId_spinner"
-        app:layout_constraintTop_toBottomOf="@+id/machineId_spinner" />
+        android:hint="Makine Parçası Seç"
+        app:layout_constraintHorizontal_bias="0.293"
+        app:layout_constraintStart_toStartOf="@+id/machineId_spinner_layout"
+        app:layout_constraintTop_toBottomOf="@+id/machineId_spinner_layout">
+
+        <AutoCompleteTextView
+            android:id="@+id/machinePartId_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            app:dropDownBackgroundTint="#FFDBDB"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

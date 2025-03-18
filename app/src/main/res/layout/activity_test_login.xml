@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="#FFDBDB"
     tools:context=".Activities.TestLoginActivity">
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -37,35 +36,46 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:text="Hoşgeldiniz"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="30sp" />
 
-        <EditText
-            android:id="@+id/username_edittext"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:ems="10"
             android:hint="Kullanıcı adı"
-            android:inputType="text"
-            android:textAlignment="center"
-            android:textColorHint="#785757" />
+            android:textColorHint="#785757"
+            app:startIconDrawable="@drawable/baseline_person_outline_24"
+            app:errorEnabled="true"
+            android:ems="10"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/kullaniciSifre_edittext"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:ems="10"
             android:hint="Şifre"
-            android:inputType="textPassword"
-            android:textAlignment="center"
             android:textColorHint="#785757"
-            />
+            app:startIconDrawable="@drawable/baseline_person_outline_24"
+            app:errorEnabled="true"
+            android:ems="10"
+            app:endIconMode="password_toggle"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/kullaniciSifre_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/button"

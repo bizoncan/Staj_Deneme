@@ -28,7 +28,6 @@
         <activity
             android:name=".Activities.AddErrorManuelActivity"
             android:exported="true" >
-
         </activity>
         <activity
             android:name=".Activities.TestLoginActivity"

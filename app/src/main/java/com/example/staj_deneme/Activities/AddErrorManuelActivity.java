@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.example.staj_deneme.Models.ErrorIdModel;
 import com.example.staj_deneme.Models.ErrorModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,7 +49,9 @@ import retrofit2.Response;
 
 public class AddErrorManuelActivity extends BaseActivity {
     EditText errorTypeEdt,errorDateEdt,errorDescEdt;
-    Spinner machineIdSpinner,machinePartSpinner;
+    //Spinner machineIdSpinner,machinePartSpinner;
+    TextInputLayout machineDropdownLayout,machinePartDropdownLayout;
+    AutoCompleteTextView machineDropdown,machinePartDropdown;
     ArrayAdapter<String> adapter,mpAdapter;
     List<String> machineNameList = new ArrayList<>();
     List<Integer> machineIdList= new ArrayList<>();
@@ -76,12 +81,14 @@ public class AddErrorManuelActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_error_manuel);
         wait_Id = false;
-        machineIdSpinner = findViewById(R.id.machineId_spinner);
-        adapter = new ArrayAdapter<>(AddErrorManuelActivity.this, android.R.layout.simple_spinner_item,machineNameList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //machineIdSpinner = findViewById(R.id.machineId_spinner);
+        machineDropdown = findViewById(R.id.machineId_spinner);
+        adapter = new ArrayAdapter<>(AddErrorManuelActivity.this, R.layout.dropdown_item,machineNameList);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fillMachineSpinner();
-        machineIdSpinner.setAdapter(adapter);
-        machineIdSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //machineIdSpinner.setAdapter(adapter);
+        machineDropdown.setAdapter(adapter);
+        /*machineIdSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 machineName = parent.getItemAtPosition(position).toString();
@@ -93,13 +100,19 @@ public class AddErrorManuelActivity extends BaseActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 machineId = null;
             }
+        });*/
+        machineDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            machineName = (String) parent.getItemAtPosition(position);
+            machineId = machineIdList.get(machineNameList.indexOf(machineName));
+            fillMachinePartSpinner();
         });
 
 
-        machinePartSpinner = findViewById(R.id.machinePartId_spinner);
-        mpAdapter = new ArrayAdapter<>(AddErrorManuelActivity.this, android.R.layout.simple_spinner_item,machinePartNameList);
-        mpAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        machinePartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //machinePartSpinner = findViewById(R.id.machinePartId_spinner);
+        machinePartDropdown = findViewById(R.id.machinePartId_spinner);
+        mpAdapter = new ArrayAdapter<>(AddErrorManuelActivity.this, R.layout.dropdown_item,machinePartNameList);
+        //mpAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        /*machinePartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 machinePartName = parent.getItemAtPosition(position).toString();
@@ -111,9 +124,12 @@ public class AddErrorManuelActivity extends BaseActivity {
                 machinePartId = null;
             }
         });
-        machinePartSpinner.setAdapter(mpAdapter);
-
-
+        machinePartSpinner.setAdapter(mpAdapter);*/
+        machinePartDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            machinePartName = parent.getItemAtPosition(position).toString();
+            machinePartId = machinePartIdList.get(machinePartNameList.indexOf(machinePartName));
+        });
+        machinePartDropdown.setAdapter(mpAdapter);
 
 
         errorDateEdt = findViewById(R.id.manuelerrordate_edittext);
@@ -124,6 +140,13 @@ public class AddErrorManuelActivity extends BaseActivity {
         errorTypeEdt=findViewById(R.id.manuelErrorType_edittext);
         errorDescEdt = findViewById(R.id.manuelErrorDesc_edittext);
         dateIn = new Date();
+
+
+        machineDropdownLayout = findViewById(R.id.machineId_spinner_layout);
+        machinePartDropdownLayout = findViewById(R.id.machinePartId_spinner_layout);
+        machineDropdownLayout.setBoxStrokeColor(Color.RED);
+        machinePartDropdownLayout.setBoxStrokeColor(Color.RED);
+
     }
 
 
