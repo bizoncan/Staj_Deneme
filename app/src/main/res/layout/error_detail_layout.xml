@@ -1,68 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent">
+
+ <LinearLayout
+       android:layout_width="383dp"
+       android:layout_height="187dp"
+       android:orientation="horizontal"
+       android:gravity="center"
+       tools:layout_editor_absoluteX="7dp"
+       tools:layout_editor_absoluteY="31dp">
+
+       <ImageView
+           android:id="@+id/errorImage_imageview"
+           android:layout_width="150dp"
+           android:layout_height="150dp"
+           android:layout_weight="1"
+           tools:srcCompat="@tools:sample/avatars" />
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_weight="1"
+           android:gravity="center"
+           android:orientation="vertical">
+
+           <TextView
+               android:id="@+id/errorMachineId_textview"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="MachineId" />
+
+           <TextView
+               android:id="@+id/errorMachinePartId_textview"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="MachinePartId" />
+
+           <TextView
+               android:id="@+id/errorType_textview"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="ErrorType" />
+
+           <TextView
+               android:id="@+id/errorDesc_textview"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="ErrorDescription" />
+
+           <TextView
+               android:id="@+id/errorStartDate_textview"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="ErrorStartDate" />
+
+           <TextView
+               android:id="@+id/errorEndDate_textview"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="ErrorEndDate" />
+       </LinearLayout>
+   </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    -->
+
+
 
     <LinearLayout
-        android:layout_width="383dp"
-        android:layout_height="187dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
         android:orientation="horizontal"
-        android:gravity="center"
-        tools:layout_editor_absoluteX="7dp"
-        tools:layout_editor_absoluteY="31dp">
+        android:background="?attr/selectableItemBackground">
 
-        <ImageView
-            android:id="@+id/errorImage_imageview"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_weight="1"
-            tools:srcCompat="@tools:sample/avatars" />
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/errorImage_imageview"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
 
-        <LinearLayout
+
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/errorMachineId_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MachineId" />
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                tools:text="Product Name" />
 
             <TextView
                 android:id="@+id/errorMachinePartId_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MachinePartId" />
+                android:layout_marginTop="4dp"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorPrimary"
+                android:maxLines="1"
+                tools:text="123456789" />
 
             <TextView
                 android:id="@+id/errorType_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ErrorType" />
-
+                android:layout_marginTop="8dp"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?android:attr/textColorSecondary"
+                android:maxLines="3"
+                android:ellipsize="end"
+                tools:text=" the content" />
             <TextView
                 android:id="@+id/errorDesc_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ErrorDescription" />
-
+                android:layout_marginTop="8dp"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?android:attr/textColorSecondary"
+                android:maxLines="3"
+                android:ellipsize="end"
+                tools:text="content" />
             <TextView
                 android:id="@+id/errorStartDate_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ErrorStartDate" />
-
+                android:layout_marginTop="8dp"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?android:attr/textColorSecondary"
+                android:maxLines="3"
+                android:ellipsize="end"
+                tools:text="content" />
             <TextView
                 android:id="@+id/errorEndDate_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ErrorEndDate" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginTop="8dp"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?android:attr/textColorSecondary"
+                android:maxLines="3"
+                android:ellipsize="end"
+                tools:text="content" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>

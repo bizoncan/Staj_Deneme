@@ -81,7 +81,7 @@
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#FD0000"
+            android:backgroundTint="#CB2F2F"
             android:onClick="giris"
             android:text="Giriş"
             android:textAlignment="center" />

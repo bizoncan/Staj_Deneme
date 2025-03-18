@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="-5dp"
-        tools:layout_editor_absoluteY="-2dp">
+        android:background="?attr/selectableItemBackground">
+
 
         <TextView
             android:id="@+id/arizaT_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="35sp" />
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="30sp"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            tools:text="Product Name" />
 
         <TextView
             android:id="@+id/arizaAcikla_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="25sp" />
+            android:layout_marginTop="4dp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorPrimary"
+            android:maxLines="1"
+            tools:text="123456789"
+            android:textSize="20sp"
+            />
 
         <TextView
             android:id="@+id/arizaZaman_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="15sp" />
+            android:layout_marginTop="8dp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?android:attr/textColorSecondary"
+            android:maxLines="3"
+            android:textSize="15sp"
+            android:ellipsize="end"
+            tools:text=" the content" />
+
 
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>

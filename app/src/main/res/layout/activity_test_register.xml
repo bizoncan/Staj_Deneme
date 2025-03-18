@@ -26,7 +26,7 @@ tools:context=".Activities.TestRegisterActivity">
 
 <LinearLayout
     android:layout_width="340dp"
-    android:layout_height="400dp"
+    android:layout_height="420dp"
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="5dp"
@@ -41,45 +41,63 @@ tools:context=".Activities.TestRegisterActivity">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+       android:layout_marginBottom="15dp"
         android:text="Bilgilerinizi giriniz"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="30sp" />
 
-    <EditText
-        android:id="@+id/namer_edittext"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:ems="10"
-        android:textAlignment="center"
+        android:hint="Kullanıcı adı"
         android:textColorHint="#785757"
-        android:inputType="text"
-        android:hint="Username"
-     />
-    <EditText
-        android:id="@+id/email_edittext"
+        app:startIconDrawable="@drawable/baseline_person_outline_24"
+        app:errorEnabled="true"
+        android:ems="10"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/namer_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:ems="10"
-        android:textAlignment="center"
-        android:textColorHint="#785757"
         android:hint="Email"
-        android:inputType="textEmailAddress"
-      />
-    <EditText
-        android:id="@+id/passwordr_edittext"
+        android:textColorHint="#785757"
+        app:startIconDrawable="@drawable/baseline_email_24"
+        app:errorEnabled="true"
+        android:ems="10"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:ems="10"
-        android:textAlignment="center"
+        android:hint="Şifre"
         android:textColorHint="#785757"
-        android:hint="Password"
-        android:inputType="textPassword"
-        />
+        app:startIconDrawable="@drawable/baseline_key_24"
+        app:errorEnabled="true"
+        android:ems="10"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordr_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <Button
         android:id="@+id/button7"
@@ -92,7 +110,6 @@ tools:context=".Activities.TestRegisterActivity">
         app:layout_constraintTop_toBottomOf="@+id/passwordr_edittext"
         app:layout_constraintVertical_bias="0.244"
         tools:layout_editor_absoluteX="0dp" />
-
 
 
     <TextView
