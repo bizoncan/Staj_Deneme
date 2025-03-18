@@ -34,6 +34,7 @@ public class ErrorDetailsActivity extends BaseActivity {
     ListView errorDetailListView;
     List<ErrorModel> errorModelList;
 
+    String i_machine_part_name;
     ExpandableListViewAdapter adapterEx;
     ExpandableListView expandableListView;
     List<String> listGroup;
@@ -189,8 +190,18 @@ public class ErrorDetailsActivity extends BaseActivity {
         List<String> makineParcaFilterList = new ArrayList<>();
         for(ErrorInfoModel e: tempErrorList){
             if (e.getMachinePartName() != null){
-                if (!makineParcaFilterList.contains(e.getMachinePartName())){
-                    makineParcaFilterList.add(e.getMachinePartName());
+                if (getIntent().getStringExtra("machinePartId")==null){
+                    if (!makineParcaFilterList.contains(e.getMachinePartName())){
+                        makineParcaFilterList.add(e.getMachinePartName());
+                    }
+                }
+                else {
+                    if (e.getMachinePartId() == Integer.parseInt(getIntent().getStringExtra("machinePartId"))){
+                        if (!makineParcaFilterList.contains(e.getMachinePartName())){
+                            makineParcaFilterList.add(e.getMachinePartName());
+                            i_machine_part_name = e.getMachinePartName();
+                        }
+                    }
                 }
             }
 
@@ -273,6 +284,10 @@ public class ErrorDetailsActivity extends BaseActivity {
         else {
             selectedItems.add(null);
             s5 = null;
+        }
+        if (i_machine_part_name!= null)
+        {
+            s3 = i_machine_part_name;
         }
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.filterListView(s1,s2,s3,s4,s5).enqueue(new Callback<List<ErrorModel>>() {

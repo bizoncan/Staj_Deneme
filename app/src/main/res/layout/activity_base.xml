@@ -59,7 +59,8 @@
                     android:elevation="1dp"
                     app:titleTextColor="@color/white"
                     app:navigationIcon="@drawable/baseline_menu_24"
-                    app:menu="@menu/nav_menu">
+                    app:menu="@menu/nav_menu"
+                    style="@style/Widget.Material3.Toolbar.Surface">
                 </com.google.android.material.appbar.MaterialToolbar>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
