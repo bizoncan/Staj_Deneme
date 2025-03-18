@@ -54,7 +54,7 @@ public class AddErrorManuelActivity extends BaseActivity {
     List<Integer> machinePartIdList= new ArrayList<>();
     Integer machineId,machinePartId;
     String machineName,machinePartName;
-
+    boolean wait_Id;
     private static final int CAMERA_REQUEST = 100;
     private long startTime = 0L;
     private long timeElapsed = 0L;
@@ -75,7 +75,7 @@ public class AddErrorManuelActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_error_manuel);
-
+        wait_Id = false;
         machineIdSpinner = findViewById(R.id.machineId_spinner);
         adapter = new ArrayAdapter<>(AddErrorManuelActivity.this, android.R.layout.simple_spinner_item,machineNameList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -180,6 +180,8 @@ public class AddErrorManuelActivity extends BaseActivity {
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if(response.isSuccessful() && response.body()!= null){
                     errorModel.setUserId(response.body());
+                    Log.e("bubuş","kettttt");
+                    add_error(errorModel);
                 }
             }
             @Override
@@ -188,7 +190,9 @@ public class AddErrorManuelActivity extends BaseActivity {
             }
         });
 
-
+    }
+    public void add_error(ErrorModel errorModel){
+        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.add(errorModel).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -217,7 +221,6 @@ public class AddErrorManuelActivity extends BaseActivity {
                 Toast.makeText(AddErrorManuelActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
             }
         });
-
     }
     public void selectImage(View view) {
         Intent intent = new Intent();

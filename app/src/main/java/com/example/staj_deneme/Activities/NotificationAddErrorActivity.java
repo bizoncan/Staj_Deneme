@@ -44,6 +44,8 @@ import retrofit2.Response;
 public class NotificationAddErrorActivity extends BaseActivity {
     EditText machineIdEditText,machinePartIdEditText,errorTypeEdt,errorDateEdt,errorDescEdt;
 
+
+
     private static final int CAMERA_REQUEST = 100;
     private long startTime = 0L;
     private long timeElapsed = 0L;
@@ -77,6 +79,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
         errorTypeEdt=findViewById(R.id.errorType_edt);
         errorDescEdt = findViewById(R.id.errorDesc_edt);
         dateIn = new Date();
+
     }
 
     private void startTimer() {
@@ -151,6 +154,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if(response.isSuccessful() && response.body()!= null){
                     errorModel.setUserId(response.body());
+                    add_error(errorModel);
                 }
             }
             @Override
@@ -159,7 +163,9 @@ public class NotificationAddErrorActivity extends BaseActivity {
             }
         });
 
-
+    }
+    public void add_error(ErrorModel errorModel){
+        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.add(errorModel).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

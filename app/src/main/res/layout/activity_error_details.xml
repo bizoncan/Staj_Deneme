@@ -7,15 +7,81 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ErrorDetailsActivity">
 
+
+
+    <com.skydoves.transformationlayout.TransformationLayout
+        android:id="@+id/error_transformation_layout"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button11"
+        app:layout_constraintEnd_toEndOf="@+id/button11"
+        app:layout_constraintStart_toStartOf="@+id/button11"
+        app:layout_constraintTop_toTopOf="@+id/button11"
+        app:transformation_duration="500"
+        app:transformation_targetView="@id/filter_layout" >
+
+    </com.skydoves.transformationlayout.TransformationLayout>
+
+
+    <LinearLayout
+        android:id="@+id/filter_layout"
+        android:layout_width="358dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="50dp"
+        android:clickable="false"
+        android:elevation="10dp"
+
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#CB2F2F"
+            android:onClick="filtrele"
+            android:text="Fitrele" />
+
+        <ExpandableListView
+            android:id="@+id/ex_listview"
+            android:layout_width="356dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/listview_background"
+            android:elevation="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.49"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/errorDetails_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
 
-        />
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:visibility="gone">
+
+    </ListView>
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+
+        android:onClick="gorunur_ol"
+        android:text="Filtreler"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
