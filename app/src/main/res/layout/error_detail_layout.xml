@@ -103,6 +103,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 tools:text="Product Name" />
@@ -110,6 +112,7 @@
             <TextView
                 android:id="@+id/errorMachinePartId_textview"
                 android:layout_width="match_parent"
+                android:textStyle="italic"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textAppearance="?attr/textAppearanceBodySmall"

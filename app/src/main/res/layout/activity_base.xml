@@ -16,6 +16,7 @@
         android:fitsSystemWindows="true">
 
         <!-- AppBarLayout should be first -->
+
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
@@ -60,6 +61,7 @@
                     app:titleTextColor="@color/white"
                     app:navigationIcon="@drawable/baseline_menu_24"
                     app:menu="@menu/nav_menu"
+                    app:layout_scrollEffect="compress"
                     style="@style/Widget.Material3.Toolbar.Surface">
                 </com.google.android.material.appbar.MaterialToolbar>
             </androidx.constraintlayout.widget.ConstraintLayout>

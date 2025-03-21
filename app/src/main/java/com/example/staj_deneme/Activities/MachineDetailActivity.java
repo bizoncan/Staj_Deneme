@@ -73,8 +73,8 @@ public class MachineDetailActivity extends BaseActivity {
                     convertView = LayoutInflater.from(MachineDetailActivity.this).inflate(R.layout.past_errors_layout,parent,false);
                 }
                 TextView name = convertView.findViewById(R.id.arizaT_textview);
-                TextView desc = convertView.findViewById(R.id.arizaAcikla_textview);
-                TextView number = convertView.findViewById(R.id.arizaZaman_textview);
+                TextView desc = convertView.findViewById(R.id.arizaZaman_textview);
+                TextView number = convertView.findViewById(R.id.arizaAcikla_textview);
 
 
                 name.setText(nameList.get(position));

@@ -76,7 +76,7 @@ public class ErrorDetailsActivity extends BaseActivity {
                     adapter.notifyDataSetChanged();
                 }
                 else{
-                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan"+response.errorBody().toString(),Toast.LENGTH_LONG).show();
                     Log.e("HATA:", response.errorBody().toString());
 
                 }
@@ -85,7 +85,7 @@ public class ErrorDetailsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<List<ErrorModel>> call, Throwable t) {
-                Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan" + t.getMessage(),Toast.LENGTH_LONG).show();
                 Log.e("HATA33:", t.getMessage());
             }
         });}

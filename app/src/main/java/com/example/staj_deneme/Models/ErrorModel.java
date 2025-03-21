@@ -12,7 +12,7 @@ public class ErrorModel {
     public String errorEndDate;
     public String errorType;
     public Integer machinePartId;
-    public  String errorImage;
+    public String errorImage;
     public String errorImageType;
     public byte[] errorImageBytes;
     public Integer userId;

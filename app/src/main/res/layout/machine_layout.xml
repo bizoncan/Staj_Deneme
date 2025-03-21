@@ -26,6 +26,8 @@
 
         <TextView
             android:id="@+id/Name_textview"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceTitleMedium"
@@ -35,6 +37,7 @@
 
         <TextView
             android:id="@+id/Number_textview"
+            android:textStyle="italic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

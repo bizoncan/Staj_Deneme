@@ -66,6 +66,7 @@ public class ErrorAdapter extends BaseAdapter {
         Long minutes= durr.toMinutes()%60;
         Long seconds= durr.getSeconds()%60;
         String durs = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours,minutes, seconds);
+
         TextView machindeId = convertView.findViewById(R.id.errorMachineId_textview);
         TextView machindePartId = convertView.findViewById(R.id.errorMachinePartId_textview);
         TextView errorType = convertView.findViewById(R.id.errorType_textview);
@@ -86,6 +87,7 @@ public class ErrorAdapter extends BaseAdapter {
                 byte[] decodedBytes = Base64.decode(curr.getErrorImage(), Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
                 imgURL.setImageBitmap(bitmap);
+
             } catch (Exception e) {
                 Log.e("ImageDecodeError", "Error decoding image: " + e.getMessage());
                 imgURL.setImageResource(R.drawable.baseline_home_24);

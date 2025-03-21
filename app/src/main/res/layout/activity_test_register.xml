@@ -11,20 +11,20 @@ android:layout_height="match_parent"
 android:background="#FFDBDB"
 tools:context=".Activities.TestRegisterActivity">
 
-<TextView
-    android:id="@+id/textView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="72dp"
-    android:text="Hesap Oluşturun"
-    android:textColor="#785757"
-    android:textSize="50sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.496"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hesap Oluşturun"
+        android:textColor="#785757"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.091" />
 
-<LinearLayout
+    <LinearLayout
     android:layout_width="340dp"
     android:layout_height="420dp"
     android:background="@color/white"
@@ -54,6 +54,9 @@ tools:context=".Activities.TestRegisterActivity">
         android:textColorHint="#785757"
         app:startIconDrawable="@drawable/baseline_person_outline_24"
         app:errorEnabled="true"
+        app:boxStrokeColor="#CB2F2F"
+        app:hintTextColor="#CB2F2F"
+
         android:ems="10"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
@@ -61,7 +64,9 @@ tools:context=".Activities.TestRegisterActivity">
             android:id="@+id/namer_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textColorHint="#6B6B6B" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -70,6 +75,9 @@ tools:context=".Activities.TestRegisterActivity">
         android:hint="Email"
         android:textColorHint="#785757"
         app:startIconDrawable="@drawable/baseline_email_24"
+        app:boxStrokeColor="#CB2F2F"
+        app:hintTextColor="#CB2F2F"
+
         app:errorEnabled="true"
         android:ems="10"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
@@ -77,8 +85,11 @@ tools:context=".Activities.TestRegisterActivity">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_edittext"
             android:layout_width="match_parent"
+            android:textColorHint="#6B6B6B"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:textColor="@color/black"
+
+            android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -86,6 +97,9 @@ tools:context=".Activities.TestRegisterActivity">
         android:layout_height="wrap_content"
         android:hint="Şifre"
         android:textColorHint="#785757"
+        app:boxStrokeColor="#CB2F2F"
+        app:hintTextColor="#CB2F2F"
+
         app:startIconDrawable="@drawable/baseline_key_24"
         app:errorEnabled="true"
         android:ems="10"
@@ -94,8 +108,11 @@ tools:context=".Activities.TestRegisterActivity">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordr_edittext"
             android:layout_width="match_parent"
+            android:textColorHint="#6B6B6B"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:textColor="@color/black"
+
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -106,6 +123,7 @@ tools:context=".Activities.TestRegisterActivity">
         android:onClick="kaydol"
         android:text="Kaydol"
         android:backgroundTint="#CB2F2F"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordr_edittext"
         app:layout_constraintVertical_bias="0.244"

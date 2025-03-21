@@ -24,8 +24,12 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.staj_deneme.Adapter.SliderAdapter;
 import com.example.staj_deneme.InterFaces.ErrorInterface;
+import com.example.staj_deneme.InterFaces.ImageApiInterface;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.Models.ErrorIdModel;
 import com.example.staj_deneme.Models.ErrorModel;
@@ -59,6 +63,8 @@ public class AddErrorManuelActivity extends BaseActivity {
     List<Integer> machinePartIdList= new ArrayList<>();
     Integer machineId,machinePartId;
     String machineName,machinePartName;
+    ArrayList<Object> sliderImages ;
+    SliderAdapter sliderAdapter;
     boolean wait_Id;
     private static final int CAMERA_REQUEST = 100;
     private long startTime = 0L;
@@ -70,9 +76,14 @@ public class AddErrorManuelActivity extends BaseActivity {
     String currentDate;
     Date dateIn;
 
-    Bitmap tempBitmapPhoto;
-    private Uri selectedImageUri = null;
-    byte[] tempPhotoBytes;
+    ViewPager2 viewPager;
+
+
+    Boolean isPhotoTaken=false;
+
+    List<Bitmap> tempBitmapPhotos;
+    private List<Uri> selectedImageUris = null;
+
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int CAMERA_PERMISSION_CODE = 100;
     @Override
@@ -106,7 +117,7 @@ public class AddErrorManuelActivity extends BaseActivity {
             machineId = machineIdList.get(machineNameList.indexOf(machineName));
             fillMachinePartSpinner();
         });
-
+       
 
         //machinePartSpinner = findViewById(R.id.machinePartId_spinner);
         machinePartDropdown = findViewById(R.id.machinePartId_spinner);
@@ -127,7 +138,12 @@ public class AddErrorManuelActivity extends BaseActivity {
         machinePartSpinner.setAdapter(mpAdapter);*/
         machinePartDropdown.setOnItemClickListener((parent, view, position, id) -> {
             machinePartName = parent.getItemAtPosition(position).toString();
-            machinePartId = machinePartIdList.get(machinePartNameList.indexOf(machinePartName));
+            if (machinePartName != "-"){
+                machinePartId = machinePartIdList.get(machinePartNameList.indexOf(machinePartName)-1);
+            }
+            else{
+                machinePartId = null;
+            }
         });
         machinePartDropdown.setAdapter(mpAdapter);
 
@@ -143,9 +159,18 @@ public class AddErrorManuelActivity extends BaseActivity {
 
 
         machineDropdownLayout = findViewById(R.id.machineId_spinner_layout);
+        machineDropdownLayout = findViewById(R.id.machineId_spinner_layout);
         machinePartDropdownLayout = findViewById(R.id.machinePartId_spinner_layout);
+
         machineDropdownLayout.setBoxStrokeColor(Color.RED);
         machinePartDropdownLayout.setBoxStrokeColor(Color.RED);
+        tempBitmapPhotos = new ArrayList<>();
+        selectedImageUris = new ArrayList<>();
+
+        viewPager = findViewById(R.id.viewPager);
+        sliderImages =  new ArrayList<>();
+        sliderAdapter = new SliderAdapter(sliderImages);
+        viewPager.setAdapter(sliderAdapter);
 
     }
 
@@ -165,10 +190,10 @@ public class AddErrorManuelActivity extends BaseActivity {
 
 
         if(machinePartId != null) errorModel.setMachinePartId(machinePartId);
-        if(selectedImageUri != null) {
+        if(selectedImageUris.size() != 0) {
             try {
                 // Convert image to byte array
-                byte[] imageBytes = convertImageToByteArray(selectedImageUri);
+                byte[] imageBytes = convertImageToByteArray(selectedImageUris.get(0));
 
                 String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
@@ -176,17 +201,17 @@ public class AddErrorManuelActivity extends BaseActivity {
                 errorModel.setErrorImage(base64Image);
 
                 // If you need to include the image type/extension
-                String imageType = getContentResolver().getType(selectedImageUri);
+                String imageType = getContentResolver().getType(selectedImageUris.get(0));
                 errorModel.setErrorImageType(imageType);
-
+                isPhotoTaken = true;
                 // Submit to API
             } catch (IOException e) {
                 Toast.makeText(AddErrorManuelActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
-        else if(tempBitmapPhoto != null){
-            byte[] imageBytes = convertBitmapToByteArray(tempBitmapPhoto);
+        else if(tempBitmapPhotos.size() != 0){
+            byte[] imageBytes = convertBitmapToByteArray(tempBitmapPhotos.get(0));
 
             String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
@@ -222,6 +247,7 @@ public class AddErrorManuelActivity extends BaseActivity {
                 Log.d("Retrofit", "Response code: " + response.code());
                 Log.d("Retrofit", "Response message: " + response.message());
                 if(response.isSuccessful() ){
+                    resimleri_ekle();
                     Toast.makeText(AddErrorManuelActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
                     Intent sayfa = new Intent(AddErrorManuelActivity.this,TestActivity.class);
                     startActivity(sayfa);
@@ -299,14 +325,18 @@ public class AddErrorManuelActivity extends BaseActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
-            selectedImageUri = data.getData();
+            selectedImageUris.add(data.getData());
+            sliderImages.add(data.getData());
+            sliderAdapter.setImageList(sliderImages);
             // Optionally show the selected image in an ImageView
             // imageView.setImageURI(selectedImageUri);
         }
         else if(requestCode== CAMERA_REQUEST && resultCode == RESULT_OK
                 && data != null ){
-            tempBitmapPhoto = (Bitmap) data.getExtras().get("data");
-
+            data.getExtras().get("data");
+            tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
+            sliderImages.add((Bitmap) data.getExtras().get("data"));
+            sliderAdapter.setImageList(sliderImages);
         }
     }
     private Runnable timerRunnable = new Runnable() {
@@ -349,6 +379,7 @@ public class AddErrorManuelActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call<List<ErrorIdModel>> call, Response<List<ErrorIdModel>> response) {
                     if (response.isSuccessful() && response.body() != null){
+                        machinePartNameList.add("-");
                         for(ErrorIdModel e : response.body()){
                             machinePartIdList.add(e.getId());
                             machinePartNameList.add(e.getName());
@@ -373,4 +404,67 @@ public class AddErrorManuelActivity extends BaseActivity {
         // Make sure to stop the timer when the activity is destroyed
         timerHandler.removeCallbacks(timerRunnable);
     }
+    public void resimleri_ekle(){
+        byte[] imageBytes;
+        String base64Image;
+        List<String> base64images = new ArrayList<>();
+        if (tempBitmapPhotos.size()>1)
+        {
+            List<Bitmap> tt_ll;
+            if (isPhotoTaken){
+                tt_ll = tempBitmapPhotos.subList(0,tempBitmapPhotos.size());
+            }
+            else{
+                tt_ll = tempBitmapPhotos.subList(1,tempBitmapPhotos.size());
+            }
+            for (Bitmap bb : tt_ll){
+                imageBytes = convertBitmapToByteArray(bb);
+                base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                base64images.add(base64Image);
+            }
+
+        }
+        if (selectedImageUris.size()>1)
+        {
+            List<Uri> ss_uu = selectedImageUris.subList(1,selectedImageUris.size());
+            for (Uri uu:ss_uu){
+                try {
+                    imageBytes = convertImageToByteArray(uu);
+                    base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                    base64images.add(base64Image);
+                } catch (IOException e) {
+                    Toast.makeText(AddErrorManuelActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        }
+        if(base64images.size()>0){
+            ImageApiInterface imageApiInterface = RetrofitClient.getApiImageService();
+            imageApiInterface.addImageData(base64images).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if(response.isSuccessful()){
+                        Toast.makeText(AddErrorManuelActivity.this,"oldu galiba",Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(AddErrorManuelActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                        try {
+                            String errorBody = response.errorBody() != null ?
+                                    response.errorBody().string() : "No error body";
+                            Log.e("Retrofit", "Error body: " + errorBody);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(AddErrorManuelActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+
 }

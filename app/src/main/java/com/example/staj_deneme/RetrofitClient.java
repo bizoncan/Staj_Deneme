@@ -2,6 +2,7 @@
 
     import com.example.staj_deneme.InterFaces.ApiDeneme;
     import com.example.staj_deneme.InterFaces.ErrorInterface;
+    import com.example.staj_deneme.InterFaces.ImageApiInterface;
     import com.example.staj_deneme.InterFaces.MachineApiInterface;
     import com.example.staj_deneme.InterFaces.MachinePartsApiInterface;
     import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
@@ -22,7 +23,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.10.82.11:7296/")
+                        .baseUrl("https://10.0.2.2:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -33,7 +34,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.10.82.11:7296/")
+                        .baseUrl("https://10.0.2.2:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -45,7 +46,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.10.82.11:7296/")
+                        .baseUrl("https://10.0.2.2:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -59,7 +60,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.10.82.11:7296/")
+                        .baseUrl("https://10.0.2.2:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create(gson))
                         .build();
@@ -70,7 +71,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.10.82.11:7296/")
+                        .baseUrl("https://10.0.2.2:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -81,11 +82,22 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.10.82.11:7296/")
+                        .baseUrl("https://10.0.2.2:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
             return retrofit.create(UserApiInterface.class);
+        }
+        public  static ImageApiInterface getApiImageService(){
+            if (retrofit == null){
+                OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://10.0.2.2:7296/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
+            return retrofit.create(ImageApiInterface.class);
         }
     }

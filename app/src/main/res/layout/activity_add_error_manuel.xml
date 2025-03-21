@@ -15,6 +15,8 @@
         android:ems="10"
         android:hint="Hata Tipi"
         android:inputType="text"
+        android:textColor="@color/black"
+        android:textColorHint="#6B6B6B"
         app:layout_constraintStart_toStartOf="@+id/machinePartId_spinner_layout"
         app:layout_constraintTop_toBottomOf="@+id/machinePartId_spinner_layout" />
 
@@ -22,10 +24,13 @@
         android:id="@+id/manuelErrorDesc_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="Hata Açıklama"
         android:inputType="text"
+        android:textColor="@color/black"
+
+        android:textColorHint="#6B6B6B"
         app:layout_constraintStart_toStartOf="@+id/manuelErrorType_edittext"
         app:layout_constraintTop_toBottomOf="@+id/manuelErrorType_edittext" />
 
@@ -37,6 +42,8 @@
         android:ems="10"
         android:hint="Hata Tarih"
         android:inputType="text"
+        android:textColor="@color/black"
+        android:textColorHint="#6B6B6B"
         app:layout_constraintStart_toStartOf="@+id/manuelErrorDesc_edittext"
         app:layout_constraintTop_toBottomOf="@+id/manuelErrorDesc_edittext" />
 
@@ -47,6 +54,8 @@
         android:backgroundTint="#CB2F2F"
         android:onClick="hata_ekle"
         android:text="Hata Ekle"
+
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/manuelerrordate_edittext"
         app:layout_constraintVertical_bias="0.061"
@@ -61,6 +70,8 @@
         android:backgroundTint="#CB2F2F"
         android:onClick="selectImage"
         android:text="Resim Yükle"
+
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button8" />
 
@@ -71,7 +82,9 @@
         android:layout_marginEnd="48dp"
         android:backgroundTint="#CB2F2F"
         android:onClick="takePicture"
+
         android:text="Resim Çek"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button9" />
 
@@ -82,20 +95,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:hint="Makine Seç"
+        app:hintTextColor="#CB2F2F"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.293"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
 
         <AutoCompleteTextView
             android:id="@+id/machineId_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
+            android:textColor="@color/black"
+            android:textColorHint="#6B6B6B"
             app:dropDownBackgroundTint="#FFDBDB" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -105,6 +119,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:hint="Makine Parçası Seç"
+        app:hintTextColor="#CB2F2F"
         app:layout_constraintHorizontal_bias="0.293"
         app:layout_constraintStart_toStartOf="@+id/machineId_spinner_layout"
         app:layout_constraintTop_toBottomOf="@+id/machineId_spinner_layout">
@@ -114,10 +129,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-            app:dropDownBackgroundTint="#FFDBDB"
-            />
+            android:textColor="@color/black"
+            android:textColorHint="#6B6B6B"
+            app:dropDownBackgroundTint="#FFDBDB" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button9"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/images_textview"
+        style="textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Çekilen Resimler: "
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

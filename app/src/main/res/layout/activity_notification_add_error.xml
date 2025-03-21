@@ -11,7 +11,7 @@
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:textColor="@color/white"
         android:layout_marginEnd="48dp"
         android:backgroundTint="#CB2F2F"
         android:onClick="takePicture"
@@ -57,6 +57,8 @@
         android:ems="10"
         android:hint="Hata Tipi"
         android:inputType="text"
+        android:textColor="@color/black"
+        android:textColorHint="#6B6B6B"
         app:layout_constraintStart_toStartOf="@+id/machinePartId_edt"
         app:layout_constraintTop_toBottomOf="@+id/machinePartId_edt" />
 
@@ -64,7 +66,8 @@
         android:id="@+id/errorDesc_edt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:textColor="@color/black"
+        android:textColorHint="#6B6B6B"
         android:layout_marginTop="28dp"
         android:ems="10"
         android:hint="Hata Açıklama"
@@ -78,6 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:clickable="false"
+        android:textColor="@color/black"
+        android:textColorHint="#6B6B6B"
         android:ems="10"
         android:focusable="false"
         android:hint="Hata Tarihi"
@@ -93,6 +98,7 @@
         android:backgroundTint="#CB2F2F"
         android:onClick="hata_ekle"
         android:text="Hata Kaydı Ekle"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/errorDate_edt"
         app:layout_constraintVertical_bias="0.061"
@@ -106,8 +112,21 @@
         android:layout_marginTop="28dp"
         android:backgroundTint="#CB2F2F"
         android:onClick="selectImage"
+        android:textColor="@color/white"
         android:text="Resim Yükle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/kaydet_btn" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button4"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

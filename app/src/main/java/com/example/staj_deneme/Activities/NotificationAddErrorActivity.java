@@ -19,12 +19,16 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.staj_deneme.Adapter.SliderAdapter;
 import com.example.staj_deneme.InterFaces.ErrorInterface;
 import android.Manifest;
 
+import com.example.staj_deneme.InterFaces.ImageApiInterface;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.Models.ErrorModel;
+import com.example.staj_deneme.Models.ImageCollectionModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
 
@@ -33,7 +37,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import android.util.Base64;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -44,7 +51,11 @@ import retrofit2.Response;
 public class NotificationAddErrorActivity extends BaseActivity {
     EditText machineIdEditText,machinePartIdEditText,errorTypeEdt,errorDateEdt,errorDescEdt;
 
+    Boolean isPhotoTaken = false;
 
+    ArrayList<Object> sliderImages ;
+    SliderAdapter sliderAdapter;
+    ViewPager2 viewPager;
 
     private static final int CAMERA_REQUEST = 100;
     private long startTime = 0L;
@@ -56,9 +67,12 @@ public class NotificationAddErrorActivity extends BaseActivity {
     String currentDate;
     Date dateIn;
 
-    Bitmap tempBitmapPhoto;
-    private Uri selectedImageUri = null;
+    List<Bitmap> tempBitmapPhotos;
+    private  List<Uri> selectedImageUris = null;
     byte[] tempPhotoBytes;
+
+
+
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int CAMERA_PERMISSION_CODE = 100;
     @Override
@@ -80,6 +94,13 @@ public class NotificationAddErrorActivity extends BaseActivity {
         errorDescEdt = findViewById(R.id.errorDesc_edt);
         dateIn = new Date();
 
+        tempBitmapPhotos = new ArrayList<>();
+        selectedImageUris = new ArrayList<>();
+
+        viewPager = findViewById(R.id.viewPager);
+        sliderImages =  new ArrayList<>();
+        sliderAdapter = new SliderAdapter(sliderImages);
+        viewPager.setAdapter(sliderAdapter);
     }
 
     private void startTimer() {
@@ -104,6 +125,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
 
     public void hata_ekle(View view){
         ErrorModel errorModel = new ErrorModel();
+        ImageCollectionModel imageCollectionModel = new ImageCollectionModel();
         if(errorTypeEdt.getText().toString().isEmpty() || errorDescEdt.getText().toString().isEmpty() || errorDateEdt.getText().toString().isEmpty() || machineIdEditText.getText().toString().isEmpty()){
             Toast.makeText(NotificationAddErrorActivity.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
             return;
@@ -116,10 +138,10 @@ public class NotificationAddErrorActivity extends BaseActivity {
 
 
         if(!machinePartIdEditText.getText().toString().isEmpty()) errorModel.setMachinePartId(Integer.parseInt(machinePartIdEditText.getText().toString()));
-        if(selectedImageUri != null) {
+        if(selectedImageUris.size() != 0) {
             try {
                 // Convert image to byte array
-                byte[] imageBytes = convertImageToByteArray(selectedImageUri);
+                byte[] imageBytes = convertImageToByteArray(selectedImageUris.get(0));
 
                 String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
@@ -127,24 +149,22 @@ public class NotificationAddErrorActivity extends BaseActivity {
                 errorModel.setErrorImage(base64Image);
 
                 // If you need to include the image type/extension
-                String imageType = getContentResolver().getType(selectedImageUri);
+                String imageType = getContentResolver().getType(selectedImageUris.get(0));
                 errorModel.setErrorImageType(imageType);
-
+                isPhotoTaken = true;
                 // Submit to API
             } catch (IOException e) {
                 Toast.makeText(NotificationAddErrorActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
-        else if(tempBitmapPhoto != null){
-                byte[] imageBytes = convertBitmapToByteArray(tempBitmapPhoto);
+        else if(tempBitmapPhotos.size() != 0){
+            byte[] imageBytes = convertBitmapToByteArray(tempBitmapPhotos.get(0));
+            String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            errorModel.setErrorImage(base64Image);
+            String imageType = "image/jpeg";
+            errorModel.setErrorImageType(imageType);
 
-                String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-                errorModel.setErrorImage(base64Image);
-
-                String imageType = "image/jpeg";
-                errorModel.setErrorImageType(imageType);
         }
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
         String us_na = sharedPreferences.getString("Username","");
@@ -172,6 +192,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
                 Log.d("Retrofit", "Response code: " + response.code());
                 Log.d("Retrofit", "Response message: " + response.message());
                 if(response.isSuccessful() ){
+                    resimleri_ekle();
                     Toast.makeText(NotificationAddErrorActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
                     Intent sayfa = new Intent(NotificationAddErrorActivity.this,TestActivity.class);
                     stopTimer();
@@ -211,14 +232,15 @@ public class NotificationAddErrorActivity extends BaseActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
-            selectedImageUri = data.getData();
-            // Optionally show the selected image in an ImageView
-            // imageView.setImageURI(selectedImageUri);
+            selectedImageUris.add(data.getData());
+            sliderImages.add(data.getData());
+            sliderAdapter.setImageList(sliderImages);
         }
         else if(requestCode== CAMERA_REQUEST && resultCode == RESULT_OK
         && data != null ){
-            tempBitmapPhoto = (Bitmap) data.getExtras().get("data");
-
+            tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
+            sliderImages.add((Bitmap) data.getExtras().get("data"));
+            sliderAdapter.setImageList(sliderImages);
         }
     }
     public void takePicture(View view){
@@ -243,7 +265,6 @@ public class NotificationAddErrorActivity extends BaseActivity {
             }
         }
     }
-    private Uri cameraImageUri;
     private void openCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
@@ -320,6 +341,65 @@ public class NotificationAddErrorActivity extends BaseActivity {
 
     }
 
+    public void resimleri_ekle(){
+        byte[] imageBytes;
+        String base64Image;
+        List<String> base64images = new ArrayList<>();
+        if (tempBitmapPhotos.size()>1)
+        {
+            List<Bitmap> tt_ll;
+            if (isPhotoTaken){
+                tt_ll = tempBitmapPhotos.subList(0,tempBitmapPhotos.size());
+            }
+            else{
+                tt_ll = tempBitmapPhotos.subList(1,tempBitmapPhotos.size());
+            }
+            for (Bitmap bb : tt_ll){
+                imageBytes = convertBitmapToByteArray(bb);
+                base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                base64images.add(base64Image);
+            }
 
+        }
+        if (selectedImageUris.size()>1)
+        {
+            List<Uri> ss_uu = selectedImageUris.subList(1,selectedImageUris.size());
+            for (Uri uu:ss_uu){
+                try {
+                    imageBytes = convertImageToByteArray(uu);
+                    base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                    base64images.add(base64Image);
+                } catch (IOException e) {
+                    Toast.makeText(NotificationAddErrorActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        }
+        if(base64images.size()>0){
+            ImageApiInterface imageApiInterface = RetrofitClient.getApiImageService();
+            imageApiInterface.addImageData(base64images).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if(response.isSuccessful()){
+                        Toast.makeText(NotificationAddErrorActivity.this,"oldu galiba",Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(NotificationAddErrorActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                        try {
+                            String errorBody = response.errorBody() != null ?
+                                    response.errorBody().string() : "No error body";
+                            Log.e("Retrofit", "Error body: " + errorBody);
 
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(NotificationAddErrorActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
 }
