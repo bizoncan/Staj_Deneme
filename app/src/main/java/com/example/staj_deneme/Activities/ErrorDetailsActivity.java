@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -34,6 +35,8 @@ public class ErrorDetailsActivity extends BaseActivity {
     ListView errorDetailListView;
     List<ErrorModel> errorModelList;
 
+
+
     String i_machine_part_name;
     ExpandableListViewAdapter adapterEx;
     ExpandableListView expandableListView;
@@ -52,6 +55,14 @@ public class ErrorDetailsActivity extends BaseActivity {
     errorModelList = new ArrayList<>();
     adapter = new ErrorAdapter(errorModelList,ErrorDetailsActivity.this);
     errorDetailListView.setAdapter(adapter);
+    errorDetailListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent sayfa = new Intent(ErrorDetailsActivity.this, ErrorInfoActivity.class);
+            sayfa.putExtra("ErrorId",errorModelList.get(position).getId());
+            startActivity(sayfa);
+        }
+    });
     expandableListView = findViewById(R.id.ex_listview);
 
     listGroup = new ArrayList<>();
@@ -72,7 +83,6 @@ public class ErrorDetailsActivity extends BaseActivity {
             public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
                 if(response.body() != null && response.isSuccessful() ){
                     errorModelList.addAll(response.body());
-
                     adapter.notifyDataSetChanged();
                 }
                 else{

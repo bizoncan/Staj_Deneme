@@ -1,6 +1,7 @@
 package com.example.staj_deneme.Activities;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -169,7 +170,7 @@ public class AddErrorManuelActivity extends BaseActivity {
 
         viewPager = findViewById(R.id.viewPager);
         sliderImages =  new ArrayList<>();
-        sliderAdapter = new SliderAdapter(sliderImages);
+        sliderAdapter = new SliderAdapter(AddErrorManuelActivity.this,sliderImages);
         viewPager.setAdapter(sliderAdapter);
 
     }
@@ -315,9 +316,33 @@ public class AddErrorManuelActivity extends BaseActivity {
             openCamera();
         }
     }
+    private Uri captureImageUri;
     private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        // Create content values with metadata for the new image
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "Camera_Image_" + System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.DESCRIPTION, "Photo captured by app");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+
+        try {
+            // Insert a new entry in the MediaStore and get the resulting URI
+            captureImageUri = getContentResolver().insert(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    values
+            );
+
+            // Create camera intent and tell it to save the full-resolution image to our URI
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
+
+            // Start camera activity without checking resolveActivity (optional safety check)
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error opening camera: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -332,11 +357,18 @@ public class AddErrorManuelActivity extends BaseActivity {
             // imageView.setImageURI(selectedImageUri);
         }
         else if(requestCode== CAMERA_REQUEST && resultCode == RESULT_OK
-                && data != null ){
-            data.getExtras().get("data");
-            tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
-            sliderImages.add((Bitmap) data.getExtras().get("data"));
-            sliderAdapter.setImageList(sliderImages);
+                ){
+            if (captureImageUri != null) {
+                // Add the URI to your collections
+                selectedImageUris.add(captureImageUri);
+                sliderImages.add(captureImageUri);
+                sliderAdapter.setImageList(sliderImages);
+                // Optional: Display a success message
+                Toast.makeText(this, "Image captured successfully", Toast.LENGTH_SHORT).show();
+            }
+           /* tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
+            sliderImages.add( data.getExtras().get("data"));
+            sliderAdapter.setImageList(sliderImages);*/
         }
     }
     private Runnable timerRunnable = new Runnable() {

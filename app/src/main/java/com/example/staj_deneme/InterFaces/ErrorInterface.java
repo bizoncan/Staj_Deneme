@@ -39,4 +39,6 @@ public interface ErrorInterface {
                                               @Query("s3") String s3,
                                               @Query("s4") String s4,
                                               @Query("s5") String s5);
+    @GET("api/Error/{id}")
+    Call<ErrorModel> getById(@Path("id")int id);
 }
