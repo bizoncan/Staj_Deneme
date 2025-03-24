@@ -15,6 +15,7 @@
         android:text="Giriş Yapınız"
         android:textColor="#785757"
         android:textSize="50sp"
+        style="?attr/textAppearanceHeadline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +40,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:text="Hoşgeldiniz"
+            style="?attr/textAppearanceHeadline2"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="30sp" />
@@ -91,6 +93,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#CB2F2F"
             android:textColor="@color/white"
+            style="?attr/textAppearanceButton"
             android:onClick="giris"
             android:text="Giriş"
             android:textAlignment="center" />
@@ -111,6 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textAlignment="center"
+            style="?attr/textAppearanceCaption"
             android:textColor="#FF0000"
             android:text="Hesap Oluştur"
             android:onClick="hesapOlustur"/>

@@ -23,7 +23,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.0.2.2:7296/")
+                        .baseUrl("https://10.10.82.11:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -34,7 +34,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.0.2.2:7296/")
+                        .baseUrl("https://10.10.82.11:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -46,7 +46,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.0.2.2:7296/")
+                        .baseUrl("https://10.10.82.11:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -60,7 +60,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.0.2.2:7296/")
+                        .baseUrl("https://10.10.82.11:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create(gson))
                         .build();
@@ -71,7 +71,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.0.2.2:7296/")
+                        .baseUrl("https://10.10.82.11:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -82,7 +82,7 @@
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.0.2.2:7296/")
+                        .baseUrl("https://10.10.82.11:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
@@ -93,7 +93,7 @@
             if (retrofit == null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("https://10.0.2.2:7296/")
+                        .baseUrl("https://10.10.82.11:7296/")
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
