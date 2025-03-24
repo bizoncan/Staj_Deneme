@@ -34,17 +34,13 @@ public class ErrorDetailsActivity extends BaseActivity {
     ErrorAdapter adapter;
     ListView errorDetailListView;
     List<ErrorModel> errorModelList;
-
-
-
-    String i_machine_part_name;
+    String i_machine_part_name,i_machine_name;
     ExpandableListViewAdapter adapterEx;
     ExpandableListView expandableListView;
     List<String> listGroup;
     HashMap<String, List<String>> listItem;
     TransformationLayout transformationLayout;
     Boolean opened= false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,9 +188,21 @@ public class ErrorDetailsActivity extends BaseActivity {
 
         List<String> makineFilterList = new ArrayList<>();
         for(ErrorInfoModel e: tempErrorList){
-            if (!makineFilterList.contains(e.getMachineName())){
-                makineFilterList.add(e.getMachineName());
+            if (getIntent().getStringExtra("machineId")==null){
+                if (!makineFilterList.contains(e.getMachineName())){
+                    makineFilterList.add(e.getMachineName());
+                }
             }
+            else {
+                if (e.getMachineId() == Integer.parseInt(getIntent().getStringExtra("machineId"))){
+                    if (!makineFilterList.contains(e.getMachineName())){
+                        makineFilterList.add(e.getMachineName());
+                        i_machine_name = e.getMachineName();
+                    }
+                }
+            }
+
+
         }
 
         List<String> makineParcaFilterList = new ArrayList<>();
@@ -298,6 +306,9 @@ public class ErrorDetailsActivity extends BaseActivity {
         if (i_machine_part_name!= null)
         {
             s3 = i_machine_part_name;
+        }
+        if(i_machine_name!=null){
+            s2= i_machine_name;
         }
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.filterListView(s1,s2,s3,s4,s5).enqueue(new Callback<List<ErrorModel>>() {

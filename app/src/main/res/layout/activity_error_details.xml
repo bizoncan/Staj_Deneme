@@ -41,7 +41,9 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#CB2F2F"
             android:onClick="filtrele"
-            android:text="Filtre Ekle" />
+            android:text="Filtre Ekle"
+            android:textColor="@color/white"
+      />
 
         <ExpandableListView
             android:id="@+id/ex_listview"

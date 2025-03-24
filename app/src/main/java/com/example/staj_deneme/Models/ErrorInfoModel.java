@@ -5,6 +5,7 @@ public class ErrorInfoModel {
     String machineName;
     String machinePartName;
     int machinePartId;
+    int machineId;
     String userName;
 
     public int getId() {
@@ -20,6 +21,10 @@ public class ErrorInfoModel {
     }
     public int getMachinePartId() {
         return machinePartId;
+    }
+
+    public int getMachineId() {
+        return machineId;
     }
 
     public String getUserName() {

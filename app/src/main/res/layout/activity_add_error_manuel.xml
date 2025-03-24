@@ -1,161 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.AddErrorManuelActivity">
+    android:fillViewport="true">
 
-    <EditText
-        android:id="@+id/manuelErrorType_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:hint="Hata Tipi"
-        android:inputType="text"
-        android:textColor="@color/black"
-        android:textColorHint="#6B6B6B"
-        app:layout_constraintStart_toStartOf="@+id/machinePartId_spinner_layout"
-        app:layout_constraintTop_toBottomOf="@+id/machinePartId_spinner_layout" />
-
-    <EditText
-        android:id="@+id/manuelErrorDesc_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="Hata Açıklama"
-        android:inputType="text"
-        android:textColor="@color/black"
-
-        android:textColorHint="#6B6B6B"
-        app:layout_constraintStart_toStartOf="@+id/manuelErrorType_edittext"
-        app:layout_constraintTop_toBottomOf="@+id/manuelErrorType_edittext" />
-
-    <EditText
-        android:id="@+id/manuelerrordate_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:hint="Hata Tarih"
-        android:inputType="text"
-        android:textColor="@color/black"
-        android:textColorHint="#6B6B6B"
-        app:layout_constraintStart_toStartOf="@+id/manuelErrorDesc_edittext"
-        app:layout_constraintTop_toBottomOf="@+id/manuelErrorDesc_edittext" />
-
-    <Button
-        android:id="@+id/button8"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#CB2F2F"
-        android:onClick="hata_ekle"
-        android:text="Hata Ekle"
+        android:padding="16dp"
+        tools:context=".Activities.AddErrorManuelActivity">
 
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/manuelerrordate_edittext"
-        app:layout_constraintVertical_bias="0.061"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="28dp"
-        android:backgroundTint="#CB2F2F"
-        android:onClick="selectImage"
-        android:text="Resim Yükle"
-
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button8" />
-
-    <Button
-        android:id="@+id/button10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:backgroundTint="#CB2F2F"
-        android:onClick="takePicture"
-
-        android:text="Resim Çek"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button9" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/machineId_spinner_layout"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="210dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:hint="Makine Seç"
-        app:hintTextColor="#CB2F2F"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.293"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <AutoCompleteTextView
-            android:id="@+id/machineId_spinner"
-            android:layout_width="match_parent"
+        <!-- Makine Seçim Alanı -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/machineId_spinner_layout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="none"
+            android:layout_marginTop="16dp"
+            android:hint="Makine Seç"
+            app:hintTextColor="#CB2F2F"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/machineId_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/black"
+                android:textColorHint="#6B6B6B"
+                app:dropDownBackgroundTint="#FFDBDB" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Makine Parçası Seçim Alanı -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/machinePartId_spinner_layout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Makine Parçası Seç"
+            app:hintTextColor="#CB2F2F"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/machineId_spinner_layout">
+
+            <AutoCompleteTextView
+                android:id="@+id/machinePartId_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/black"
+                android:textColorHint="#6B6B6B"
+                app:dropDownBackgroundTint="#FFDBDB" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Hata Bilgileri Giriş Alanları -->
+        <EditText
+            android:id="@+id/manuelErrorType_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Hata Tipi"
+            android:inputType="text"
             android:textColor="@color/black"
             android:textColorHint="#6B6B6B"
-            app:dropDownBackgroundTint="#FFDBDB" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/machinePartId_spinner_layout" />
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/machinePartId_spinner_layout"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="210dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:hint="Makine Parçası Seç"
-        app:hintTextColor="#CB2F2F"
-        app:layout_constraintHorizontal_bias="0.293"
-        app:layout_constraintStart_toStartOf="@+id/machineId_spinner_layout"
-        app:layout_constraintTop_toBottomOf="@+id/machineId_spinner_layout">
-
-        <AutoCompleteTextView
-            android:id="@+id/machinePartId_spinner"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/manuelErrorDesc_edittext"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="none"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Hata Açıklama"
+            android:inputType="textMultiLine"
+            android:minLines="3"
             android:textColor="@color/black"
             android:textColorHint="#6B6B6B"
-            app:dropDownBackgroundTint="#FFDBDB" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/manuelErrorType_edittext" />
 
+        <EditText
+            android:id="@+id/manuelerrordate_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Hata Tarih"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textColorHint="#6B6B6B"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/manuelErrorDesc_edittext" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button9"
-        app:layout_constraintVertical_bias="0.0" />
+        <!-- Hata Ekle Butonu -->
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#CB2F2F"
+            android:onClick="hata_ekle"
+            android:text="Hata Ekle"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/manuelerrordate_edittext"
+            style="?attr/textAppearanceButton"/>
 
-    <TextView
-        android:id="@+id/images_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Çekilen Resimler: "
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textAppearance="?attr/textAppearanceTitleMedium"
-        app:layout_constraintTop_toBottomOf="@+id/button9" />
+        <!-- Resim İşlem Butonları -->
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#CB2F2F"
+            android:onClick="selectImage"
+            android:text="Resim Yükle"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button8"
+            style="?attr/textAppearanceButton"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/button10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#CB2F2F"
+            android:onClick="takePicture"
+            android:text="Resim Çek"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/button8"
+            style="?attr/textAppearanceButton"/>
+
+        <!-- Çekilen Resimler Başlığı -->
+        <TextView
+            android:id="@+id/images_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Çekilen Resimler:"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button9" />
+
+        <!-- Resim Slider -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/images_textview" />
+
+        <!-- Butonlar arası guideline -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

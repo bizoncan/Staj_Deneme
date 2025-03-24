@@ -59,6 +59,27 @@ public class ErrorInfoActivity extends BaseActivity {
         errorStartDate= findViewById(R.id.errorStartDate_textview);
         errorEndDate= findViewById(R.id.errorEndDate_textview);
         int errorId = getIntent().getIntExtra("ErrorId",0);
+        get_error_list(errorId);
+
+
+
+        ImageApiInterface imageApiInterface = RetrofitClient.getApiImageService();
+        imageApiInterface.getImages(errorId).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    imageCollectionList.addAll(response.body());
+                    fillImageCollection();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+
+            }
+        });
+    }
+    public void get_error_list(int errorId){
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.getById(errorId).enqueue(new Callback<ErrorModel>() {
             @Override
@@ -78,23 +99,7 @@ public class ErrorInfoActivity extends BaseActivity {
                 Log.d("amanin",t.getMessage());
             }
         });
-        ImageApiInterface imageApiInterface = RetrofitClient.getApiImageService();
-        imageApiInterface.getImages(errorId).enqueue(new Callback<List<String>>() {
-            @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    imageCollectionList.addAll(response.body());
-                    fillImageCollection();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
-
-            }
-        });
     }
-
     private void fillImageCollection() {
         if (imageCollectionList.size() > 0 ) {
             for(String s : imageCollectionList){
@@ -125,11 +130,11 @@ public class ErrorInfoActivity extends BaseActivity {
         Long seconds= durr.getSeconds()%60;
         String durs = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours,minutes, seconds);
         machineId.setText("Makine Id: "+errorModel.getMachineId().toString());
-        if (machinePartId!=null){
+        if (errorModel.getMachinePartId()!=null){
             machinePartId.setText("Makine parçası Id: "+errorModel.getMachinePartId().toString());
         }
         else{
-            machinePartId.setText("Makine Parçası Id'si yok: "+errorModel.getMachinePartId().toString());
+            machinePartId.setText("Makine Parçası Id'si yok");
         }
         errorType.setText("Hata tipi: "+errorModel.getErrorType());
         errorDesc.setText("Hata açıklama: "+errorModel.getErrorDesc());

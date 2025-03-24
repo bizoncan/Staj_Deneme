@@ -57,7 +57,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
     ArrayList<Object> sliderImages ;
     SliderAdapter sliderAdapter;
     ViewPager2 viewPager;
-
+    ErrorModel errorModel;
     private static final int CAMERA_REQUEST = 100;
     private long startTime = 0L;
     private long timeElapsed = 0L;
@@ -102,6 +102,36 @@ public class NotificationAddErrorActivity extends BaseActivity {
         sliderImages =  new ArrayList<>();
         sliderAdapter = new SliderAdapter(NotificationAddErrorActivity.this ,sliderImages);
         viewPager.setAdapter(sliderAdapter);
+
+        errorModel = new ErrorModel();
+        get_user();
+    }
+    public void get_user(){
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
+        String us_na = sharedPreferences.getString("Username","");
+        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+        us_na = "admin";//değişecek
+
+        errorInterface.getUserId(us_na).enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if(response.isSuccessful() && response.body()!= null){
+                    errorModel.setUserId(response.body());
+                    Log.e("bubuş","kettttt");
+                    add_error(errorModel);
+                }
+                else {
+                    Log.e("API_DEBUG", "Failed to get user ID" + response.errorBody().toString());
+                }
+            }
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Log.e("API_DEBUG", "Failed to get user ID", t);
+            }
+        });
+
+
+
     }
 
     private void startTimer() {
@@ -125,7 +155,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
     }
 
     public void hata_ekle(View view){
-        ErrorModel errorModel = new ErrorModel();
+
         ImageCollectionModel imageCollectionModel = new ImageCollectionModel();
         if(errorTypeEdt.getText().toString().isEmpty() || errorDescEdt.getText().toString().isEmpty() || errorDateEdt.getText().toString().isEmpty() || machineIdEditText.getText().toString().isEmpty()){
             Toast.makeText(NotificationAddErrorActivity.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
@@ -254,8 +284,20 @@ public class NotificationAddErrorActivity extends BaseActivity {
         requestCameraPermission();
     }
     private void requestCameraPermission() {
+        List<String> permissionsNeeded = new ArrayList<>();
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+            permissionsNeeded.add(Manifest.permission.CAMERA);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        if (!permissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    permissionsNeeded.toArray(new String[0]),
+                    CAMERA_PERMISSION_CODE);
         } else {
             openCamera();
         }

@@ -1,6 +1,10 @@
 package com.example.staj_deneme;
 
+import android.util.Log;
+
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
@@ -55,8 +59,27 @@ public class OkHttpUtil {
             };
 
             // Install the all-trusting trust manager
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            final SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+            /*HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                @Override
+                public void log(String message) {
+                    // Uzun mesajları satır satır bölelim
+                    if (message.length() > 4000) {
+                        for (int i = 0; i <= message.length() / 4000; i++) {
+                            int start = i * 4000;
+                            int end = (i+1) * 4000;
+                            end = end > message.length() ? message.length() : end;
+                            Log.d("OKHTTP", message.substring(start, end));
+                        }
+                    } else {
+                        Log.d("OKHTTP", message);
+                    }
+                }
+            });
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);*/
+
 
             // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
@@ -64,7 +87,7 @@ public class OkHttpUtil {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
             builder.hostnameVerifier((hostname, session) -> true);
-
+            //builder.addInterceptor(loggingInterceptor);
             return builder.build();
         } catch (Exception e) {
             throw new RuntimeException(e);
