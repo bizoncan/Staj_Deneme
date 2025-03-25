@@ -3,6 +3,9 @@ package com.example.staj_deneme.InterFaces;
 import com.example.staj_deneme.Models.ErrorIdModel;
 import com.example.staj_deneme.Models.ErrorInfoModel;
 import com.example.staj_deneme.Models.ErrorModel;
+import com.example.staj_deneme.Models.ErrorResponseModel;
+import com.example.staj_deneme.Models.ErrorResponseNoListModel;
+import com.example.staj_deneme.Models.ResponseModel;
 
 import java.util.List;
 
@@ -17,11 +20,11 @@ import retrofit2.http.Query;
 
 public interface ErrorInterface {
     @GET("api/Error")
-    Call<List<ErrorModel>> getAll();
+    Call<ErrorResponseModel> getAll();
     @GET("api/Error/Machine/{machineId}")
-    Call<List<ErrorModel>> getByMachineId(@Path("machineId")int id);
+    Call<ErrorResponseModel> getByMachineId(@Path("machineId")int id);
     @GET("api/Error/MachinePart/{machinePartId}")
-    Call<List<ErrorModel>> getByMachinePartId(@Path("machinePartId")int id);
+    Call<ErrorResponseModel> getByMachinePartId(@Path("machinePartId")int id);
     @POST("api/Error")
     @Headers({"Content-Type: application/json"})
     Call<Void> add(@Body ErrorModel errorModel);
@@ -40,5 +43,7 @@ public interface ErrorInterface {
                                               @Query("s4") String s4,
                                               @Query("s5") String s5);
     @GET("api/Error/{id}")
-    Call<ErrorModel> getById(@Path("id")int id);
+    Call<ErrorResponseNoListModel> getById(@Path("id")int id);
+    @GET("api/Error/GetMachineNameAndPart/{id}")
+    Call<ErrorInfoModel> getMachineNameAndPart(@Path("id") int id);
 }

@@ -118,7 +118,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
                 if(response.isSuccessful() && response.body()!= null){
                     errorModel.setUserId(response.body());
                     Log.e("bubuş","kettttt");
-                    add_error(errorModel);
+
                 }
                 else {
                     Log.e("API_DEBUG", "Failed to get user ID" + response.errorBody().toString());

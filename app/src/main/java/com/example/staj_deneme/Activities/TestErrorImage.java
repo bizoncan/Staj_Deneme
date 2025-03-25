@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.staj_deneme.InterFaces.ErrorInterface;
 import com.example.staj_deneme.Models.ErrorModel;
+import com.example.staj_deneme.Models.ErrorResponseModel;
 import com.example.staj_deneme.Models.MachineModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
@@ -107,11 +108,11 @@ public class TestErrorImage extends BaseActivity {
         };
         errorListView.setAdapter(adapter);
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        errorInterface.getAll().enqueue(new Callback<List<ErrorModel>>() {
+        errorInterface.getAll().enqueue(new Callback<ErrorResponseModel>() {
             @Override
-            public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
+            public void onResponse(Call<ErrorResponseModel> call, Response<ErrorResponseModel> response) {
                 if(response.isSuccessful()&&response.body()!=null){
-                    List<ErrorModel> errorModels = response.body();
+                    List<ErrorModel> errorModels = response.body().getErrorModelList();
                     if (errorModels.isEmpty()) {
                         Toast.makeText(TestErrorImage.this,"AAAAAAAAAAAAAAAAA",Toast.LENGTH_LONG).show();
                         return;
@@ -127,8 +128,8 @@ public class TestErrorImage extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<List<ErrorModel>> call, Throwable t) {
-                Log.e("Errorrrrrrr", "aaaaaa");
+            public void onFailure(Call<ErrorResponseModel> call, Throwable t) {
+
             }
         });
 

@@ -17,7 +17,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.staj_deneme.Adapter.SliderAdapter;
 import com.example.staj_deneme.InterFaces.ErrorInterface;
 import com.example.staj_deneme.InterFaces.ImageApiInterface;
+import com.example.staj_deneme.Models.ErrorInfoModel;
 import com.example.staj_deneme.Models.ErrorModel;
+import com.example.staj_deneme.Models.ErrorResponseNoListModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
 
@@ -35,6 +37,7 @@ import retrofit2.Response;
 public class ErrorInfoActivity extends BaseActivity {
     TextView machineId,machinePartId,errorType,errorDesc,errorStartDate,errorEndDate;
     ErrorModel errorModel;
+    ErrorInfoModel errorInfoModel;
     ArrayList<Object> sliderImages ;
     SliderAdapter sliderAdapter;
     ViewPager2 viewPager;
@@ -45,7 +48,7 @@ public class ErrorInfoActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_error_info);
         imageCollectionList = new ArrayList<>();
-
+        errorInfoModel = new ErrorInfoModel();
         errorModel = new ErrorModel();
         viewPager = findViewById(R.id.viewPager);
         sliderImages =  new ArrayList<>();
@@ -81,11 +84,12 @@ public class ErrorInfoActivity extends BaseActivity {
     }
     public void get_error_list(int errorId){
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        errorInterface.getById(errorId).enqueue(new Callback<ErrorModel>() {
+        errorInterface.getById(errorId).enqueue(new Callback<ErrorResponseNoListModel>() {
             @Override
-            public void onResponse(Call<ErrorModel> call, Response<ErrorModel> response) {
+            public void onResponse(Call<ErrorResponseNoListModel> call, Response<ErrorResponseNoListModel> response) {
                 if(response.isSuccessful()&& response.body() != null){
-                    errorModel = response.body();
+                    errorModel = response.body().getErrorModel();
+                    errorInfoModel=response.body().getErrorInfoModel();
                     fillList();
                     addImages();
 
@@ -95,7 +99,7 @@ public class ErrorInfoActivity extends BaseActivity {
                 }
             }
             @Override
-            public void onFailure(Call<ErrorModel> call, Throwable t) {
+            public void onFailure(Call<ErrorResponseNoListModel> call, Throwable t) {
                 Log.d("amanin",t.getMessage());
             }
         });
@@ -129,9 +133,9 @@ public class ErrorInfoActivity extends BaseActivity {
         Long minutes= durr.toMinutes()%60;
         Long seconds= durr.getSeconds()%60;
         String durs = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours,minutes, seconds);
-        machineId.setText("Makine Id: "+errorModel.getMachineId().toString());
+        machineId.setText("Makine Id: "+errorInfoModel.getMachineName());
         if (errorModel.getMachinePartId()!=null){
-            machinePartId.setText("Makine parçası Id: "+errorModel.getMachinePartId().toString());
+            machinePartId.setText("Makine parçası Id: "+errorInfoModel.getMachinePartName());
         }
         else{
             machinePartId.setText("Makine Parçası Id'si yok");

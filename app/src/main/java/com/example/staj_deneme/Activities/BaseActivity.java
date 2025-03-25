@@ -256,7 +256,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void startDatabasePolling() {
-        final int POLL_INTERVAL = 500;
+        final int POLL_INTERVAL = 10000;
 
         Handler handler = new Handler();
         Runnable pollRunnable = new Runnable() {
