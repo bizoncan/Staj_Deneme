@@ -39,7 +39,7 @@
             android:id="@+id/button14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#CB2F2F"
+            android:backgroundTint="#DA291C"
             android:onClick="filtrele"
             android:text="Filtre Ekle"
             android:textColor="@color/white"
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#CB2F2F"
+        android:backgroundTint="#DA291C"
         android:onClick="gorunur_ol"
         android:text="Filtreler"
 

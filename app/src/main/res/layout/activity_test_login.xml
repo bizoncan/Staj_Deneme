@@ -91,7 +91,7 @@
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#CB2F2F"
+            android:backgroundTint="#DA291C"
             android:textColor="@color/white"
             style="?attr/textAppearanceButton"
             android:onClick="giris"
@@ -115,7 +115,7 @@
             android:layout_marginTop="10dp"
             android:textAlignment="center"
             style="?attr/textAppearanceCaption"
-            android:textColor="#FF0000"
+            android:textColor="#DA291C"
             android:text="Hesap Oluştur"
             android:onClick="hesapOlustur"/>
 

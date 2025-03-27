@@ -3,6 +3,7 @@ package com.example.staj_deneme.Adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.staj_deneme.InterFaces.ErrorInterface;
 import com.example.staj_deneme.Models.ErrorInfoModel;
 import com.example.staj_deneme.Models.ErrorModel;
@@ -25,8 +27,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +40,7 @@ public class ErrorAdapter extends BaseAdapter {
     List<ErrorModel> errors;
     List<ErrorInfoModel> errorInfos;
     Context context;
+    private Map<Integer, ErrorInfoModel> errorInfoMap;
 
     public ErrorAdapter() {
     }
@@ -44,7 +49,18 @@ public class ErrorAdapter extends BaseAdapter {
         this.errors = errors;
         this.errorInfos = errorInfos;
         this.context = context;
+
     }
+    private static class ViewHolder {
+        TextView machindeId;
+        TextView machindePartId;
+        TextView errorType;
+        TextView errorDesc;
+        TextView errorStartDate;
+        TextView errorEndDate;
+        ImageView imgURL;
+    }
+
 
     @Override
     public int getCount() {
@@ -63,50 +79,76 @@ public class ErrorAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        errorInfoMap = new HashMap<>();
+        for(ErrorInfoModel info : errorInfos){
+            errorInfoMap.put(info.getMachineId(),info);
+        }
         if (convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.error_detail_layout, parent, false);
+
+            holder = new ViewHolder();
+            holder.machindeId = convertView.findViewById(R.id.errorMachineId_textview);
+            holder.machindePartId = convertView.findViewById(R.id.errorMachinePartId_textview);
+            holder.errorType = convertView.findViewById(R.id.errorType_textview);
+            holder.errorDesc = convertView.findViewById(R.id.errorDesc_textview);
+            holder.errorStartDate = convertView.findViewById(R.id.errorStartDate_textview);
+            holder.errorEndDate = convertView.findViewById(R.id.errorEndDate_textview);
+            holder.imgURL = convertView.findViewById(R.id.errorImage_imageview);
+
+            convertView.setTag(holder);
+        }else {
+            holder = (ViewHolder) convertView.getTag();
         }
         ErrorModel curr = errors.get(position);
 
-        String durs = formatErrorDuration(curr);
 
-        TextView machindeId = convertView.findViewById(R.id.errorMachineId_textview);
-        TextView machindePartId = convertView.findViewById(R.id.errorMachinePartId_textview);
-        TextView errorType = convertView.findViewById(R.id.errorType_textview);
-        TextView errorDesc = convertView.findViewById(R.id.errorDesc_textview);
-        TextView errorStartDate = convertView.findViewById(R.id.errorStartDate_textview);
-        TextView errorEndDate = convertView.findViewById(R.id.errorEndDate_textview);
-        ImageView imgURL = convertView.findViewById(R.id.errorImage_imageview);
-        for(ErrorInfoModel e : errorInfos){
-            if (e.getMachineId()==curr.getMachineId()){
-                machindeId.setText("Makine: "+e.getMachineName());
+        ErrorInfoModel machineInfo = errorInfoMap.get(curr.getMachineId());
+
+        if (machineInfo != null) {
+            holder.machindeId.setText("Makine: " + machineInfo.getMachineName());
+
+            if (curr.getMachinePartId() != null) {
+                holder.machindePartId.setText("Makine parçası: " + machineInfo.getMachinePartName());
+            } else {
+                holder.machindePartId.setText("Makine Parçası Id'si yok");
             }
-            if(curr.getMachinePartId() != null){
-                if(e.getMachineId()==curr.getMachineId()){
-                    machindePartId.setText("Makine parçası: "+e.getMachinePartName());
-                }
-            }
-            else machindePartId.setText("Makine Parçası Id'si yok");
         }
-        errorType.setText("Hata tipi: "+curr.getErrorType());
-        errorDesc.setText("Hata açıklama: "+curr.getErrorDesc());
-        errorStartDate.setText("Arıza kaydı giriş tarihi: "+curr.getErrorDate());
-        errorEndDate.setText("Arıza kaydı için geçen süre: "+durs);
-        if (curr.getErrorImage() != null) {
-            try {
-                byte[] decodedBytes = Base64.decode(curr.getErrorImage(), Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-                imgURL.setImageBitmap(bitmap);
+        holder.errorType.setText("Hata tipi: "+curr.getErrorType());
+        holder.errorDesc.setText("Hata açıklama: "+curr.getErrorDesc());
+        holder.errorStartDate.setText("Arıza kaydı giriş tarihi: "+curr.getErrorDate());
+        try{
+            String durs = formatErrorDuration(curr);
+            holder.errorEndDate.setText("Arıza kaydı için geçen süre: "+durs);
+        }catch (Exception e){
+            holder.errorEndDate.setText("Arıza kaydı için geçen süre: HESAPLANAMADI");
+        }
+        loadImage(holder.imgURL,curr.getErrorImage());
 
+        return convertView;
+    }
+    private void loadImage(ImageView imageView, String base64Image) {
+        // Consider using a background thread or image loading library
+        if (base64Image != null) {
+            try {
+                byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+                Glide.with(context)
+                        .asBitmap()
+                        .load(decodedBytes)
+                        .placeholder(R.drawable.baseline_no_photography_24)
+                        .error(R.drawable.baseline_no_photography_24)
+                        .into(imageView);
             } catch (Exception e) {
                 Log.e("ImageDecodeError", "Error decoding image: " + e.getMessage());
-                imgURL.setImageResource(R.drawable.baseline_home_24);
+                Glide.with(context)
+                        .load(R.drawable.baseline_no_photography_24)
+                        .into(imageView);
             }
+        } else {
+            Glide.with(context)
+                    .load(R.drawable.baseline_no_photography_24)
+                    .into(imageView);
         }
-        else{
-            imgURL.setImageResource(R.drawable.baseline_home_24);
-        }
-        return convertView;
     }
     private String formatErrorDuration(ErrorModel error) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");

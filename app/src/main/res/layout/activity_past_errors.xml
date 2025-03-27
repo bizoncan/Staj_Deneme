@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:onClick="geri"
         android:text="Geri"
-        android:backgroundTint="#CB2F2F"
+        android:backgroundTint="#DA291C"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

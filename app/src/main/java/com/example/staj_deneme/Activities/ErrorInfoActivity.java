@@ -2,6 +2,9 @@ package com.example.staj_deneme.Activities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableWrapper;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
@@ -115,12 +119,13 @@ public class ErrorInfoActivity extends BaseActivity {
 
                 } catch (Exception e) {
                     Log.e("ImageDecodeError", "Error decoding image: " + e.getMessage());
-                    sliderImages.add(R.drawable.baseline_home_24);
+                    Drawable vectorDrawable = getDrawable(R.drawable.baseline_no_photography_24);
+                    sliderImages.add(Bitmap.createBitmap(
+                            vectorDrawable.getIntrinsicWidth(),
+                            vectorDrawable.getIntrinsicHeight(),
+                            Bitmap.Config.ARGB_8888));
                 }
             }
-        }
-        else{
-            sliderImages.add(R.drawable.baseline_home_24);
         }
     }
 
@@ -157,11 +162,39 @@ public class ErrorInfoActivity extends BaseActivity {
 
             } catch (Exception e) {
                 Log.e("ImageDecodeError", "Error decoding image: " + e.getMessage());
-                sliderImages.add(R.drawable.baseline_home_24);
+                Drawable vectorDrawable = getDrawable(R.drawable.baseline_no_photography_24);
+                vectorDrawable = DrawableCompat.wrap(vectorDrawable);
+                Bitmap bb = Bitmap.createBitmap(
+                        vectorDrawable.getIntrinsicWidth(),
+                        vectorDrawable.getIntrinsicHeight(),
+                        Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bb);
+
+// Draw the drawable onto the canvas
+                vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+                vectorDrawable.draw(canvas);
+
+                sliderImages.add(bb);
+                Drawable vectorDrawable_ = getDrawable(R.drawable.baseline_home_24);
+                sliderAdapter.setImageList(sliderImages);
             }
         }
         else{
-            sliderImages.add(R.drawable.baseline_home_24);
+            Drawable vectorDrawable = getDrawable(R.drawable.baseline_no_photography_24);
+            vectorDrawable = DrawableCompat.wrap(vectorDrawable);
+            Bitmap bb = Bitmap.createBitmap(
+                    vectorDrawable.getIntrinsicWidth(),
+                    vectorDrawable.getIntrinsicHeight(),
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bb);
+
+// Draw the drawable onto the canvas
+            vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+            vectorDrawable.draw(canvas);
+
+            sliderImages.add(bb);
+            Drawable vectorDrawable_ = getDrawable(R.drawable.baseline_home_24);
+            sliderAdapter.setImageList(sliderImages);
         }
     }
 }

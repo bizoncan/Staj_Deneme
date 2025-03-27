@@ -27,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#CB2F2F"
+        android:backgroundTint="#DA291C"
         android:minHeight="48dp"
         android:onClick="hatalari_gor"
         android:text="Makine Hatalarını Görüntüle"

@@ -124,7 +124,7 @@ tools:context=".Activities.TestRegisterActivity">
         android:layout_height="wrap_content"
         android:onClick="kaydol"
         android:text="Kaydol"
-        android:backgroundTint="#CB2F2F"
+        android:backgroundTint="#DA291C"
         android:textColor="@color/white"
         style="?attr/textAppearanceButton"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -140,7 +140,7 @@ tools:context=".Activities.TestRegisterActivity">
         android:layout_marginTop="10dp"
         android:text="Hatalı kullancı numarası veya şifre"
         android:textAlignment="center"
-        android:textColor="#FF0000"
+        android:textColor="#DA291C"
         android:visibility="gone" />
 </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

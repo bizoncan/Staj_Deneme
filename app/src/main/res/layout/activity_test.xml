@@ -13,7 +13,7 @@
         android:layout_width="113dp"
         android:layout_height="100dp"
 
-        android:backgroundTint="#CB2F2F"
+        android:backgroundTint="#DA291C"
         android:text="QR Tara"
         android:visibility="gone"
         tools:layout_editor_absoluteY="587dp" />
@@ -41,7 +41,7 @@
         android:layout_marginStart="240dp"
         android:layout_marginTop="588dp"
         android:background="@drawable/ic_notification"
-        android:backgroundTint="#CB2F2F"
+        android:backgroundTint="#DA291C"
         android:elevation="5dp"
         android:onClick="bildirim_yukle"
         android:visibility="gone"
