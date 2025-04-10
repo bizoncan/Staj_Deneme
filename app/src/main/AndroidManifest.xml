@@ -5,10 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -28,20 +28,26 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.TakenWorksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.AddWorkActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.WorkOrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.WorkOrdersActivity"
+            android:exported="true" />
+        <activity
             android:name=".Activities.ErrorInfoActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.AddErrorManuelActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Activities.TestLoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activities.TestRegisterActivity"
             android:exported="true" />
@@ -63,7 +69,11 @@
         <activity
             android:name=".Activities.TestActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Activities.AddNotificationTestActivity"

@@ -50,6 +50,7 @@ public class ErrorAdapter extends BaseAdapter {
         this.errorInfos = errorInfos;
         this.context = context;
 
+
     }
     private static class ViewHolder {
         TextView machindeId;
@@ -80,10 +81,7 @@ public class ErrorAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        errorInfoMap = new HashMap<>();
-        for(ErrorInfoModel info : errorInfos){
-            errorInfoMap.put(info.getMachineId(),info);
-        }
+
         if (convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.error_detail_layout, parent, false);
 
@@ -103,17 +101,22 @@ public class ErrorAdapter extends BaseAdapter {
         ErrorModel curr = errors.get(position);
 
 
-        ErrorInfoModel machineInfo = errorInfoMap.get(curr.getMachineId());
 
-        if (machineInfo != null) {
-            holder.machindeId.setText("Makine: " + machineInfo.getMachineName());
 
-            if (curr.getMachinePartId() != null) {
-                holder.machindePartId.setText("Makine parçası: " + machineInfo.getMachinePartName());
-            } else {
-                holder.machindePartId.setText("Makine Parçası Id'si yok");
-            }
-        }
+
+       for(ErrorInfoModel e: errorInfos){
+           if(e.getMachineId()== curr.getMachineId()){
+                holder.machindeId.setText("Makine adı: "+ e.getMachineName());
+           }
+           if(curr.getMachinePartId()!=null){
+               if (e.getMachinePartId()== curr.getMachinePartId()){
+                   holder.machindePartId.setText("Makine parça adı: "+ e.getMachinePartName());
+               }
+           }
+           else {
+               holder.machindePartId.setText("Makine parçası bilgisi bulunamadı.");
+           }
+       }
         holder.errorType.setText("Hata tipi: "+curr.getErrorType());
         holder.errorDesc.setText("Hata açıklama: "+curr.getErrorDesc());
         holder.errorStartDate.setText("Arıza kaydı giriş tarihi: "+curr.getErrorDate());

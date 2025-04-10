@@ -179,7 +179,12 @@ public class BaseActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.tarihi) {
                 sayfa = new Intent(getApplicationContext(), TestLoginActivity.class);
             }
-
+            else if (item.getItemId() == R.id.workorders) {
+                sayfa = new Intent(getApplicationContext(), WorkOrdersActivity.class);
+            }
+            else if (item.getItemId() == R.id.myworks) {
+                sayfa = new Intent(getApplicationContext(), TakenWorksActivity.class);
+            }
             if (sayfa != null) {
                 startActivity(sayfa);
             }

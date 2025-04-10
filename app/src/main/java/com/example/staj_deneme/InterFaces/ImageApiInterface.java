@@ -12,8 +12,10 @@ import retrofit2.http.Path;
 
 public interface ImageApiInterface {
 
-    @POST("api/ImageData")
+    @POST("api/ImageData/addImageData")
     Call<Void> addImageData(@Body List<String> imageCollectionModel);
+    @POST("api/ImageData/addImageDataWork")
+    Call<Void> addImageDataWork(@Body List<String> imageCollectionModel);
     @GET("api/ImageData/{errorId}")
     Call<List<String>> getImages(@Path("errorId") int errorId);
 }

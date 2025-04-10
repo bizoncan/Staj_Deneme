@@ -39,7 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ErrorInfoActivity extends BaseActivity {
-    TextView machineId,machinePartId,errorType,errorDesc,errorStartDate,errorEndDate;
+    TextView machineId,machinePartId,errorType,errorDesc,errorStartDate,errorEndDate,errorUser;
     ErrorModel errorModel;
     ErrorInfoModel errorInfoModel;
     ArrayList<Object> sliderImages ;
@@ -65,6 +65,7 @@ public class ErrorInfoActivity extends BaseActivity {
         errorDesc = findViewById(R.id.errorDesc_textview);
         errorStartDate= findViewById(R.id.errorStartDate_textview);
         errorEndDate= findViewById(R.id.errorEndDate_textview);
+        errorUser=findViewById(R.id.errorUser_textview);
         int errorId = getIntent().getIntExtra("ErrorId",0);
         get_error_list(errorId);
 
@@ -149,7 +150,7 @@ public class ErrorInfoActivity extends BaseActivity {
         errorDesc.setText("Hata açıklama: "+errorModel.getErrorDesc());
         errorStartDate.setText("Arıza kaydı giriş tarihi: "+start.toString());
         errorEndDate.setText("Arıza kaydı için geçen süre: "+durs);
-
+        errorUser.setText("Arızayı giren kişi: "+ errorInfoModel.getUserName());
     }
 
     private void addImages() {

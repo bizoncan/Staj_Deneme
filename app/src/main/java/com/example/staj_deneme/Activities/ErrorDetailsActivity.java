@@ -189,7 +189,7 @@ public class ErrorDetailsActivity extends BaseActivity {
 
 
     }
-    public void addItems(List<ErrorInfoModel> tempErrorList){
+    public void addItems(List<ErrorInfoModel> tempErrorInfos){
 
         listGroup.add("Tarih");
         listGroup.add("Makineler");
@@ -203,7 +203,7 @@ public class ErrorDetailsActivity extends BaseActivity {
         tarihList.add("Bu ay");
 
         List<String> makineFilterList = new ArrayList<>();
-        for(ErrorInfoModel e: tempErrorList){
+        for(ErrorInfoModel e: tempErrorInfos){
             if (getIntent().getStringExtra("machineId")==null){
                 if (!makineFilterList.contains(e.getMachineName())){
                     makineFilterList.add(e.getMachineName());
@@ -220,7 +220,7 @@ public class ErrorDetailsActivity extends BaseActivity {
         }
 
         List<String> makineParcaFilterList = new ArrayList<>();
-        for(ErrorInfoModel e: tempErrorList){
+        for(ErrorInfoModel e: tempErrorInfos){
             if (e.getMachinePartName() != null){
                 if (getIntent().getStringExtra("machinePartId")==null){
                     if (!makineParcaFilterList.contains(e.getMachinePartName())){
@@ -243,7 +243,7 @@ public class ErrorDetailsActivity extends BaseActivity {
         fotoList.add("Yok");
 
         List<String> userInputList = new ArrayList<>();
-        for(ErrorInfoModel e: tempErrorList){
+        for(ErrorInfoModel e: tempErrorInfos){
             if (e.getUserName() != null){
                 if (!userInputList.contains(e.getUserName())){
                     userInputList.add(e.getUserName());

@@ -7,6 +7,8 @@
     import com.example.staj_deneme.InterFaces.MachinePartsApiInterface;
     import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
     import com.example.staj_deneme.InterFaces.UserApiInterface;
+    import com.example.staj_deneme.InterFaces.WorkInterface;
+    import com.example.staj_deneme.InterFaces.WorkOrderInterface;
     import com.google.gson.Gson;
     import com.google.gson.GsonBuilder;
 
@@ -99,5 +101,27 @@
                         .build();
             }
             return retrofit.create(ImageApiInterface.class);
+        }
+        public  static WorkOrderInterface getApiWorkOrderService(){
+            if (retrofit == null){
+                OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://10.0.2.2:7296/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
+            return retrofit.create(WorkOrderInterface.class);
+        }
+        public  static WorkInterface getApiWorkService(){
+            if (retrofit == null){
+                OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://10.0.2.2:7296/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
+            return retrofit.create(WorkInterface.class);
         }
     }

@@ -104,5 +104,18 @@
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
             tools:text="content" />
+        <TextView
+            android:id="@+id/errorUser_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            tools:text="content" />
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

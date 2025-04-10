@@ -23,6 +23,20 @@
         android:icon="@drawable/baseline_stacked_bar_chart_24"
         />
     <item
+        android:id="@+id/workorders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="İş Emirleri"
+        android:icon="@drawable/baseline_queue_24"
+        />
+    <item
+        android:id="@+id/myworks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Mevcut İş Emirlerim"
+        android:icon="@drawable/baseline_build_24"
+        />
+    <item
         android:id="@+id/tarihi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
