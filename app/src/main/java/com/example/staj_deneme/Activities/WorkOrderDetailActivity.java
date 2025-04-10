@@ -118,7 +118,7 @@ public class WorkOrderDetailActivity extends BaseActivity {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));//Türkiye Saat Dilimi
             String currentDate = dateFormat.format(new Date());
-            workOrderModel.setWorkOrderStartDate(currentDate);
+            workOrderModel.setWorkOrderTempStartDate(currentDate);
             workOrderModel.setOpened(true);
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
             String us_na = sharedPreferences.getString("Username","");

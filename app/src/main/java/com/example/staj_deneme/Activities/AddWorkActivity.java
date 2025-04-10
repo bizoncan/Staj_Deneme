@@ -387,12 +387,13 @@ public class AddWorkActivity extends BaseActivity {
         workModel.setMachinePartId(machinePartId);
         workModel.setTitle(workTypeEdt.getText().toString());
         workModel.setDesc(workDescEdt.getText().toString());
-        workModel.setWorkOrderStartDate(workOrderModel.getWorkOrderStartDate());
+        workModel.setWorkOrderStartDate(workOrderModel.getWorkOrderTempStartDate());
         workModel.setWorkOrderEndDate(dateFormat.format(new Date()));
         workModel.setUserId(workOrderModel.getUserId());
         workModel.setWorkOrderId(workOrderModel.getId());
         workModel.setOpened(true);
         workModel.setClosed(true);
+        workModel.setPastWork(false);
         workOrderModel.setWorkOrderEndDate(dateFormat.format(new Date()));
         workOrderModel.setClosed(true);
         add_work(workModel);

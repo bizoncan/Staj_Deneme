@@ -8,11 +8,12 @@ public class WorkOrderModel {
     public boolean isOpened;
     public String workOrderStartDate;
     public String workOrderEndDate;
+    public String workOrderTempStartDate;
     public Integer machineId;
     public Integer machinePartId;
     public Integer userId;
 
-    public WorkOrderModel(int id, String title, String desc, boolean isClosed, boolean isOpened, String workOrderStartDate, String workOrderEndDate, Integer machineId, Integer machinePartId, Integer userId) {
+    public WorkOrderModel(int id, String title, String desc, boolean isClosed, boolean isOpened, String workOrderStartDate, String workOrderEndDate, String workOrderTempStartDate, Integer machineId, Integer machinePartId, Integer userId) {
         this.id = id;
         this.title = title;
         this.desc = desc;
@@ -20,6 +21,7 @@ public class WorkOrderModel {
         this.isOpened = isOpened;
         this.workOrderStartDate = workOrderStartDate;
         this.workOrderEndDate = workOrderEndDate;
+        this.workOrderTempStartDate = workOrderTempStartDate;
         this.machineId = machineId;
         this.machinePartId = machinePartId;
         this.userId = userId;
@@ -106,5 +108,13 @@ public class WorkOrderModel {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getWorkOrderTempStartDate() {
+        return workOrderTempStartDate;
+    }
+
+    public void setWorkOrderTempStartDate(String workOrderTempStartDate) {
+        this.workOrderTempStartDate = workOrderTempStartDate;
     }
 }

@@ -12,8 +12,9 @@ public class WorkModel {
     public Integer machinePartId;
     public Integer userId;
     public int workOrderId;
+    public boolean isPastWork;
 
-    public WorkModel(int id, String title, String desc, String workOrderStartDate, String workOrderEndDate, boolean isOpened, boolean isClosed, Integer machineId, Integer machinePartId, Integer userId, int workOrderId) {
+    public WorkModel(int id, String title, String desc, String workOrderStartDate, String workOrderEndDate, boolean isOpened, boolean isClosed, Integer machineId, Integer machinePartId, Integer userId, int workOrderId, boolean isPastWork) {
         this.id = id;
         this.title = title;
         this.desc = desc;
@@ -25,6 +26,7 @@ public class WorkModel {
         this.machinePartId = machinePartId;
         this.userId = userId;
         this.workOrderId = workOrderId;
+        this.isPastWork = isPastWork;
     }
 
     public WorkModel() {
@@ -116,5 +118,13 @@ public class WorkModel {
 
     public void setClosed(boolean closed) {
         isClosed = closed;
+    }
+
+    public boolean isPastWork() {
+        return isPastWork;
+    }
+
+    public void setPastWork(boolean pastWork) {
+        isPastWork = pastWork;
     }
 }
