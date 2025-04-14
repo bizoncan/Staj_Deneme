@@ -113,9 +113,10 @@ public class TakenWorksActivity extends BaseActivity {
     }
     public void userCheck(){
         SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String us_na = sp.getString("UserName",null);
+        String us_na = sp.getString("Username",null);
         WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
-        workOrderInterface.getUserId("admin").enqueue(new Callback<Integer>() {
+        Log.e("qw","asadwa");
+        workOrderInterface.getUserId(us_na).enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if (response.isSuccessful() && response.body()!= null){

@@ -102,7 +102,7 @@ public class AddWorkActivity extends BaseActivity {
         machineDropdown.setAdapter(adapter);
 
         machineDropdown.setOnItemClickListener((parent, view, position, id) -> {
-            machinePartName = parent.getItemAtPosition(position).toString();
+            machineName = parent.getItemAtPosition(position).toString();
             if (machinePartName != "-"){
                 machineId = machineIdList.get(machineNameList.indexOf(machineName)-1);
             }

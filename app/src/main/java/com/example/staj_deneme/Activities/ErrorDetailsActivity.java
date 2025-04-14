@@ -331,7 +331,6 @@ public class ErrorDetailsActivity extends BaseActivity {
             public void onResponse(Call<List<ErrorModel>> call, Response<List<ErrorModel>> response) {
                 Log.d("API_RESPONSE", "Request URL: " + call.request().url());
                 Log.d("API_RESPONSE", "Response code: " + response.code());
-
                 if (!response.isSuccessful()) {
                     try {
                         Log.e("API_RESPONSE", "Error body: " + response.errorBody().string());
@@ -348,13 +347,11 @@ public class ErrorDetailsActivity extends BaseActivity {
             }
             @Override
             public void onFailure(Call<List<ErrorModel>> call, Throwable t) {
-
+                Log.e("abov","ula noli");
+                Log.e("HATA",t.getMessage());
             }
         });
     }
-
-
-
     @Override
     protected void onStop() {
         Log.d("ErrorDetailsActivity", "onStop called");
