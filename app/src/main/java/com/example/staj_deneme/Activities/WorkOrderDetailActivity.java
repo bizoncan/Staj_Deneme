@@ -79,15 +79,13 @@ public class WorkOrderDetailActivity extends BaseActivity {
     public void fillPage(){
         title.setText(workOrderModel.getTitle());
         desc.setText(workOrderModel.getDesc());
-
+        startDate.setText("İşe başlama tarihi: "+workOrderModel.getWorkOrderStartDate());
 
         if(workOrderModel.isOpened()){
             setGreen(light1);
             startDate.setText("İşe başlama tarihi: "+workOrderModel.getWorkOrderStartDate());
         }
-        else{
-            startDate.setText("İş birisi tarafından alınmadı");
-        }
+
         if(workOrderModel.isClosed){
             setGreen(light2);
             endDate.setText("İş bitiş tarihi: "+workOrderModel.getWorkOrderEndDate());

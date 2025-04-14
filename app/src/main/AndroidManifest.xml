@@ -47,7 +47,13 @@
             android:exported="true" />
         <activity
             android:name=".Activities.TestLoginActivity"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Activities.TestRegisterActivity"
             android:exported="true" />
@@ -69,11 +75,7 @@
         <activity
             android:name=".Activities.TestActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Activities.AddNotificationTestActivity"

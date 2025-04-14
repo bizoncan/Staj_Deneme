@@ -66,6 +66,7 @@ public class AddWorkActivity extends BaseActivity {
     ArrayList<Object> sliderImages ;
     SliderAdapter sliderAdapter;
     WorkOrderModel workOrderModel;
+    WorkModel workModel ;
     boolean isMachinePartFilled=false;
 
     private static final int CAMERA_REQUEST = 100;
@@ -95,7 +96,7 @@ public class AddWorkActivity extends BaseActivity {
         setContentView(R.layout.activity_add_work);
         machineDropdown = findViewById(R.id.machineId_spinner);
         adapter = new ArrayAdapter<>(AddWorkActivity.this, R.layout.dropdown_item,machineNameList);
-
+        workModel = new WorkModel();
         fillMachineSpinner();
 
         machineDropdown.setAdapter(adapter);
@@ -130,7 +131,9 @@ public class AddWorkActivity extends BaseActivity {
         workDateEdt = findViewById(R.id.workEndDate_edittext);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));//Türkiye Saat Dilimi
-        currentDate = dateFormat.format(new Date());
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat1.setTimeZone(TimeZone.getTimeZone("GMT+3"));
+        currentDate = dateFormat1.format(new Date());
         workDateEdt.setText(currentDate);
         workTypeEdt=findViewById(R.id.workTitle_edittext);
         workDescEdt = findViewById(R.id.workDesc_edittext);
@@ -229,6 +232,9 @@ public class AddWorkActivity extends BaseActivity {
             if (machineIndex > 0 && machineIndex < machineNameList.size()) {
                 machineDropdown.setText(machineNameList.get(machineIndex), false);
                 machineDropdown.setEnabled(false); // Kitlemek için
+                machineDropdownLayout.setEnabled(false);
+                // Dropdown tıklama olayını devre dışı bırak
+                machineDropdown.setOnItemClickListener(null);
                 if(!isMachinePartFilled){
                     fillMachinePartSpinner();
                     isMachinePartFilled = true;
@@ -240,6 +246,9 @@ public class AddWorkActivity extends BaseActivity {
             if (machineIndex > 0 && machineIndex < machinePartNameList.size()) {
                 machinePartDropdown.setText(machinePartNameList.get(machineIndex), false);
                 machinePartDropdown.setEnabled(false); // Kitlemek için
+                machinePartDropdownLayout.setEnabled(false);
+                // Dropdown tıklama olayını devre dışı bırak
+                machinePartDropdown.setOnItemClickListener(null);
             }
         }
     }
@@ -378,7 +387,7 @@ public class AddWorkActivity extends BaseActivity {
     }
 
     public void hata_ekle(View view){
-        WorkModel workModel = new WorkModel();
+
         if(workTypeEdt.getText().toString().isEmpty() || workDescEdt.getText().toString().isEmpty() || workDateEdt.getText().toString().isEmpty()){
             Toast.makeText(AddWorkActivity.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
             return;
@@ -392,62 +401,71 @@ public class AddWorkActivity extends BaseActivity {
         workModel.setUserId(workOrderModel.getUserId());
         workModel.setWorkOrderId(workOrderModel.getId());
         workModel.setOpened(true);
-        workModel.setClosed(true);
+
         workModel.setPastWork(false);
         workOrderModel.setWorkOrderEndDate(dateFormat.format(new Date()));
-        workOrderModel.setClosed(true);
+
         add_work(workModel);
         updateOrders();
     }
 
     private void updateOrders() {
-        WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
-        workOrderInterface.updateWorkOrder(workOrderModel).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(AddWorkActivity.this,"İslem başarılı",Toast.LENGTH_LONG).show();
+        if (!workOrderModel.isClosed()){
+            workOrderModel.setClosed(true);
+            WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
+            workOrderInterface.updateWorkOrder(workOrderModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if(response.isSuccessful()){
+                        Toast.makeText(AddWorkActivity.this,"İslem başarılı",Toast.LENGTH_LONG).show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
 
                 }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-
-            }
-        });
+            });
+        }
     }
 
     public void add_work(WorkModel workModel){
-        WorkInterface workInterface = RetrofitClient.getApiWorkService();
-        workInterface.addWork(workModel).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("Retrofit", "Response code: " + response.code());
-                Log.d("Retrofit", "Response message: " + response.message());
-                if(response.isSuccessful() ){
-                    resimleri_ekle();
-                    Toast.makeText(AddWorkActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
-                    Intent sayfa = new Intent(AddWorkActivity.this,TestActivity.class);
-                    startActivity(sayfa);
-                }
-                else{
-                    Toast.makeText(AddWorkActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
-                    try {
-                        String errorBody = response.errorBody() != null ?
-                                response.errorBody().string() : "No error body";
-                        Log.e("Retrofit", "Error body: " + errorBody);
+        if(!workModel.isClosed()){
+            workModel.setClosed(true);
+            WorkInterface workInterface = RetrofitClient.getApiWorkService();
+            workInterface.addWork(workModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Log.d("Retrofit", "Response code: " + response.code());
+                    Log.d("Retrofit", "Response message: " + response.message());
+                    if(response.isSuccessful() ){
+                        resimleri_ekle();
+                        Toast.makeText(AddWorkActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
+                        Intent sayfa = new Intent(AddWorkActivity.this,TestActivity.class);
+                        startActivity(sayfa);
+                    }
+                    else{
+                        Toast.makeText(AddWorkActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                        try {
+                            String errorBody = response.errorBody() != null ?
+                                    response.errorBody().string() : "No error body";
+                            Log.e("Retrofit", "Error body: " + errorBody);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(AddWorkActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(AddWorkActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        else{
+            Toast.makeText(AddWorkActivity.this,"İşlem tamamlanıyor bekleyin",Toast.LENGTH_LONG).show();
+        }
     }
     public void resimleri_ekle(){
         byte[] imageBytes;

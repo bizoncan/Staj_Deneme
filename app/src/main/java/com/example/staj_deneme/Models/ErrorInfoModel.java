@@ -4,8 +4,8 @@ public class ErrorInfoModel {
     int id;
     String machineName;
     String machinePartName;
-    int machinePartId;
-    int machineId;
+    Integer machinePartId;
+    Integer machineId;
     String userName;
 
     public int getId() {
@@ -19,11 +19,11 @@ public class ErrorInfoModel {
     public String getMachinePartName() {
         return machinePartName;
     }
-    public int getMachinePartId() {
+    public Integer getMachinePartId() {
         return machinePartId;
     }
 
-    public int getMachineId() {
+    public Integer getMachineId() {
         return machineId;
     }
 

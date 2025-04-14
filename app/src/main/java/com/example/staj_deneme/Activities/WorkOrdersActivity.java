@@ -83,9 +83,7 @@ public class WorkOrdersActivity extends BaseActivity {
                     setGreen(light1);
                     startDate.setText(workOrders.get(position).getWorkOrderStartDate());
                 }
-                else{
-                    startDate.setText("İş kaydı daha alınmadı.");
-                }
+
                 if(workOrders.get(position).isClosed()){
                     setGreen(light2);
                     endDate.setText(workOrders.get(position).getWorkOrderEndDate());

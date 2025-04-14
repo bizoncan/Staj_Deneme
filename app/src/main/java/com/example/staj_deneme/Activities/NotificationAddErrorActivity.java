@@ -68,7 +68,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
     SimpleDateFormat dateFormat;
     String currentDate;
     Date dateIn;
-
+    Boolean isDone=false;
     List<Bitmap> tempBitmapPhotos;
     private  List<Uri> selectedImageUris = null;
     byte[] tempPhotoBytes;
@@ -217,40 +217,45 @@ public class NotificationAddErrorActivity extends BaseActivity {
 
     }
     public void add_error(ErrorModel errorModel){
-        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        errorInterface.add(errorModel).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("Retrofit", "Response code: " + response.code());
-                Log.d("Retrofit", "Response message: " + response.message());
-                if(response.isSuccessful() ){
-                    resimleri_ekle();
-                    Toast.makeText(NotificationAddErrorActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
-                    Intent sayfa = new Intent(NotificationAddErrorActivity.this,TestActivity.class);
-                    stopTimer();
-                    Log.e("Geçen Zaman:",formatedTime);
-                    del_not();
-                    startActivity(sayfa);
-                }
-                else{
-                    Toast.makeText(NotificationAddErrorActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
-                    try {
-                        String errorBody = response.errorBody() != null ?
-                                response.errorBody().string() : "No error body";
-                        Log.e("Retrofit", "Error body: " + errorBody);
+        if (!isDone){
+            isDone = true;
+            ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+            errorInterface.add(errorModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Log.d("Retrofit", "Response code: " + response.code());
+                    Log.d("Retrofit", "Response message: " + response.message());
+                    if(response.isSuccessful() ){
+                        resimleri_ekle();
+                        Toast.makeText(NotificationAddErrorActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
+                        Intent sayfa = new Intent(NotificationAddErrorActivity.this,TestActivity.class);
+                        stopTimer();
+                        Log.e("Geçen Zaman:",formatedTime);
+                        del_not();
+                        startActivity(sayfa);
+                    }
+                    else{
+                        Toast.makeText(NotificationAddErrorActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                        try {
+                            String errorBody = response.errorBody() != null ?
+                                    response.errorBody().string() : "No error body";
+                            Log.e("Retrofit", "Error body: " + errorBody);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(NotificationAddErrorActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
-            }
-        });
-
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(NotificationAddErrorActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        else {
+            Toast.makeText(NotificationAddErrorActivity.this,"İşlem tamamlanıyor bekleyin",Toast.LENGTH_LONG).show();
+        }
     }
     public void selectImage(View view) {
         Intent intent = new Intent();

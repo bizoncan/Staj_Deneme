@@ -80,6 +80,7 @@ public class AddErrorManuelActivity extends BaseActivity {
 
     ViewPager2 viewPager;
 
+    Boolean isDone = false ;
 
     Boolean isPhotoTaken=false;
 
@@ -179,7 +180,6 @@ public class AddErrorManuelActivity extends BaseActivity {
 
 
     public void hata_ekle(View view){
-
         ErrorModel errorModel = new ErrorModel();
         if(errorTypeEdt.getText().toString().isEmpty() || errorDescEdt.getText().toString().isEmpty() || errorDateEdt.getText().toString().isEmpty() || machineId == null){
             Toast.makeText(AddErrorManuelActivity.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
@@ -226,42 +226,48 @@ public class AddErrorManuelActivity extends BaseActivity {
         get_user(errorModel);
     }
     public void add_error(ErrorModel errorModel){
-        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        errorInterface.add(errorModel).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("Retrofit", "Response code: " + response.code());
-                Log.d("Retrofit", "Response message: " + response.message());
-                if(response.isSuccessful() ){
-                    resimleri_ekle();
-                    Toast.makeText(AddErrorManuelActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
-                    Intent sayfa = new Intent(AddErrorManuelActivity.this,TestActivity.class);
-                    startActivity(sayfa);
-                }
-                else{
-                    Toast.makeText(AddErrorManuelActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
-                    try {
-                        String errorBody = response.errorBody() != null ?
-                                response.errorBody().string() : "No error body";
-                        Log.e("Retrofit", "Error body: " + errorBody);
+        if(!isDone){
+            isDone = true;
+            ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+            errorInterface.add(errorModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Log.d("Retrofit", "Response code: " + response.code());
+                    Log.d("Retrofit", "Response message: " + response.message());
+                    if(response.isSuccessful() ){
+                        resimleri_ekle();
+                        Toast.makeText(AddErrorManuelActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
+                        Intent sayfa = new Intent(AddErrorManuelActivity.this,TestActivity.class);
+                        startActivity(sayfa);
+                    }
+                    else{
+                        Toast.makeText(AddErrorManuelActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                        try {
+                            String errorBody = response.errorBody() != null ?
+                                    response.errorBody().string() : "No error body";
+                            Log.e("Retrofit", "Error body: " + errorBody);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(AddErrorManuelActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(AddErrorManuelActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        else{
+            Toast.makeText(AddErrorManuelActivity.this,"İşlem tamamlanıyor bekleyin",Toast.LENGTH_LONG).show();
+        }
     }
     public void get_user(ErrorModel errorModel){
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
         String us_na = sharedPreferences.getString("Username","");
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        us_na = "admin";//değişecek
+        //us_na = "admin";//değişecek
 
         errorInterface.getUserId(us_na).enqueue(new Callback<Integer>() {
             @Override

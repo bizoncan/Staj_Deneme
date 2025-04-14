@@ -104,19 +104,27 @@ public class ErrorAdapter extends BaseAdapter {
 
 
 
-       for(ErrorInfoModel e: errorInfos){
-           if(e.getMachineId()== curr.getMachineId()){
-                holder.machindeId.setText("Makine adı: "+ e.getMachineName());
-           }
-           if(curr.getMachinePartId()!=null){
-               if (e.getMachinePartId()== curr.getMachinePartId()){
-                   holder.machindePartId.setText("Makine parça adı: "+ e.getMachinePartName());
-               }
-           }
-           else {
-               holder.machindePartId.setText("Makine parçası bilgisi bulunamadı.");
-           }
-       }
+        for (ErrorInfoModel e : errorInfos) {
+            if (e.getMachineId() == curr.getMachineId()) {
+                holder.machindeId.setText("Makine adı: " + e.getMachineName());
+                break;
+            }
+        }
+
+// Makine parça adı
+        boolean foundPart = false;
+        if (curr.getMachinePartId() != null) {
+            for (ErrorInfoModel e : errorInfos) {
+                if (e.getMachinePartId() != null && e.getMachinePartId().equals(curr.getMachinePartId())) {
+                    holder.machindePartId.setText("Makine parça adı: " + e.getMachinePartName());
+                    foundPart = true;
+                    break;
+                }
+            }
+        }
+        if (!foundPart) {
+            holder.machindePartId.setText("Makine parçası bilgisi bulunamadı.");
+        }
         holder.errorType.setText("Hata tipi: "+curr.getErrorType());
         holder.errorDesc.setText("Hata açıklama: "+curr.getErrorDesc());
         holder.errorStartDate.setText("Arıza kaydı giriş tarihi: "+curr.getErrorDate());
