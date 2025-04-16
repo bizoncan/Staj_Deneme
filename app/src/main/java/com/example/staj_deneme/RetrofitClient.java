@@ -19,9 +19,7 @@
     public class RetrofitClient {
         private static final String BASE_URL="https://10.10.82.11:7296/";
         private static Retrofit retrofit=null;
-
         public static ApiDeneme getApiService(){
-
             if(retrofit==null){
                 OkHttpClient client = OkHttpUtil.getUnsafeOkHttpClient();
                 retrofit = new Retrofit.Builder()

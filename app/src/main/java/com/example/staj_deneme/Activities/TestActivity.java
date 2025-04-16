@@ -21,12 +21,16 @@ import com.example.staj_deneme.Adapter.MachineAdapter;
 import com.example.staj_deneme.InterFaces.MachineApiInterface;
 import com.example.staj_deneme.Models.MachineModel;
 import com.example.staj_deneme.Models.NotificationModel;
+import com.example.staj_deneme.Models.NotificationResponseModel;
+import com.example.staj_deneme.Models.WorkOrderModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.RetrofitClient;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.skydoves.transformationlayout.TransformationLayout;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,10 +45,10 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
     ImageButton notificationButton;
     TransformationLayout transformationLayout;
     TextView notificationText;
-    BaseAdapter adapter;
+    //BaseAdapter adapter;
     MachineAdapter m_adapter;
     ListView notificationsListView,machinesListView;
-    List<String> titleList,machineIdList,descList,idList,machinePartIdList;
+    List<String> titleList,machineIdList,descList,idList,machinePartIdList,typeList;
     List<MachineModel> machineModelList;
 
     @Override
@@ -58,12 +62,12 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
         });
         transformationLayout = findViewById(R.id.transition_layout);
         setNotificationButtonListener(this);
-        RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
-        recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
+       /* RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
+        recieveNotification.getNotification().enqueue(new Callback<NotificationResponseModel>() {
             @Override
-            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+            public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if(response.body()!= null && response.isSuccessful()){
-                    notificationText.setText(Integer.toString(response.body().size()));
+                    notificationText.setText(Integer.toString(response.body().getNotificationList().size()));
                 }
                 else{
                     try {
@@ -76,11 +80,13 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
             }
 
             @Override
-            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
+            public void onFailure(Call<NotificationResponseModel> call, Throwable t) {
 
             }
-        });
-        notificationsListView = findViewById(R.id.notificationsbase_listview);
+        });*/
+
+
+        //notificationsListView = findViewById(R.id.notificationsbase_listview);
         machineModelList = new ArrayList<>();
         machinesListView = findViewById(R.id.machines_listview);
         m_adapter = new MachineAdapter(this,machineModelList );
@@ -108,7 +114,8 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
         descList = new ArrayList<>();
         idList= new ArrayList<>();
         machinePartIdList = new ArrayList<>();
-        adapter = new BaseAdapter() {
+        typeList = new ArrayList<>();
+        /*adapter = new BaseAdapter() {
             @Override
             public int getCount() {
                 return titleList.size();
@@ -134,18 +141,19 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
                 TextView machineId_text = convertView.findViewById(R.id.machineId_textview);
                 TextView machinePartId_text= convertView.findViewById(R.id.machinePartId_textview);
                 TextView desc_text = convertView.findViewById(R.id.description_textview);
-
+                TextView type_text = convertView.findViewById(R.id.type_txt);
 
                 title_text.setText(titleList.get(position));
                 machineId_text.setText(machineIdList.get(position));
                 machinePartId_text.setText(machinePartIdList.get(position));
                 desc_text.setText(descList.get(position));
+                type_text.setText(typeList.get(position));
                 return convertView;
             }
         };
         notificationText=findViewById(R.id.notification_textview);
-        notificationsListView.setAdapter(adapter);
-        notificationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        notificationsListView.setAdapter(adapter);*/
+       /* notificationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent sayfa = new Intent(TestActivity.this, NotificationAddErrorActivity.class);
@@ -155,7 +163,7 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
                 startActivity(sayfa);
 
             }
-        });
+        });*/
         machinesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -164,7 +172,7 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
                 startActivity(sayfa);
             }
         });
-        startDatabasePolling();
+        //startDatabasePolling();
 
     }
     @Override
@@ -188,7 +196,7 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
         }
     }
     public void bildirim_yukle(View view){
-        checkForNewNotifications();
+        //checkForNewNotifications();
 
         if(opened){
             transformationLayout.startTransform();
@@ -202,8 +210,8 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
 
     }
 
-    private void startDatabasePolling() {
-        final int POLL_INTERVAL = 500;
+    /*private void startDatabasePolling() {
+        final int POLL_INTERVAL = 10000; // 10 saniye
 
         Handler handler = new Handler();
         Runnable pollRunnable = new Runnable() {
@@ -215,16 +223,18 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
         };
 
         handler.post(pollRunnable); // Başlat
-    }
-    public void checkForNewNotifications(){
+    }*/
+    /*public void checkForNewNotifications(){
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
-        recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
+        recieveNotification.getNotification().enqueue(new Callback<NotificationResponseModel>() {
             @Override
-            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+            public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if(response.body()!= null && response.isSuccessful()){
-                    List<NotificationModel> notifications = response.body();
+                    List<NotificationModel> notifications = response.body().getNotificationList();
+                    List<WorkOrderModel> works = response.body().getWorkNotificationList();
                     for(NotificationModel n: notifications){
                         if(!idList.contains(Integer.toString(n.getId()))){
+                            typeList.add("Arıza");
                             idList.add(Integer.toString(n.getId()));
                             titleList.add(n.getTitle());
                             if(n.getMachineId()== null)machineIdList.add(null);
@@ -232,11 +242,29 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
                             if(n.getMachinePartId()==null)machinePartIdList.add(null) ;
                             else machinePartIdList.add(Integer.toString(n.getMachinePartId()));
                             descList.add(n.getDescription());
-                            notificationText.setText(Integer.toString(response.body().size()));
-
+                            not_size = response.body().getNotificationList().size() +
+                                    response.body().getWorkNotificationList().size();
+                            notificationText.setText(Integer.toString(not_size));
                         }
+
                     }
-                    adapter.notifyDataSetChanged();
+                    for(WorkOrderModel w: works){
+                        if(!idList.contains(Integer.toString(w.getId()))){
+                            typeList.add("İş Emri");
+                            idList.add(Integer.toString(w.getId()));
+                            titleList.add(w.getTitle());
+                            if(w.getMachineId()== null)machineIdList.add(null);
+                            else machineIdList.add(Integer.toString(w.getMachineId()));
+                            if(w.getMachinePartId()==null)machinePartIdList.add(null) ;
+                            else machinePartIdList.add(Integer.toString(w.getMachinePartId()));
+                            descList.add(w.getDesc());
+                            not_size = response.body().getNotificationList().size() +
+                                    response.body().getWorkNotificationList().size();
+                            notificationText.setText(Integer.toString(not_size));
+                        }
+
+                    }
+                    adadpter.notifyDataSetChanged();
                 }
                 else{
                     try {
@@ -249,12 +277,13 @@ public class TestActivity extends BaseActivity implements BaseActivity.Notificat
             }
 
             @Override
-            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
+            public void onFailure(Call<NotificationResponseModel> call, Throwable t) {
 
             }
         });
 
-    }
+
+    }*/
 
     @Override
     public void onNotificationButtonClicked() {

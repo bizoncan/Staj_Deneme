@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.example.staj_deneme.Activities.MainActivity;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.Models.NotificationModel;
+import com.example.staj_deneme.Models.NotificationResponseModel;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -181,11 +182,11 @@ public class AnaSayfaFragment extends Fragment {
         if (!isAdded()) return;
 
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
-        recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
+        recieveNotification.getNotification().enqueue(new Callback<NotificationResponseModel>() {
             @Override
-            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+            public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if (isAdded() && response.body() != null && response.isSuccessful()) {
-                    notificationText.setText(Integer.toString(response.body().size()));
+                    notificationText.setText(Integer.toString(response.body().getNotificationList().size()));
                 } else if (isAdded()) {
                     try {
                         Log.e("API ERROR", "Response Code: " + response.code() +
@@ -197,23 +198,24 @@ public class AnaSayfaFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
+            public void onFailure(Call<NotificationResponseModel> call, Throwable t) {
                 if (isAdded()) {
                     Log.e("API ERROR", "Call failed: " + t.getMessage());
                 }
             }
         });
+
     }
 
     public void checkForNewNotifications() {
         if (!isAdded()) return;
 
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
-        recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
+        recieveNotification.getNotification().enqueue(new Callback<NotificationResponseModel>() {
             @Override
-            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+            public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if (isAdded() && response.body() != null && response.isSuccessful()) {
-                    List<NotificationModel> notifications = response.body();
+                    List<NotificationModel> notifications = response.body().getNotificationList();
                     for (NotificationModel n : notifications) {
                         if (!idList.contains(Integer.toString(n.getId()))) {
                             idList.add(Integer.toString(n.getId()));
@@ -238,12 +240,13 @@ public class AnaSayfaFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
+            public void onFailure(Call<NotificationResponseModel> call, Throwable t) {
                 if (isAdded()) {
                     Log.e("API ERROR", "Call failed: " + t.getMessage());
                 }
             }
         });
+
     }
     @Override
     public void onPause() {

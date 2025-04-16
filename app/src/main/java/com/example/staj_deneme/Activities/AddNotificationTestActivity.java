@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.staj_deneme.Models.NotificationModel;
+import com.example.staj_deneme.Models.NotificationResponseModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.RetrofitClient;
@@ -43,12 +44,12 @@ public class AddNotificationTestActivity extends AppCompatActivity {
         desc = findViewById(R.id.desc_edt);
         notificationText = findViewById(R.id.notification_textview);
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
-        recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
+        recieveNotification.getNotification().enqueue(new Callback<NotificationResponseModel>() {
             @Override
-            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+            public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     StringBuilder machineData = new StringBuilder();
-                    List<NotificationModel> notss = response.body();
+                    List<NotificationModel> notss = response.body().getNotificationList();
                     if (notss.isEmpty()) {
                         notificationText.setText("Makine bulunamadı!");
                         return;
@@ -72,7 +73,7 @@ public class AddNotificationTestActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
+            public void onFailure(Call<NotificationResponseModel> call, Throwable t) {
 
             }
         });

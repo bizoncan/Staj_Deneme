@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.staj_deneme.Models.NotificationModel;
+import com.example.staj_deneme.Models.NotificationResponseModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.RetrofitClient;
@@ -55,11 +56,11 @@ public class QrScanActivity extends AppCompatActivity {
         });
 
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
-        recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
+        recieveNotification.getNotification().enqueue(new Callback<NotificationResponseModel>() {
             @Override
-            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+            public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if(response.body()!= null && response.isSuccessful()){
-                    notificationText.setText(Integer.toString(response.body().size()));
+                    notificationText.setText(Integer.toString(response.body().getNotificationList().size()));
                 }
                 else{
                     try {
@@ -72,10 +73,11 @@ public class QrScanActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
+            public void onFailure(Call<NotificationResponseModel> call, Throwable t) {
 
             }
         });
+
         notificationsListView = findViewById(R.id.notificationsbase_listview);
         titleList = new ArrayList<>();
         machineIdList = new ArrayList<>();
@@ -166,18 +168,18 @@ public class QrScanActivity extends AppCompatActivity {
     }
     public void checkForNewNotifications(){
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
-        recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
+        recieveNotification.getNotification().enqueue(new Callback<NotificationResponseModel>() {
             @Override
-            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+            public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if(response.body()!= null && response.isSuccessful()){
-                    List<NotificationModel> notifications = response.body();
+                    List<NotificationModel> notifications = response.body().getNotificationList();
                     for(NotificationModel n: notifications){
                         if(!idList.contains(Integer.toString(n.getId()))){
                             idList.add(Integer.toString(n.getId()));
                             titleList.add(n.getTitle());
                             machineIdList.add(Integer.toString(n.getMachineId()));
                             descList.add(n.getDescription());
-                            notificationText.setText(Integer.toString(response.body().size()));
+                            notificationText.setText(Integer.toString(response.body().getNotificationList().size()));
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -193,10 +195,11 @@ public class QrScanActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
+            public void onFailure(Call<NotificationResponseModel> call, Throwable t) {
 
             }
         });
+
 
     }
 }

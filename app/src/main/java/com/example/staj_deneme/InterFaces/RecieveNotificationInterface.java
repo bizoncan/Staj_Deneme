@@ -1,6 +1,7 @@
 package com.example.staj_deneme.InterFaces;
 
 import com.example.staj_deneme.Models.NotificationModel;
+import com.example.staj_deneme.Models.NotificationResponseModel;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import retrofit2.http.Path;
 
 public interface RecieveNotificationInterface {
     @GET("api/Bildirimler")
-    Call<List<NotificationModel>> getNotification();
+    Call<NotificationResponseModel> getNotification();
     @POST("api/Bildirimler")
     Call<Void> addNotification(@Body NotificationModel notificationModel);
     @DELETE("api/Bildirimler/{id}")

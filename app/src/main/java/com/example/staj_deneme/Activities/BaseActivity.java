@@ -26,6 +26,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
 import com.example.staj_deneme.Models.NotificationModel;
+import com.example.staj_deneme.Models.NotificationResponseModel;
+import com.example.staj_deneme.Models.WorkOrderModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -48,19 +50,16 @@ public class BaseActivity extends AppCompatActivity {
     NavigationView navigationView;
     TextView notificationText,usernameTextView;
     MenuItem menuItem;
-    List<String> idList,titleList,machineIdList,machinePartIdList,descList;
+    List<String> idList,titleList,machineIdList,machinePartIdList,descList,typeList;
     BaseAdapter adadpter;
     ListView notificationListView;
+    int not_size = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         //setContentView(R.layout.activity_base);
-
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
+        typeList = new ArrayList<>();
         idList = new ArrayList<>();
         titleList = new ArrayList<>();
         machineIdList = new ArrayList<>();
@@ -92,15 +91,25 @@ public class BaseActivity extends AppCompatActivity {
                 TextView machineId_text = convertView.findViewById(R.id.machineId_textview);
                 TextView machinePartId_text= convertView.findViewById(R.id.machinePartId_textview);
                 TextView desc_text = convertView.findViewById(R.id.description_textview);
-
-
+                TextView type_text = convertView.findViewById(R.id.type_txt);
+                Log.e("TAG", "getView: "+titleList.get(position));
+                Log.e("TAG", "getView: "+machineIdList.get(position));
+                Log.e("TAG", "getView: "+machinePartIdList.get(position));
+                Log.e("TAG", "getView: "+descList.get(position));
+                Log.e("TAG", "getView: "+typeList.get(position));
                 title_text.setText(titleList.get(position));
                 machineId_text.setText(machineIdList.get(position));
                 machinePartId_text.setText(machinePartIdList.get(position));
                 desc_text.setText(descList.get(position));
+                type_text.setText(typeList.get(position));
                 return convertView;
             }
         };
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+
 
         // 1. Ana layout'u inflate et
         drawerLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
@@ -223,13 +232,15 @@ public class BaseActivity extends AppCompatActivity {
 
     public void checkForUpdates() {
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();
-        recieveNotification.getNotification().enqueue(new Callback<List<NotificationModel>>() {
+        recieveNotification.getNotification().enqueue(new Callback<NotificationResponseModel>() {
             @Override
-            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+            public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if(response.body()!= null && response.isSuccessful()){
-                    List<NotificationModel> notifications = response.body();
+                    List<NotificationModel> notifications = response.body().getNotificationList();
+                    List<WorkOrderModel> works = response.body().getWorkNotificationList();
                     for(NotificationModel n: notifications){
                         if(!idList.contains(Integer.toString(n.getId()))){
+                            typeList.add("Arıza");
                             idList.add(Integer.toString(n.getId()));
                             titleList.add(n.getTitle());
                             if(n.getMachineId()== null)machineIdList.add(null);
@@ -237,9 +248,27 @@ public class BaseActivity extends AppCompatActivity {
                             if(n.getMachinePartId()==null)machinePartIdList.add(null) ;
                             else machinePartIdList.add(Integer.toString(n.getMachinePartId()));
                             descList.add(n.getDescription());
-                            notificationText.setText(Integer.toString(response.body().size()));
-
+                            not_size = response.body().getNotificationList().size() +
+                                    response.body().getWorkNotificationList().size();
+                            notificationText.setText(Integer.toString(not_size));
                         }
+
+                    }
+                    for(WorkOrderModel w: works){
+                        if(!idList.contains(Integer.toString(w.getId()))){
+                            typeList.add("İş Emri");
+                            idList.add(Integer.toString(w.getId()));
+                            titleList.add(w.getTitle());
+                            if(w.getMachineId()== null)machineIdList.add(null);
+                            else machineIdList.add(Integer.toString(w.getMachineId()));
+                            if(w.getMachinePartId()==null)machinePartIdList.add(null) ;
+                            else machinePartIdList.add(Integer.toString(w.getMachinePartId()));
+                            descList.add(w.getDesc());
+                            not_size = response.body().getNotificationList().size() +
+                                    response.body().getWorkNotificationList().size();
+                            notificationText.setText(Integer.toString(not_size));
+                        }
+
                     }
                     adadpter.notifyDataSetChanged();
                 }
@@ -254,10 +283,11 @@ public class BaseActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
+            public void onFailure(Call<NotificationResponseModel> call, Throwable t) {
 
             }
         });
+
     }
 
     private void startDatabasePolling() {

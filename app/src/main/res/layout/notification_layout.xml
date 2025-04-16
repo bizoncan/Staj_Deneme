@@ -19,6 +19,12 @@
             android:textSize="40sp" />
 
         <TextView
+            android:id="@+id/type_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
             android:id="@+id/machineId_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

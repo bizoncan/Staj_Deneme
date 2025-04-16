@@ -62,46 +62,60 @@ public class WorkOrdersActivity extends BaseActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null) {
-                    convertView=LayoutInflater.from(WorkOrdersActivity.this).inflate(R.layout.work_order_item_layout,parent,false);
-                }
-                TextView title = convertView.findViewById(R.id.workOrderTitle_txt);
-                TextView desc = convertView.findViewById(R.id.workOrderDesc_txt);
-                TextView startDate = convertView.findViewById(R.id.workOrderStartDate_txt);
-                TextView endDate = convertView.findViewById(R.id.workOrderEndDate_txt);
-                View light1 = convertView.findViewById(R.id.lightView1);
-                View light2 = convertView.findViewById(R.id.lightView2);
+                WorkOrderModel w = workOrders.get(position);
 
-                light1.setBackgroundResource(R.drawable.light_circle);  // veya varsayılan renk
-                light2.setBackgroundResource(R.drawable.light_circle);
+                if(!w.isClosed()){
+                    if (convertView == null) {
+                        convertView=LayoutInflater.from(WorkOrdersActivity.this).inflate(R.layout.work_order_item_layout,parent,false);
+                    }
 
-                title.setText(workOrders.get(position).getTitle());
-                desc.setText(workOrders.get(position).getDesc());
-                startDate.setText(workOrders.get(position).getWorkOrderStartDate());
+                    TextView title = convertView.findViewById(R.id.workOrderTitle_txt);
+                    TextView desc = convertView.findViewById(R.id.workOrderDesc_txt);
+                    TextView startDate = convertView.findViewById(R.id.workOrderStartDate_txt);
+                    TextView endDate = convertView.findViewById(R.id.workOrderEndDate_txt);
+                    View light1 = convertView.findViewById(R.id.lightView1);
+                    View light2 = convertView.findViewById(R.id.lightView2);
 
-                if(workOrders.get(position).isOpened()){
-                    setGreen(light1);
+                    light1.setBackgroundResource(R.drawable.light_circle);  // veya varsayılan renk
+                    light2.setBackgroundResource(R.drawable.light_circle);
+
+                    title.setText(workOrders.get(position).getTitle());
+                    desc.setText(workOrders.get(position).getDesc());
                     startDate.setText(workOrders.get(position).getWorkOrderStartDate());
+
+                    if(workOrders.get(position).isOpened()){
+                        setGreen(light1);
+                        startDate.setText(workOrders.get(position).getWorkOrderStartDate());
+                    }
+
+                    if(workOrders.get(position).isClosed()){
+                        setGreen(light2);
+                        endDate.setText(workOrders.get(position).getWorkOrderEndDate());
+                    }
+                    else{
+                        endDate.setText("İş kaydı daha sonlanmadı.");
+                    }
+                    return convertView;
                 }
 
-                if(workOrders.get(position).isClosed()){
-                    setGreen(light2);
-                    endDate.setText(workOrders.get(position).getWorkOrderEndDate());
+               else {
+                   return LayoutInflater.from(WorkOrdersActivity.this).inflate(R.layout.work_order_item_layout, parent, false);
                 }
-                else{
-                    endDate.setText("İş kaydı daha sonlanmadı.");
-                }
-                return convertView;
             }
         };
         workOrderListView.setAdapter(adapter);
+        List<WorkOrderModel> tempWorkOrder = new ArrayList<>();
         WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
         workOrderInterface.getWorkOrders().enqueue(new Callback<List<WorkOrderModel>>() {
             @Override
             public void onResponse(Call<List<WorkOrderModel>> call, Response<List<WorkOrderModel>> response) {
                 if (response.isSuccessful() && response.body() != null){
-                    workOrders.addAll(response.body());
-
+                    tempWorkOrder.addAll(response.body());
+                    for (WorkOrderModel w : tempWorkOrder) {
+                        if (!w.isClosed()){
+                            workOrders.add(w);
+                        }
+                    }
                     adapter.notifyDataSetChanged();
                 }
                 else{
