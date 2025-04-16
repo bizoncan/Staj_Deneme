@@ -50,8 +50,9 @@ public class BaseActivity extends AppCompatActivity {
     NavigationView navigationView;
     TextView notificationText,usernameTextView;
     MenuItem menuItem;
-    List<String> idList,titleList,machineIdList,machinePartIdList,descList,typeList;
+    List<String> idList,titleList,machineIdList,machinePartIdList,descList,typeList,workOrderIdList,userIdList;
     BaseAdapter adadpter;
+    int userId;
     ListView notificationListView;
     int not_size = 0;
     @Override
@@ -65,6 +66,8 @@ public class BaseActivity extends AppCompatActivity {
         machineIdList = new ArrayList<>();
         machinePartIdList = new ArrayList<>();
         descList = new ArrayList<>();
+        workOrderIdList = new ArrayList<>();
+        userIdList = new ArrayList<>();
         adadpter = new BaseAdapter() {
             @Override
             public int getCount() {
@@ -105,6 +108,8 @@ public class BaseActivity extends AppCompatActivity {
                 return convertView;
             }
         };
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
+        userId = sharedPreferences.getInt("UserId",0);
     }
 
     @Override
@@ -147,12 +152,26 @@ public class BaseActivity extends AppCompatActivity {
         notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent sayfa = new Intent(BaseActivity.this, NotificationAddErrorActivity.class);
-                sayfa.putExtra("machineID",machineIdList.get(position));
-                sayfa.putExtra("machinePartID",machinePartIdList.get(position));
-                sayfa.putExtra("notificationId",idList.get(position));
-                startActivity(sayfa);
+                if (typeList.get(position)== "Arıza"){
+                    Intent sayfa = new Intent(BaseActivity.this, NotificationAddErrorActivity.class);
+                    sayfa.putExtra("machineID",machineIdList.get(position));
+                    sayfa.putExtra("machinePartID",machinePartIdList.get(position));
+                    sayfa.putExtra("notificationId",idList.get(position));
+                    startActivity(sayfa);
 
+                }
+                else {
+                    if(Integer.parseInt(userIdList.get(position)) != 0){
+                        Intent sayfa = new Intent(BaseActivity.this, AddWorkActivity.class);
+                        sayfa.putExtra("workOrderId",Integer.parseInt(workOrderIdList.get(position)));
+                        startActivity(sayfa);
+                    }
+                    else{
+                        Intent sayfa = new Intent(BaseActivity.this, WorkOrderDetailActivity.class);
+                        sayfa.putExtra("workOrderId",Integer.parseInt(workOrderIdList.get(position)));
+                        startActivity(sayfa);
+                    }
+                }
             }
         });
 
@@ -236,6 +255,7 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<NotificationResponseModel> call, Response<NotificationResponseModel> response) {
                 if(response.body()!= null && response.isSuccessful()){
+                    int ss = 0;
                     List<NotificationModel> notifications = response.body().getNotificationList();
                     List<WorkOrderModel> works = response.body().getWorkNotificationList();
                     for(NotificationModel n: notifications){
@@ -243,6 +263,8 @@ public class BaseActivity extends AppCompatActivity {
                             typeList.add("Arıza");
                             idList.add(Integer.toString(n.getId()));
                             titleList.add(n.getTitle());
+                            workOrderIdList.add("0");
+                            userIdList.add("0");
                             if(n.getMachineId()== null)machineIdList.add(null);
                             else machineIdList.add(Integer.toString(n.getMachineId()));
                             if(n.getMachinePartId()==null)machinePartIdList.add(null) ;
@@ -255,21 +277,47 @@ public class BaseActivity extends AppCompatActivity {
 
                     }
                     for(WorkOrderModel w: works){
-                        if(!idList.contains(Integer.toString(w.getId()))){
-                            typeList.add("İş Emri");
-                            idList.add(Integer.toString(w.getId()));
-                            titleList.add(w.getTitle());
-                            if(w.getMachineId()== null)machineIdList.add(null);
-                            else machineIdList.add(Integer.toString(w.getMachineId()));
-                            if(w.getMachinePartId()==null)machinePartIdList.add(null) ;
-                            else machinePartIdList.add(Integer.toString(w.getMachinePartId()));
-                            descList.add(w.getDesc());
-                            not_size = response.body().getNotificationList().size() +
-                                    response.body().getWorkNotificationList().size();
-                            notificationText.setText(Integer.toString(not_size));
+                        if (!w.isOpened()){
+                            if(!idList.contains(Integer.toString(w.getId()))){
+                                typeList.add("İş Emri");
+                                idList.add(Integer.toString(w.getId()));
+                                titleList.add(w.getTitle());
+                                workOrderIdList.add(Integer.toString(w.getId()));
+                                userIdList.add("0");
+                                if(w.getMachineId()== null)machineIdList.add(null);
+                                else machineIdList.add(Integer.toString(w.getMachineId()));
+                                if(w.getMachinePartId()==null)machinePartIdList.add(null) ;
+                                else machinePartIdList.add(Integer.toString(w.getMachinePartId()));
+                                descList.add(w.getDesc());
+                            }
+                        }
+                        else {
+                            if (w.userId == userId){
+                                if(!idList.contains(Integer.toString(w.getId()))){
+                                    typeList.add("İş Emri");
+                                    idList.add(Integer.toString(w.getId()));
+                                    titleList.add(w.getTitle());
+                                    workOrderIdList.add(Integer.toString(w.getId()));
+                                    userIdList.add(Integer.toString(w.getUserId()));
+                                    if(w.getMachineId()== null)machineIdList.add(null);
+                                    else machineIdList.add(Integer.toString(w.getMachineId()));
+                                    if(w.getMachinePartId()==null)machinePartIdList.add(null) ;
+                                    else machinePartIdList.add(Integer.toString(w.getMachinePartId()));
+                                    descList.add(w.getDesc());
+
+                                }
+
+                            }
+                            else {
+                                ss=ss+1;
+                            }
                         }
 
+
                     }
+                    not_size = response.body().getNotificationList().size() +
+                            response.body().getWorkNotificationList().size()-ss;
+                    notificationText.setText(Integer.toString(not_size));
                     adadpter.notifyDataSetChanged();
                 }
                 else{

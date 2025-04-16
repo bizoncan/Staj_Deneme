@@ -64,6 +64,7 @@ public class TestLoginActivity extends AppCompatActivity {
                         SharedPreferences sharedPreferences= getSharedPreferences("UserPrefs",MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("Username",username);
+                        editor.putInt("UserId",response.body().getUserId());
                         editor.apply();
                         Toast.makeText(TestLoginActivity.this,"Giriş başarılı",Toast.LENGTH_LONG).show();
                         Intent sayfa = new Intent(TestLoginActivity.this,TestActivity.class);
