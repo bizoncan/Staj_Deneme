@@ -36,7 +36,7 @@ import retrofit2.Response;
 
 public class WorkOrderDetailActivity extends BaseActivity {
     WorkOrderModel workOrderModel;
-    TextView title,desc,startDate,endDate;
+    TextView title,desc,startDate,endDate,workOrderUser;
     View light1,light2;
     Button workOrderAdd;
     @Override
@@ -51,6 +51,8 @@ public class WorkOrderDetailActivity extends BaseActivity {
         light1 = findViewById(R.id.lightDetailView1);
         light2 = findViewById(R.id.lightDetailView2);
         workOrderAdd = findViewById(R.id.workOrderGet_btn);
+        workOrderUser = findViewById(R.id.workOrderUser_txt);
+
         int id = getIntent().getIntExtra("workOrderId",0);
         WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
         workOrderInterface.getWorkOrder(id).enqueue(new Callback<WorkOrderModel>() {
@@ -58,6 +60,7 @@ public class WorkOrderDetailActivity extends BaseActivity {
             public void onResponse(Call<WorkOrderModel> call, Response<WorkOrderModel> response) {
                 if (response.isSuccessful() && response.body()!= null){
                     workOrderModel = response.body();
+                    setUserName(workOrderModel.getUserId());
                     fillPage();
                 }
                 else{
@@ -94,6 +97,24 @@ public class WorkOrderDetailActivity extends BaseActivity {
             endDate.setText("İş henüz sonlanmadı");
         }
     }
+
+    private void setUserName(Integer userId) {
+        WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
+        workOrderInterface.getUserName(userId).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful() && response.body()!= null){
+                    workOrderUser.setText("İşi alan kullanıcı: "+response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("pop",t.getMessage());
+            }
+        });
+    }
+
     public void setGreen(View view) {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.OVAL);

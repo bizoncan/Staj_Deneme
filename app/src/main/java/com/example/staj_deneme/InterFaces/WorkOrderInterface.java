@@ -20,4 +20,6 @@ public interface WorkOrderInterface {
     Call<Void> updateWorkOrder(@Body WorkOrderModel workOrderModel);
     @GET("api/WorkOrder/GetUserId")
     Call<Integer> getUserId(@Query("username") String username);
+    @GET("api/WorkOrder/GetUserName")
+    Call<String> getUserName(@Query("userId") int userId);
 }

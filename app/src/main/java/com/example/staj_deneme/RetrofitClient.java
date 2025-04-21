@@ -15,9 +15,9 @@
     import okhttp3.OkHttpClient;
     import retrofit2.Retrofit;
     import retrofit2.converter.gson.GsonConverterFactory;
-
+    import retrofit2.converter.scalars.ScalarsConverterFactory;
     public class RetrofitClient {
-        private static final String BASE_URL="https://10.10.82.247:7296/";
+        private static final String BASE_URL="https://10.10.82.11:7296/";
         private static Retrofit retrofit=null;
         public static ApiDeneme getApiService(){
             if(retrofit==null){
@@ -25,6 +25,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
@@ -36,6 +37,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
@@ -48,6 +50,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
@@ -62,6 +65,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create(gson))
                         .build();
             }
@@ -73,6 +77,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
@@ -84,6 +89,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
@@ -95,6 +101,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
@@ -106,6 +113,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
@@ -117,6 +125,7 @@
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(client)
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
