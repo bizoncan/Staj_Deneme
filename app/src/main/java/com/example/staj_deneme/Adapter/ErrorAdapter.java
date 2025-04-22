@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.staj_deneme.InterFaces.ErrorInterface;
 import com.example.staj_deneme.Models.ErrorInfoModel;
 import com.example.staj_deneme.Models.ErrorModel;
+import com.example.staj_deneme.Models.ErrorSupInfoModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
 import com.google.type.DateTime;
@@ -37,20 +38,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ErrorAdapter extends BaseAdapter {
-    List<ErrorModel> errors;
-    List<ErrorInfoModel> errorInfos;
+    /*List<ErrorModel> errors;
+    List<ErrorInfoModel> errorInfos;*/
+    List<ErrorSupInfoModel> errorSupInfoModels;
     Context context;
     private Map<Integer, ErrorInfoModel> errorInfoMap;
 
     public ErrorAdapter() {
     }
 
-    public ErrorAdapter(List<ErrorModel> errors, List<ErrorInfoModel> errorInfos, Context context) {
-        this.errors = errors;
-        this.errorInfos = errorInfos;
+    public ErrorAdapter(List<ErrorModel> errors, List<ErrorInfoModel> errorInfos, Context context,List<ErrorSupInfoModel> errorSupInfoModels) {
+        /*this.errors = errors;
+        this.errorInfos = errorInfos;*/
         this.context = context;
-
-
+        this.errorSupInfoModels = errorSupInfoModels;
     }
     private static class ViewHolder {
         TextView machindeId;
@@ -65,12 +66,12 @@ public class ErrorAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return errors.size();
+        return errorSupInfoModels.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return errors.get(position);
+        return errorSupInfoModels.get(position);
     }
 
     @Override
@@ -98,21 +99,22 @@ public class ErrorAdapter extends BaseAdapter {
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ErrorModel curr = errors.get(position);
+        //ErrorModel curr = errors.get(position);
+        ErrorSupInfoModel currSup = errorSupInfoModels.get(position);
 
 
 
 
-
-        for (ErrorInfoModel e : errorInfos) {
+       /* for (ErrorInfoModel e : errorInfos) {
             if (e.getMachineId() == curr.getMachineId()) {
                 holder.machindeId.setText("Makine adı: " + e.getMachineName());
                 break;
             }
-        }
+        }*/
+        holder.machindeId.setText("Makine adı: "+currSup.getMachineName());
 
 // Makine parça adı
-        boolean foundPart = false;
+        /*boolean foundPart = false;
         if (curr.getMachinePartId() != null) {
             for (ErrorInfoModel e : errorInfos) {
                 if (e.getMachinePartId() != null && e.getMachinePartId().equals(curr.getMachinePartId())) {
@@ -124,17 +126,27 @@ public class ErrorAdapter extends BaseAdapter {
         }
         if (!foundPart) {
             holder.machindePartId.setText("Makine parçası bilgisi bulunamadı.");
+        }*/
+        if(currSup.getMachinePartId() != null) {
+            holder.machindePartId.setText("Makine parça adı: " + currSup.getMachinePartName());
         }
-        holder.errorType.setText("Hata tipi: "+curr.getErrorType());
+        else {
+            holder.machindePartId.setText("Makine parçası bilgisi bulunamadı.");
+        }
+        /*holder.errorType.setText("Hata tipi: "+curr.getErrorType());
         holder.errorDesc.setText("Hata açıklama: "+curr.getErrorDesc());
-        holder.errorStartDate.setText("Arıza kaydı giriş tarihi: "+curr.getErrorDate());
+        holder.errorStartDate.setText("Arıza kaydı giriş tarihi: "+curr.getErrorDate());*/
+        holder.errorType.setText("Hata tipi: "+currSup.getErrorType());
+        holder.errorDesc.setText("Hata açıklama: "+currSup.getErrorDesc());
+        holder.errorStartDate.setText("Arıza kaydı giriş tarihi: "+currSup.getStartDate());
+
         try{
-            String durs = formatErrorDuration(curr);
+            String durs = formatErrorDuration(currSup);
             holder.errorEndDate.setText("Arıza kaydı için geçen süre: "+durs);
         }catch (Exception e){
             holder.errorEndDate.setText("Arıza kaydı için geçen süre: HESAPLANAMADI");
         }
-        loadImage(holder.imgURL,curr.getErrorImage());
+        loadImage(holder.imgURL,currSup.getErrorImage());
 
         return convertView;
     }
@@ -161,10 +173,10 @@ public class ErrorAdapter extends BaseAdapter {
                     .into(imageView);
         }
     }
-    private String formatErrorDuration(ErrorModel error) {
+    private String formatErrorDuration(ErrorSupInfoModel error) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        LocalDateTime start = LocalDateTime.parse(error.getErrorDate(),dateFormat);
-        LocalDateTime end = LocalDateTime.parse(error.getErrorEndDate(),dateFormat);
+        LocalDateTime start = LocalDateTime.parse(error.getStartDate(),dateFormat);
+        LocalDateTime end = LocalDateTime.parse(error.getEndDate(),dateFormat);
         Duration durr = Duration.between(start, end);
         Long hours= durr.toHours();
         Long minutes= durr.toMinutes()%60;

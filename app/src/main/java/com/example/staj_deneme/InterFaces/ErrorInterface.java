@@ -5,6 +5,7 @@ import com.example.staj_deneme.Models.ErrorInfoModel;
 import com.example.staj_deneme.Models.ErrorModel;
 import com.example.staj_deneme.Models.ErrorResponseModel;
 import com.example.staj_deneme.Models.ErrorResponseNoListModel;
+import com.example.staj_deneme.Models.ErrorSupInfoModel;
 import com.example.staj_deneme.Models.ResponseModel;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public interface ErrorInterface {
     @GET("api/Error/GetInfoNames")
     Call<List<ErrorInfoModel>> getErrorInfos();
     @GET("api/Error/FilterListView")
-        Call<List<ErrorModel>> filterListView(@Query("s1") String s1,
+        Call<List<ErrorSupInfoModel>> filterListView(@Query("s1") String s1,
                                               @Query("s2") String s2,
                                               @Query("s3") String s3,
                                               @Query("s4") String s4,
@@ -46,4 +47,10 @@ public interface ErrorInterface {
     Call<ErrorResponseNoListModel> getById(@Path("id")int id);
     @GET("api/Error/GetMachineNameAndPart/{id}")
     Call<ErrorInfoModel> getMachineNameAndPart(@Path("id") int id);
+    @GET("api/Error/GetErrorSupModel")
+    Call<List<ErrorSupInfoModel>> getErrorSupModel();
+    @GET("api/Error/GetErrorSupModelByMachine/{machineId}")
+    Call<List<ErrorSupInfoModel>> getErrorSupModelByMachine(@Path("machineId")int machineId);
+    @GET("api/Error/GetErrorSupModelByMachinePart/{machinePartId}")
+    Call<List<ErrorSupInfoModel>> getErrorSupModelByMachinePart(@Path("machinePartId")int machinePartId);
 }
