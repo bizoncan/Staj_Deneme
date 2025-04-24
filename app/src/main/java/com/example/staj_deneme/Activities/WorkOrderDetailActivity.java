@@ -60,7 +60,12 @@ public class WorkOrderDetailActivity extends BaseActivity {
             public void onResponse(Call<WorkOrderModel> call, Response<WorkOrderModel> response) {
                 if (response.isSuccessful() && response.body()!= null){
                     workOrderModel = response.body();
-                    setUserName(workOrderModel.getUserId());
+                    if(workOrderModel.getUserId()!= null){
+                        setUserName(workOrderModel.getUserId());
+                    }
+                    else{
+                        workOrderUser.setText("İşi alan kullanıcı: Bu iş henüz alınmamış.");
+                    }
                     fillPage();
                 }
                 else{
