@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
@@ -12,6 +13,18 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         tools:context=".Activities.AddErrorManuelActivity">
+
+        <!-- Başlık -->
+        <TextView
+            android:id="@+id/title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yeni İş Ekle"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textColor="@color/black"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <!-- Makine Seçim Alanı -->
         <com.google.android.material.textfield.TextInputLayout
@@ -22,9 +35,11 @@
             android:layout_marginTop="16dp"
             android:hint="Makine Seç"
             app:hintTextColor="#CB2F2F"
+            app:boxStrokeColor="#CB2F2F"
+            app:endIconTint="#CB2F2F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/title_textview">
 
             <AutoCompleteTextView
                 android:id="@+id/machineId_spinner"
@@ -45,6 +60,8 @@
             android:layout_marginTop="16dp"
             android:hint="Makine Parçası Seç"
             app:hintTextColor="#CB2F2F"
+            app:boxStrokeColor="#CB2F2F"
+            app:endIconTint="#CB2F2F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/machineId_spinner_layout">
@@ -59,121 +76,163 @@
                 app:dropDownBackgroundTint="#FFDBDB" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Hata Bilgileri Giriş Alanları -->
-        <EditText
-            android:id="@+id/workTitle_edittext"
+        <!-- Yapılan İş Başlığı -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/workTitle_layout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:ems="10"
             android:hint="Yapılan İş"
-            android:inputType="text"
-            android:textColor="@color/black"
-            android:textColorHint="#6B6B6B"
+            app:hintTextColor="#CB2F2F"
+            app:boxStrokeColor="#CB2F2F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/machinePartId_spinner_layout" />
+            app:layout_constraintTop_toBottomOf="@id/machinePartId_spinner_layout">
 
-        <EditText
-            android:id="@+id/workDesc_edittext"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/workTitle_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="#6B6B6B" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Yapılan İş Açıklama -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/workDesc_layout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:ems="10"
             android:hint="Yapılan İş Açıklama"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:textColor="@color/black"
-            android:textColorHint="#6B6B6B"
+            app:hintTextColor="#CB2F2F"
+            app:boxStrokeColor="#CB2F2F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/workTitle_edittext" />
+            app:layout_constraintTop_toBottomOf="@id/workTitle_layout">
 
-        <EditText
-            android:id="@+id/workEndDate_edittext"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/workDesc_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:textColor="@color/black"
+                android:textColorHint="#6B6B6B" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- İş Tamamlama Tarihi -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/workEndDate_layout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:ems="10"
             android:hint="İş Tamamlama Tarihi"
-            android:inputType="text"
-            android:textColor="@color/black"
-            android:textColorHint="#6B6B6B"
-            android:clickable="false"
-            android:focusable="false"
+            app:hintTextColor="#CB2F2F"
+            app:boxStrokeColor="#CB2F2F"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_calendar_24"
+            app:endIconTint="#CB2F2F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/workDesc_edittext" />
+            app:layout_constraintTop_toBottomOf="@id/workDesc_layout">
 
-        <!-- Hata Ekle Butonu -->
-        <Button
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/workEndDate_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:focusable="false"
+                android:clickable="true"
+                android:textColor="@color/black"
+                android:textColorHint="#6B6B6B" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- İş Bilgilerini Ekle Butonu -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button8"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#CB2F2F"
-            android:onClick="hata_ekle"
+            android:layout_marginTop="24dp"
             android:text="İş Bilgilerini Ekle"
             android:textColor="@color/white"
+            android:onClick="hata_ekle"
+            app:cornerRadius="8dp"
+            app:elevation="4dp"
+            app:backgroundTint="#CB2F2F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/workEndDate_edittext"
-            style="?attr/textAppearanceButton"/>
+            app:layout_constraintTop_toBottomOf="@id/workEndDate_layout"/>
 
         <!-- Resim İşlem Butonları -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button9"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="#CB2F2F"
-            android:onClick="selectImage"
             android:text="Resim Yükle"
             android:textColor="@color/white"
+            android:onClick="selectImage"
+            app:cornerRadius="8dp"
+            app:elevation="4dp"
+            app:backgroundTint="#CB2F2F"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button8"
-            style="?attr/textAppearanceButton"/>
+            app:layout_constraintTop_toBottomOf="@id/button8"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginStart="8dp"
-            android:backgroundTint="#CB2F2F"
-            android:onClick="takePicture"
             android:text="Resim Çek"
             android:textColor="@color/white"
+            android:onClick="takePicture"
+            app:cornerRadius="8dp"
+            app:elevation="4dp"
+            app:backgroundTint="#CB2F2F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/button8"
-            style="?attr/textAppearanceButton"/>
+            app:layout_constraintTop_toBottomOf="@id/button8"/>
 
         <!-- Çekilen Resimler Başlığı -->
         <TextView
             android:id="@+id/images_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Çekilen Resimler:"
+            android:layout_marginTop="24dp"
+            android:text="Çekilen Resimler"
             android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button9" />
 
         <!-- Resim Slider -->
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/image_slider_card"
             android:layout_width="0dp"
             android:layout_height="200dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/images_textview" />
+            app:layout_constraintTop_toBottomOf="@id/images_textview">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.cardview.widget.CardView>
 
         <!-- Butonlar arası guideline -->
         <androidx.constraintlayout.widget.Guideline

@@ -24,6 +24,7 @@ import com.example.staj_deneme.InterFaces.WorkInterface;
 import com.example.staj_deneme.InterFaces.WorkOrderInterface;
 import com.example.staj_deneme.Models.WorkModel;
 import com.example.staj_deneme.Models.WorkOrderModel;
+import com.example.staj_deneme.Models.WorkOrderViewModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
 
@@ -37,6 +38,7 @@ import retrofit2.Response;
 
 public class TakenWorksActivity extends BaseActivity {
     List<WorkOrderModel> workModelList ;
+    List<String> machineNameList;
     ListView workModelListView;
     BaseAdapter adapter;
     @Override
@@ -46,6 +48,7 @@ public class TakenWorksActivity extends BaseActivity {
         setContentView(R.layout.activity_taken_works);
         workModelListView = findViewById(R.id.work_listview);
         workModelList = new ArrayList<>();
+        machineNameList = new ArrayList<>();
         adapter = new BaseAdapter() {
             @Override
             public int getCount() {
@@ -80,11 +83,14 @@ public class TakenWorksActivity extends BaseActivity {
         };
         workModelListView.setAdapter(adapter);
         WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
-        workOrderInterface.getWorkOrders().enqueue(new Callback<List<WorkOrderModel>>() {
+        workOrderInterface.getWorkOrders().enqueue(new Callback<List<WorkOrderViewModel>>() {
             @Override
-            public void onResponse(Call<List<WorkOrderModel>> call, Response<List<WorkOrderModel>> response) {
+            public void onResponse(Call<List<WorkOrderViewModel>> call, Response<List<WorkOrderViewModel>> response) {
                 if ( response.isSuccessful() && response.body() != null){
-                    workModelList.addAll(response.body());
+                    for (WorkOrderViewModel w : response.body()) {
+                        workModelList.add(w.getWorkOrderModel());
+                        machineNameList.add(w.getMachineName());
+                    }
                     userCheck();
                 }
                 else{
@@ -98,10 +104,12 @@ public class TakenWorksActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<List<WorkOrderModel>> call, Throwable t) {
+            public void onFailure(Call<List<WorkOrderViewModel>> call, Throwable t) {
                 Log.e("pop", t.getMessage());
             }
+
         });
+
         workModelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

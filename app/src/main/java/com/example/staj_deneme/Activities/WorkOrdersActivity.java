@@ -1,6 +1,7 @@
 package com.example.staj_deneme.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -19,9 +20,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.staj_deneme.InterFaces.WorkOrderInterface;
 import com.example.staj_deneme.Models.WorkOrderModel;
+import com.example.staj_deneme.Models.WorkOrderViewModel;
 import com.example.staj_deneme.R;
 import com.example.staj_deneme.RetrofitClient;
 
@@ -35,15 +39,74 @@ import retrofit2.Response;
 
 public class WorkOrdersActivity extends BaseActivity {
     BaseAdapter adapter;
+    List<String> machineNameList;
     List<WorkOrderModel> workOrders;
     ListView workOrderListView;
+    Integer UserId;
+    SwipeRefreshLayout srl;
+    TextView emptyTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_work_orders);
+        SharedPreferences sp = getSharedPreferences("UserPrefs",MODE_PRIVATE);
+        emptyTextView = findViewById(R.id.empty_textView);
+        machineNameList = new ArrayList<>();
+        srl = findViewById(R.id.swipeRefreshLayout);
+        List<WorkOrderViewModel> tempWorkOrder = new ArrayList<>();
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                workOrders.clear();
+                tempWorkOrder.clear();
+                adapter.notifyDataSetChanged();
+                WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
+                workOrderInterface.getWorkOrders().enqueue(new Callback<List<WorkOrderViewModel>>() {
+                    @Override
+                    public void onResponse(Call<List<WorkOrderViewModel>> call, Response<List<WorkOrderViewModel>> response) {
+                        if (response.isSuccessful() && response.body() != null){
+                            tempWorkOrder.addAll(response.body());
+                            for (WorkOrderViewModel w : tempWorkOrder) {
+                                if (w.getWorkOrderModel().getUserId() == UserId && !w.getWorkOrderModel().isClosed()) {
+                                    workOrders.add(w.getWorkOrderModel());
+                                    machineNameList.add(w.getMachineName());
+                                }
+                            }
+                            if(workOrders.isEmpty()){
+                                emptyTextView.setVisibility(View.VISIBLE);
+                                adapter.notifyDataSetChanged();
+                            }
+                            else{
+                                emptyTextView.setVisibility(View.GONE);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                        else{
+                            try {
+                                Log.e("API ERROR", "Response Code: " + response.code() +
+                                        " | Message: " + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<WorkOrderViewModel>> call, Throwable t) {
+                        Log.e("pop",t.getMessage());
+                    }
+
+                });
+                srl.setRefreshing(false);
+            }
+        });
+        UserId = sp.getInt("UserId",0);
         workOrderListView = findViewById(R.id.workOrderListView);
+
         workOrders = new ArrayList<>();
+
         adapter = new BaseAdapter() {
             @Override
             public int getCount() {
@@ -64,59 +127,71 @@ public class WorkOrdersActivity extends BaseActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 WorkOrderModel w = workOrders.get(position);
 
-                if(!w.isClosed()){
+                if(!w.isClosed() && w != null) {
                     if (convertView == null) {
-                        convertView=LayoutInflater.from(WorkOrdersActivity.this).inflate(R.layout.work_order_item_layout,parent,false);
+                        convertView=LayoutInflater.from(WorkOrdersActivity.this).inflate(R.layout.item_work_order,parent,false);
                     }
 
                     TextView title = convertView.findViewById(R.id.workOrderTitle_txt);
-                    TextView desc = convertView.findViewById(R.id.workOrderDesc_txt);
+                    //TextView desc = convertView.findViewById(R.id.workOrderDesc_txt);
                     TextView startDate = convertView.findViewById(R.id.workOrderStartDate_txt);
-                    TextView endDate = convertView.findViewById(R.id.workOrderEndDate_txt);
-                    View light1 = convertView.findViewById(R.id.lightView1);
-                    View light2 = convertView.findViewById(R.id.lightView2);
+                    TextView workMachineName = convertView.findViewById(R.id.workMachineName_txt);
+                    TextView isDurum = convertView.findViewById(R.id.isDurum_txt);
+                    //TextView endDate = convertView.findViewById(R.id.workOrderEndDate_txt);
+                    //View light1 = convertView.findViewById(R.id.lightView1);
+                    View light2 = convertView.findViewById(R.id.light2);
 
-                    light1.setBackgroundResource(R.drawable.light_circle);  // veya varsayılan renk
-                    light2.setBackgroundResource(R.drawable.light_circle);
+                    //light1.setBackgroundResource(R.drawable.light_circle);  // veya varsayılan renk
+                    //light2.setBackgroundResource(R.drawable.light_circle);
 
                     title.setText(workOrders.get(position).getTitle());
-                    desc.setText(workOrders.get(position).getDesc());
+                    //desc.setText(workOrders.get(position).getDesc());
                     startDate.setText(workOrders.get(position).getWorkOrderStartDate());
-
-                    if(workOrders.get(position).isOpened()){
+                    workMachineName.setText(machineNameList.get(position));
+                    isDurum.setText("İş Bitmedi");
+                    light2.setBackgroundColor(getResources().getColor(R.color.redred));                    /*if(workOrders.get(position).isOpened()){
                         setGreen(light1);
                         startDate.setText(workOrders.get(position).getWorkOrderStartDate());
-                    }
+                    }*/
 
-                    if(workOrders.get(position).isClosed()){
-                        setGreen(light2);
-                        endDate.setText(workOrders.get(position).getWorkOrderEndDate());
-                    }
-                    else{
-                        endDate.setText("İş kaydı daha sonlanmadı.");
-                    }
+//                    if(workOrders.get(position).isClosed()){
+//                        setGreen(light2);
+//                        //endDate.setText(workOrders.get(position).getWorkOrderEndDate());
+//                    }
+//                    else{
+//                        //endDate.setText("İş kaydı daha sonlanmadı.");
+//                    }
                     return convertView;
                 }
 
                else {
-                   return LayoutInflater.from(WorkOrdersActivity.this).inflate(R.layout.work_order_item_layout, parent, false);
-                }
+                   return LayoutInflater.from(WorkOrdersActivity.this).inflate(R.layout.empty_son_of_empty, parent, false);
+
+               }
             }
         };
         workOrderListView.setAdapter(adapter);
-        List<WorkOrderModel> tempWorkOrder = new ArrayList<>();
+
         WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
-        workOrderInterface.getWorkOrders().enqueue(new Callback<List<WorkOrderModel>>() {
+        workOrderInterface.getWorkOrders().enqueue(new Callback<List<WorkOrderViewModel>>() {
             @Override
-            public void onResponse(Call<List<WorkOrderModel>> call, Response<List<WorkOrderModel>> response) {
+            public void onResponse(Call<List<WorkOrderViewModel>> call, Response<List<WorkOrderViewModel>> response) {
                 if (response.isSuccessful() && response.body() != null){
                     tempWorkOrder.addAll(response.body());
-                    for (WorkOrderModel w : tempWorkOrder) {
-                        if (!w.isClosed()){
-                            workOrders.add(w);
+                    for (WorkOrderViewModel w : tempWorkOrder) {
+                        if (w.getWorkOrderModel().userId == UserId && !w.getWorkOrderModel().isClosed()) {
+                            workOrders.add(w.getWorkOrderModel());
+                            machineNameList.add(w.getMachineName());
                         }
                     }
-                    adapter.notifyDataSetChanged();
+                    if(workOrders.isEmpty()){
+                        emptyTextView.setVisibility(View.VISIBLE);
+                        adapter.notifyDataSetChanged();
+                    }
+                    else{
+                        emptyTextView.setVisibility(View.GONE);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
                 else{
                     try {
@@ -129,14 +204,17 @@ public class WorkOrdersActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<List<WorkOrderModel>> call, Throwable t) {
+            public void onFailure(Call<List<WorkOrderViewModel>> call, Throwable t) {
                 Log.e("pop",t.getMessage());
+
             }
+
         });
+
         workOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent sayfa = new Intent(WorkOrdersActivity.this,WorkOrderDetailActivity.class);
+                Intent sayfa = new Intent(WorkOrdersActivity.this,AddWorkActivity.class);
                 sayfa.putExtra("workOrderId",workOrders.get(position).getId());
                 startActivity(sayfa);
             }

@@ -6,13 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.WorkOrdersActivity">
-
-    <ListView
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/empty_textView"
+        android:text="Henüz iş emriniz bulunmamaktadır"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:padding="16dp"/>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/workOrderListView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp" />
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+
+
+        <ListView
+            android:id="@+id/workOrderListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

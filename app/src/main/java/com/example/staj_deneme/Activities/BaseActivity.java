@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,6 +56,12 @@ public class BaseActivity extends AppCompatActivity {
     int userId;
     ListView notificationListView;
     int not_size = 0;
+
+    private Handler pollingHandler;
+    private Runnable pollingRunnable;
+    private boolean isPollingRunning = false;
+    private static final int POLL_INTERVAL = 10000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +117,7 @@ public class BaseActivity extends AppCompatActivity {
         };
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
         userId = sharedPreferences.getInt("UserId",0);
+        initializePolling();
     }
 
     @Override
@@ -134,7 +142,7 @@ public class BaseActivity extends AppCompatActivity {
         notificationText = findViewById(R.id.notificationCount_textview);
 
 
-        startDatabasePolling();
+        //startDatabasePolling();
 
     }
 
@@ -198,21 +206,21 @@ public class BaseActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             Intent sayfa = null;
 
-            if (item.getItemId() == R.id.home) {
+            /*if (item.getItemId() == R.id.home) {
                 sayfa = new Intent(getApplicationContext(), TestActivity.class);
             } else if (item.getItemId() == R.id.person) {
                 sayfa = new Intent(getApplicationContext(), ErrorDetailsActivity.class);
             } else if (item.getItemId() == R.id.nufus) {
                 sayfa = new Intent(getApplicationContext(), AddErrorManuelActivity.class);
-            } else if (item.getItemId() == R.id.tarihi) {
+            } else*/ if (item.getItemId() == R.id.tarihi) {
                 sayfa = new Intent(getApplicationContext(), TestLoginActivity.class);
             }
             else if (item.getItemId() == R.id.workorders) {
                 sayfa = new Intent(getApplicationContext(), WorkOrdersActivity.class);
             }
-            else if (item.getItemId() == R.id.myworks) {
+            /*else if (item.getItemId() == R.id.myworks) {
                 sayfa = new Intent(getApplicationContext(), TakenWorksActivity.class);
-            }
+            }*/
             if (sayfa != null) {
                 startActivity(sayfa);
             }
@@ -337,22 +345,76 @@ public class BaseActivity extends AppCompatActivity {
         });
 
     }
-
-    private void startDatabasePolling() {
-        final int POLL_INTERVAL = 10000;
-
-        Handler handler = new Handler();
-        Runnable pollRunnable = new Runnable() {
+    private void initializePolling() {
+        // Handler'ı Main Looper ile oluşturduğundan emin ol
+        pollingHandler = new Handler(Looper.getMainLooper());
+        pollingRunnable = new Runnable() {
             @Override
             public void run() {
-                checkForUpdates();
-                handler.postDelayed(this, POLL_INTERVAL); // Tekrar çalıştır
+                // Activity hala aktif mi kontrol et
+                if (!isFinishing() && !isDestroyed() && isPollingRunning) {
+                    Log.d("PollingDebug", "checkForUpdates çağrılıyor: " + BaseActivity.this.getClass().getSimpleName() + " Instance: " + BaseActivity.this.hashCode());
+                    checkForUpdates();
+
+                    // Sadece polling hala aktifse bir sonrakini zamanla
+                    pollingHandler.postDelayed(this, POLL_INTERVAL);
+                } else {
+                    Log.d("PollingDebug", "Polling durdu veya Activity sonlanıyor: " + BaseActivity.this.getClass().getSimpleName());
+                    isPollingRunning = false; // Bayrağı güncelle
+                }
             }
         };
+    }
+    private void startDatabasePolling() {
+        if (pollingHandler == null || pollingRunnable == null) {
+            initializePolling();
+        }
 
-        handler.post(pollRunnable); // Başlat
+        // Zaten çalışmıyorsa ve başlatılabiliyorsa başlat
+        if (!isPollingRunning && pollingHandler != null && pollingRunnable != null) {
+            Log.d("PollingDebug", "Polling başlatılıyor: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
+            isPollingRunning = true;
+            // Önceki olası callback'leri temizle (garanti olsun)
+            pollingHandler.removeCallbacks(pollingRunnable);
+            // Runnable'ı hemen çalıştır ve döngüyü başlat
+            pollingHandler.post(pollingRunnable);
+        } else if (isPollingRunning) {
+            Log.d("PollingDebug", "Polling zaten çalışıyor: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
+        }
+    }
+    private void stopDatabasePolling() {
+        if (pollingHandler != null && pollingRunnable != null) {
+            Log.d("PollingDebug", "Polling durduruluyor: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
+            isPollingRunning = false;
+            pollingHandler.removeCallbacks(pollingRunnable);
+        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("ActivityLifecycle", "onResume: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
+        // Activity ön plana geldiğinde polling'i başlat
+        startDatabasePolling();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("ActivityLifecycle", "onPause: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
+        // Activity arka plana gittiğinde polling'i durdur
+        stopDatabasePolling();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("ActivityLifecycle", "onDestroy: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
+        // Activity yok edildiğinde polling'i kesin olarak durdur ve referansları temizle
+        stopDatabasePolling();
+        pollingHandler = null; // Garbage Collector'a yardımcı ol
+        pollingRunnable = null;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.nav_menu, menu);

@@ -1,8 +1,10 @@
 package com.example.staj_deneme.Activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -209,6 +211,7 @@ public class AddWorkActivity extends BaseActivity {
             public void onResponse(Call<WorkOrderModel> call, Response<WorkOrderModel> response) {
                 if (response.isSuccessful() && response.body() != null){
                     workOrderModel = response.body();
+                    checkUser();
                     if (workOrderModel.getMachineId()!= null) {
                         machineId = workOrderModel.getMachineId();
                         if (workOrderModel.getMachinePartId() != null){
@@ -225,6 +228,25 @@ public class AddWorkActivity extends BaseActivity {
             }
         });
     }
+
+    private void checkUser() {
+        SharedPreferences sp = getSharedPreferences("UserPrefs",MODE_PRIVATE);
+        int UserId = sp.getInt("UserId",0);
+        if (workOrderModel.getUserId() != UserId) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Hata")
+                    .setMessage("Bu iş emri başka birisine atandı!")
+                    .setCancelable(false)
+                    .setPositiveButton("Tamam", (dialog, which) -> {
+                        Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                        startActivity(intent);
+                        finish();
+                    })
+                    .show();
+
+        }
+    }
+
     private void setDefaultSelections() {
         if (machineId != null) {
 
@@ -442,7 +464,7 @@ public class AddWorkActivity extends BaseActivity {
                     if(response.isSuccessful() ){
                         resimleri_ekle();
                         Toast.makeText(AddWorkActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
-                        Intent sayfa = new Intent(AddWorkActivity.this,TestActivity.class);
+                        Intent sayfa = new Intent(AddWorkActivity.this,WorkOrdersActivity.class);
                         startActivity(sayfa);
                     }
                     else{

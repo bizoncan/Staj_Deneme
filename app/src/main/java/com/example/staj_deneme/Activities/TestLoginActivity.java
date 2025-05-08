@@ -67,7 +67,7 @@ public class TestLoginActivity extends AppCompatActivity {
                         editor.putInt("UserId",response.body().getUserId());
                         editor.apply();
                         Toast.makeText(TestLoginActivity.this,"Giriş başarılı",Toast.LENGTH_LONG).show();
-                        Intent sayfa = new Intent(TestLoginActivity.this,TestActivity.class);
+                        Intent sayfa = new Intent(TestLoginActivity.this,WorkOrdersActivity.class);
                         startActivity(sayfa);
                     }
                     else{

@@ -1,6 +1,7 @@
 package com.example.staj_deneme.InterFaces;
 
 import com.example.staj_deneme.Models.WorkOrderModel;
+import com.example.staj_deneme.Models.WorkOrderViewModel;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import retrofit2.http.Query;
 
 public interface WorkOrderInterface {
     @GET("api/WorkOrder")
-    Call<List<WorkOrderModel>> getWorkOrders();
+    Call<List<WorkOrderViewModel>> getWorkOrders();
     @GET("api/WorkOrder/{id}")
     Call<WorkOrderModel> getWorkOrder(@Path("id") int id);
     @PUT("api/WorkOrder")

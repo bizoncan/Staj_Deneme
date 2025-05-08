@@ -17,7 +17,7 @@
     import retrofit2.converter.gson.GsonConverterFactory;
     import retrofit2.converter.scalars.ScalarsConverterFactory;
     public class RetrofitClient {
-        private static final String BASE_URL="https://10.10.82.247:7296/";
+        private static final String BASE_URL="https://10.10.82.11:7296/";
         private static Retrofit retrofit=null;
         public static ApiDeneme getApiService(){
             if(retrofit==null){
