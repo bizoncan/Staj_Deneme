@@ -8,66 +8,60 @@
     android:layout_height="match_parent"
     tools:context=".Activities.BaseActivity"
     tools:openDrawer="start"
-    android:background="#EFEFEF">
+    android:background="@color/white">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <!-- AppBarLayout should be first -->
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top">
-            <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/white"
+            android:elevation="0dp">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/redred"
+                app:titleTextColor="@color/white"
+                app:title="İş Emirleri"
+                app:navigationIcon="@drawable/baseline_menu_24"
+                app:menu="@menu/nav_menu"
+                app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                app:layout_scrollEffect="compress"
+                style="@style/Widget.Material3.Toolbar.Surface">
+
                 <com.skydoves.transformationlayout.TransformationLayout
                     android:id="@+id/transition_layout"
                     android:layout_width="41dp"
                     android:layout_height="43dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
                     app:transformation_duration="500"
-                    app:transformation_targetView="@id/notificationsbase_listview">
-                </com.skydoves.transformationlayout.TransformationLayout>
+                    app:transformation_targetView="@id/notificationsbase_listview"/>
 
                 <TextView
                     android:id="@+id/notificationCount_textview"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:elevation="10dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/notification_badge_background"
+                    android:elevation="4dp"
                     android:gravity="center"
                     android:text="0"
-                    android:textColor="#000000"
-                    android:textSize="10sp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/materialToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="#DA291C"
-                    app:title="Arıza Kayıt"
-                    android:elevation="1dp"
-                    app:titleTextColor="@color/white"
-                    app:navigationIcon="@drawable/baseline_menu_24"
-                    app:menu="@menu/nav_menu"
-                    app:layout_scrollEffect="compress"
-                    style="@style/Widget.Material3.Toolbar.Surface">
-                </com.google.android.material.appbar.MaterialToolbar>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- Content ConstraintLayout with proper behavior -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -77,27 +71,21 @@
             <FrameLayout
                 android:id="@+id/content_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout_editor_absoluteX="-203dp"
-                tools:layout_editor_absoluteY="16dp">
+                android:layout_height="match_parent">
 
                 <ListView
                     android:id="@+id/notificationsbase_listview"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="98dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="4dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/listview_background"
                     android:dividerHeight="8dp"
-                    android:elevation="10dp"
+                    android:elevation="8dp"
                     android:overScrollMode="never"
                     android:scrollbarStyle="outsideOverlay"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.206"
                     tools:visibility="gone" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -108,9 +96,15 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:visibility="visible"
+        android:background="@color/white"
+        android:elevation="8dp"
         app:headerLayout="@layout/nav_header"
+        app:itemHorizontalPadding="24dp"
+        app:itemIconPadding="16dp"
+        app:itemIconSize="24dp"
+        app:itemIconTint="@color/black"
+        app:itemTextAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        app:itemTextColor="@color/black"
         app:menu="@menu/header_menu"
-        tools:visibility="gone">
-    </com.google.android.material.navigation.NavigationView>
+        tools:visibility="visible"></com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

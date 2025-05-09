@@ -26,6 +26,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import com.example.staj_deneme.Adapter.SliderAdapter;
 import com.example.staj_deneme.InterFaces.ErrorInterface;
@@ -54,50 +56,53 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddWorkActivity extends BaseActivity {
-    EditText workTypeEdt,workDateEdt,workDescEdt;
-    TextInputLayout machineDropdownLayout,machinePartDropdownLayout;
-    AutoCompleteTextView machineDropdown,machinePartDropdown;
-    ArrayAdapter<String> adapter,mpAdapter;
+public class AddWorkActivity extends AppCompatActivity {
+    EditText workTypeEdt, workDateEdt, workDescEdt;
+    TextInputLayout machineDropdownLayout, machinePartDropdownLayout;
+    AutoCompleteTextView machineDropdown, machinePartDropdown;
+    ArrayAdapter<String> adapter, mpAdapter;
     List<String> machineNameList = new ArrayList<>();
-    List<Integer> machineIdList= new ArrayList<>();
+    List<Integer> machineIdList = new ArrayList<>();
     List<String> machinePartNameList = new ArrayList<>();
-    List<Integer> machinePartIdList= new ArrayList<>();
-    Integer machineId,machinePartId;
-    String machineName,machinePartName;
-    ArrayList<Object> sliderImages ;
+    List<Integer> machinePartIdList = new ArrayList<>();
+    Integer machineId, machinePartId;
+    String machineName, machinePartName;
+    ArrayList<Object> sliderImages;
     SliderAdapter sliderAdapter;
     WorkOrderModel workOrderModel;
-    WorkModel workModel ;
-    boolean isMachinePartFilled=false;
+    WorkModel workModel;
+    boolean isMachinePartFilled = false;
 
     private static final int CAMERA_REQUEST = 100;
     private long startTime = 0L;
     private long timeElapsed = 0L;
     private Handler timerHandler = new Handler();
     private boolean isTimerRunning = false;
-    private String formatedTime ="00:00";
+    private String formatedTime = "00:00";
     SimpleDateFormat dateFormat;
     String currentDate;
     Date dateIn;
 
     ViewPager2 viewPager;
 
-
-    Boolean isPhotoTaken=false;
+    Boolean isPhotoTaken = false;
 
     List<Bitmap> tempBitmapPhotos;
     private List<Uri> selectedImageUris = null;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int CAMERA_PERMISSION_CODE = 100;
+    private MaterialToolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_work);
+
+        setupToolbar();
         machineDropdown = findViewById(R.id.machineId_spinner);
-        adapter = new ArrayAdapter<>(AddWorkActivity.this, R.layout.dropdown_item,machineNameList);
+        adapter = new ArrayAdapter<>(AddWorkActivity.this, R.layout.dropdown_item, machineNameList);
         workModel = new WorkModel();
         fillMachineSpinner();
 
@@ -105,42 +110,37 @@ public class AddWorkActivity extends BaseActivity {
 
         machineDropdown.setOnItemClickListener((parent, view, position, id) -> {
             machineName = parent.getItemAtPosition(position).toString();
-            if (machinePartName != "-"){
-                machineId = machineIdList.get(machineNameList.indexOf(machineName)-1);
-            }
-            else{
+            if (machinePartName != "-") {
+                machineId = machineIdList.get(machineNameList.indexOf(machineName) - 1);
+            } else {
                 machineId = null;
             }
             fillMachinePartSpinner();
         });
 
-
         machinePartDropdown = findViewById(R.id.machinePartId_spinner);
-        mpAdapter = new ArrayAdapter<>(AddWorkActivity.this, R.layout.dropdown_item,machinePartNameList);
+        mpAdapter = new ArrayAdapter<>(AddWorkActivity.this, R.layout.dropdown_item, machinePartNameList);
 
         machinePartDropdown.setOnItemClickListener((parent, view, position, id) -> {
             machinePartName = parent.getItemAtPosition(position).toString();
-            if (machinePartName != "-"){
-                machinePartId = machinePartIdList.get(machinePartNameList.indexOf(machinePartName)-1);
-            }
-            else{
+            if (machinePartName != "-") {
+                machinePartId = machinePartIdList.get(machinePartNameList.indexOf(machinePartName) - 1);
+            } else {
                 machinePartId = null;
             }
         });
         machinePartDropdown.setAdapter(mpAdapter);
 
-
         workDateEdt = findViewById(R.id.workEndDate_edittext);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));//Türkiye Saat Dilimi
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));// Türkiye Saat Dilimi
         SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         dateFormat1.setTimeZone(TimeZone.getTimeZone("GMT+3"));
         currentDate = dateFormat1.format(new Date());
         workDateEdt.setText(currentDate);
-        workTypeEdt=findViewById(R.id.workTitle_edittext);
+        workTypeEdt = findViewById(R.id.workTitle_edittext);
         workDescEdt = findViewById(R.id.workDesc_edittext);
         dateIn = new Date();
-
 
         machineDropdownLayout = findViewById(R.id.machineId_spinner_layout);
         machineDropdownLayout = findViewById(R.id.machineId_spinner_layout);
@@ -152,18 +152,35 @@ public class AddWorkActivity extends BaseActivity {
         selectedImageUris = new ArrayList<>();
 
         viewPager = findViewById(R.id.viewPager);
-        sliderImages =  new ArrayList<>();
-        sliderAdapter = new SliderAdapter(AddWorkActivity.this,sliderImages);
+        sliderImages = new ArrayList<>();
+        sliderAdapter = new SliderAdapter(AddWorkActivity.this, sliderImages);
         viewPager.setAdapter(sliderAdapter);
     }
+
+    private void setupToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("İş Ekle");
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     public void fillMachineSpinner() {
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
         errorInterface.getNames().enqueue(new Callback<List<ErrorIdModel>>() {
             @Override
             public void onResponse(Call<List<ErrorIdModel>> call, Response<List<ErrorIdModel>> response) {
-                if(response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null) {
                     machineNameList.add("-");
-                    for(ErrorIdModel e: response.body()){
+                    for (ErrorIdModel e : response.body()) {
                         machineIdList.add(e.getId());
                         machineNameList.add(e.getName());
                     }
@@ -171,12 +188,14 @@ public class AddWorkActivity extends BaseActivity {
                 getWorkOrderInfos();
                 adapter.notifyDataSetChanged();
             }
+
             @Override
             public void onFailure(Call<List<ErrorIdModel>> call, Throwable t) {
 
             }
         });
     }
+
     private void fillMachinePartSpinner() {
         if (machineId != null) {
             machinePartIdList.clear();
@@ -185,9 +204,9 @@ public class AddWorkActivity extends BaseActivity {
             errorInterface.getPartNames(machineId).enqueue(new Callback<List<ErrorIdModel>>() {
                 @Override
                 public void onResponse(Call<List<ErrorIdModel>> call, Response<List<ErrorIdModel>> response) {
-                    if (response.isSuccessful() && response.body() != null){
+                    if (response.isSuccessful() && response.body() != null) {
                         machinePartNameList.add("-");
-                        for(ErrorIdModel e : response.body()){
+                        for (ErrorIdModel e : response.body()) {
                             machinePartIdList.add(e.getId());
                             machinePartNameList.add(e.getName());
                         }
@@ -196,6 +215,7 @@ public class AddWorkActivity extends BaseActivity {
                     mpAdapter.notifyDataSetChanged();
 
                 }
+
                 @Override
                 public void onFailure(Call<List<ErrorIdModel>> call, Throwable t) {
 
@@ -204,34 +224,37 @@ public class AddWorkActivity extends BaseActivity {
         }
 
     }
-    public void getWorkOrderInfos(){
+
+    public void getWorkOrderInfos() {
         WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
-        workOrderInterface.getWorkOrder(getIntent().getIntExtra("workOrderId",0)).enqueue(new Callback<WorkOrderModel>() {
-            @Override
-            public void onResponse(Call<WorkOrderModel> call, Response<WorkOrderModel> response) {
-                if (response.isSuccessful() && response.body() != null){
-                    workOrderModel = response.body();
-                    checkUser();
-                    if (workOrderModel.getMachineId()!= null) {
-                        machineId = workOrderModel.getMachineId();
-                        if (workOrderModel.getMachinePartId() != null){
-                            machinePartId = workOrderModel.getMachinePartId();
+        workOrderInterface.getWorkOrder(getIntent().getIntExtra("workOrderId", 0))
+                .enqueue(new Callback<WorkOrderModel>() {
+                    @Override
+                    public void onResponse(Call<WorkOrderModel> call, Response<WorkOrderModel> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            workOrderModel = response.body();
+                            checkUser();
+                            if (workOrderModel.getMachineId() != null) {
+                                machineId = workOrderModel.getMachineId();
+                                if (workOrderModel.getMachinePartId() != null) {
+                                    machinePartId = workOrderModel.getMachinePartId();
+                                }
+                                new Handler().postDelayed(() -> {
+                                    setDefaultSelections();
+                                }, 500);
+                            }
                         }
-                        new Handler().postDelayed(() -> {
-                            setDefaultSelections();
-                        }, 500);
                     }
-                }
-            }
-            @Override
-            public void onFailure(Call<WorkOrderModel> call, Throwable t) {
-            }
-        });
+
+                    @Override
+                    public void onFailure(Call<WorkOrderModel> call, Throwable t) {
+                    }
+                });
     }
 
     private void checkUser() {
-        SharedPreferences sp = getSharedPreferences("UserPrefs",MODE_PRIVATE);
-        int UserId = sp.getInt("UserId",0);
+        SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int UserId = sp.getInt("UserId", 0);
         if (workOrderModel.getUserId() != UserId) {
             new AlertDialog.Builder(this)
                     .setTitle("Hata")
@@ -257,7 +280,7 @@ public class AddWorkActivity extends BaseActivity {
                 machineDropdownLayout.setEnabled(false);
                 // Dropdown tıklama olayını devre dışı bırak
                 machineDropdown.setOnItemClickListener(null);
-                if(!isMachinePartFilled){
+                if (!isMachinePartFilled) {
                     fillMachinePartSpinner();
                     isMachinePartFilled = true;
                 }
@@ -274,12 +297,14 @@ public class AddWorkActivity extends BaseActivity {
             }
         }
     }
+
     public void selectImage(View view) {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Resim Seç"), PICK_IMAGE_REQUEST);
     }
+
     private byte[] convertImageToByteArray(Uri imageUri) throws IOException {
         InputStream inputStream = getContentResolver().openInputStream(imageUri);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
@@ -296,21 +321,23 @@ public class AddWorkActivity extends BaseActivity {
         inputStream.close();
         return byteBuffer.toByteArray();
     }
-    private byte[] convertBitmapToByteArray(Bitmap bitmap){
+
+    private byte[] convertBitmapToByteArray(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray=   stream.toByteArray();
-        try{
+        byte[] byteArray = stream.toByteArray();
+        try {
             stream.close();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return byteArray;
     }
-    public void takePicture(View view){
+
+    public void takePicture(View view) {
         requestCameraPermission();
     }
+
     private void requestCameraPermission() {
         List<String> permissionsNeeded = new ArrayList<>();
 
@@ -318,11 +345,16 @@ public class AddWorkActivity extends BaseActivity {
             permissionsNeeded.add(Manifest.permission.CAMERA);
         }
 
-        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }*/
+        /*
+         * if (ContextCompat.checkSelfPermission(this,
+         * Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+         * PackageManager.PERMISSION_GRANTED) {
+         * permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+         * }
+         */
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
         }
@@ -335,7 +367,9 @@ public class AddWorkActivity extends BaseActivity {
             openCamera();
         }
     }
+
     private Uri captureImageUri;
+
     private void openCamera() {
         // Create content values with metadata for the new image
         ContentValues values = new ContentValues();
@@ -347,14 +381,14 @@ public class AddWorkActivity extends BaseActivity {
             // Insert a new entry in the MediaStore and get the resulting URI
             captureImageUri = getContentResolver().insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    values
-            );
+                    values);
 
             // Create camera intent and tell it to save the full-resolution image to our URI
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
 
-            // Start camera activity without checking resolveActivity (optional safety check)
+            // Start camera activity without checking resolveActivity (optional safety
+            // check)
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
         } catch (Exception e) {
@@ -375,9 +409,7 @@ public class AddWorkActivity extends BaseActivity {
             sliderAdapter.setImageList(sliderImages);
             // Optionally show the selected image in an ImageView
             // imageView.setImageURI(selectedImageUri);
-        }
-        else if(requestCode== CAMERA_REQUEST && resultCode == RESULT_OK
-        ){
+        } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             if (captureImageUri != null) {
                 // Add the URI to your collections
                 selectedImageUris.add(captureImageUri);
@@ -386,11 +418,14 @@ public class AddWorkActivity extends BaseActivity {
                 // Optional: Display a success message
                 Toast.makeText(this, "Image captured successfully", Toast.LENGTH_SHORT).show();
             }
-           /* tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
-            sliderImages.add( data.getExtras().get("data"));
-            sliderAdapter.setImageList(sliderImages);*/
+            /*
+             * tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
+             * sliderImages.add( data.getExtras().get("data"));
+             * sliderAdapter.setImageList(sliderImages);
+             */
         }
     }
+
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
@@ -401,6 +436,7 @@ public class AddWorkActivity extends BaseActivity {
             timerHandler.postDelayed(this, 10);
         }
     };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -408,10 +444,11 @@ public class AddWorkActivity extends BaseActivity {
         timerHandler.removeCallbacks(timerRunnable);
     }
 
-    public void hata_ekle(View view){
+    public void hata_ekle(View view) {
 
-        if(workTypeEdt.getText().toString().isEmpty() || workDescEdt.getText().toString().isEmpty() || workDateEdt.getText().toString().isEmpty()){
-            Toast.makeText(AddWorkActivity.this,"Gerekli alanları doldurunuz",Toast.LENGTH_LONG).show();
+        if (workTypeEdt.getText().toString().isEmpty() || workDescEdt.getText().toString().isEmpty()
+                || workDateEdt.getText().toString().isEmpty()) {
+            Toast.makeText(AddWorkActivity.this, "Gerekli alanları doldurunuz", Toast.LENGTH_LONG).show();
             return;
         }
         workModel.setMachineId(machineId);
@@ -432,14 +469,14 @@ public class AddWorkActivity extends BaseActivity {
     }
 
     private void updateOrders() {
-        if (!workOrderModel.isClosed()){
+        if (!workOrderModel.isClosed()) {
             workOrderModel.setClosed(true);
             WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
             workOrderInterface.updateWorkOrder(workOrderModel).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    if(response.isSuccessful()){
-                        Toast.makeText(AddWorkActivity.this,"İslem başarılı",Toast.LENGTH_LONG).show();
+                    if (response.isSuccessful()) {
+                        Toast.makeText(AddWorkActivity.this, "İslem başarılı", Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -452,8 +489,8 @@ public class AddWorkActivity extends BaseActivity {
         }
     }
 
-    public void add_work(WorkModel workModel){
-        if(!workModel.isClosed()){
+    public void add_work(WorkModel workModel) {
+        if (!workModel.isClosed()) {
             workModel.setClosed(true);
             WorkInterface workInterface = RetrofitClient.getApiWorkService();
             workInterface.addWork(workModel).enqueue(new Callback<Void>() {
@@ -461,17 +498,17 @@ public class AddWorkActivity extends BaseActivity {
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     Log.d("Retrofit", "Response code: " + response.code());
                     Log.d("Retrofit", "Response message: " + response.message());
-                    if(response.isSuccessful() ){
+                    if (response.isSuccessful()) {
                         resimleri_ekle();
-                        Toast.makeText(AddWorkActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
-                        Intent sayfa = new Intent(AddWorkActivity.this,WorkOrdersActivity.class);
+                        Toast.makeText(AddWorkActivity.this, "İşlem Başarılı", Toast.LENGTH_LONG).show();
+                        Intent sayfa = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
                         startActivity(sayfa);
-                    }
-                    else{
-                        Toast.makeText(AddWorkActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(AddWorkActivity.this, "Bir hata meydana geldi" + response.errorBody(),
+                                Toast.LENGTH_LONG).show();
                         try {
-                            String errorBody = response.errorBody() != null ?
-                                    response.errorBody().string() : "No error body";
+                            String errorBody = response.errorBody() != null ? response.errorBody().string()
+                                    : "No error body";
                             Log.e("Retrofit", "Error body: " + errorBody);
 
                         } catch (IOException e) {
@@ -479,56 +516,56 @@ public class AddWorkActivity extends BaseActivity {
                         }
                     }
                 }
+
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(AddWorkActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddWorkActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
             });
-        }
-        else{
-            Toast.makeText(AddWorkActivity.this,"İşlem tamamlanıyor bekleyin",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(AddWorkActivity.this, "İşlem tamamlanıyor bekleyin", Toast.LENGTH_LONG).show();
         }
     }
-    public void resimleri_ekle(){
+
+    public void resimleri_ekle() {
         byte[] imageBytes;
         String base64Image;
         List<String> base64images = new ArrayList<>();
-        if (tempBitmapPhotos.size()>0)
-        {
+        if (tempBitmapPhotos.size() > 0) {
 
-            for (Bitmap bb : tempBitmapPhotos){
+            for (Bitmap bb : tempBitmapPhotos) {
                 imageBytes = convertBitmapToByteArray(bb);
                 base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
                 base64images.add(base64Image);
             }
 
         }
-        if (selectedImageUris.size()>0)
-        {
-            for (Uri uu:selectedImageUris){
+        if (selectedImageUris.size() > 0) {
+            for (Uri uu : selectedImageUris) {
                 try {
                     imageBytes = convertImageToByteArray(uu);
                     base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
                     base64images.add(base64Image);
                 } catch (IOException e) {
-                    Toast.makeText(AddWorkActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddWorkActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
         }
-        if(base64images.size()>0){
+        if (base64images.size() > 0) {
             ImageApiInterface imageApiInterface = RetrofitClient.getApiImageService();
             imageApiInterface.addImageDataWork(base64images).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    if(response.isSuccessful()){
-                        Toast.makeText(AddWorkActivity.this,"oldu galiba",Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        Toast.makeText(AddWorkActivity.this,"Bir hata meydana geldi"+response.errorBody(),Toast.LENGTH_LONG).show();
+                    if (response.isSuccessful()) {
+                        Toast.makeText(AddWorkActivity.this, "oldu galiba", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(AddWorkActivity.this, "Bir hata meydana geldi" + response.errorBody(),
+                                Toast.LENGTH_LONG).show();
                         try {
-                            String errorBody = response.errorBody() != null ?
-                                    response.errorBody().string() : "No error body";
+                            String errorBody = response.errorBody() != null ? response.errorBody().string()
+                                    : "No error body";
                             Log.e("Retrofit", "Error body: " + errorBody);
 
                         } catch (IOException e) {
@@ -536,9 +573,10 @@ public class AddWorkActivity extends BaseActivity {
                         }
                     }
                 }
+
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(AddWorkActivity.this,t.getMessage().toString(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddWorkActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
             });
         }
