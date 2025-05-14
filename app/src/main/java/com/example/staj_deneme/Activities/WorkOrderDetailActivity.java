@@ -1,5 +1,6 @@
 package com.example.staj_deneme.Activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -81,13 +83,18 @@ public class WorkOrderDetailActivity extends AppCompatActivity {
                         workOrderUser.setText("İşi alan kullanıcı: Bu iş henüz alınmamış.");
                     }
                     fillPage();
-                } else {
-                    try {
-                        Log.e("API ERROR", "Response Code: " + response.code() +
-                                " | Message: " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                }
+                else {
+                    new AlertDialog.Builder(WorkOrderDetailActivity.this)
+                            .setTitle("Hata")
+                            .setMessage("İş emri kaldırıldı veya bir hata meydana geldi.")
+                            .setCancelable(false)
+                            .setPositiveButton("Tamam", (dialog, which) -> {
+                                Intent intent = new Intent(WorkOrderDetailActivity.this, WorkOrdersActivity.class);
+                                startActivity(intent);
+                                finish();
+                            })
+                            .show();
                 }
             }
 
@@ -101,11 +108,20 @@ public class WorkOrderDetailActivity extends AppCompatActivity {
     private void fillPage() {
         title.setText(workOrderModel.getTitle());
         desc.setText(workOrderModel.getDesc());
-        startDate.setText("Başlangıç: " + workOrderModel.getWorkOrderStartDate());
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Date date = null;
+        try {
+            date = inputFormat.parse(workOrderModel.getWorkOrderStartDate());
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        String formattedDate = outputFormat.format(date);
 
         if (workOrderModel.isOpened()) {
            // setGreen(light1);
-            startDate.setText("Başlangıç: " + workOrderModel.getWorkOrderStartDate());
+            startDate.setText("Başlangıç: " + formattedDate);
         }
 
         if (workOrderModel.isClosed) {

@@ -16,16 +16,28 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <ImageView
+            android:id="@+id/workOrderImage_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/avatars"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/workOrderTitle_txt"
+            app:layout_constraintBottom_toBottomOf="@+id/workOrderStartDate_txt"
+            android:contentDescription="İş emri fotoğrafı" />
+
         <TextView
             android:id="@+id/workOrderTitle_txt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="Arıza Başlığı / İş Emri Kodu"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/workOrderImage_img"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/light2"/>
 
@@ -38,7 +50,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             tools:text="Makine Adı: XYZ-123"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/workOrderTitle_txt"
             app:layout_constraintTop_toBottomOf="@+id/workOrderTitle_txt"
             app:layout_constraintEnd_toEndOf="@+id/workOrderTitle_txt"/>
 
@@ -51,7 +63,7 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="12sp"
             tools:text="Tarih: 01.01.2024"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/workOrderTitle_txt"
             app:layout_constraintTop_toBottomOf="@+id/workMachineName_txt"
             app:layout_constraintEnd_toEndOf="@+id/workMachineName_txt"/>
 
@@ -74,7 +86,7 @@
             android:textAppearance="?attr/textAppearanceOverline"
             android:textColor="@android:color/darker_gray"
             android:textSize="10sp"
-            tools:text="İŞ BİTMEDİ"
+            tools:text=""
             app:layout_constraintEnd_toEndOf="@+id/light2"
             app:layout_constraintTop_toBottomOf="@+id/light2" />
 

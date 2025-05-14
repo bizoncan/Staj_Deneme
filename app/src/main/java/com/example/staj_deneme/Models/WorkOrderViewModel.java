@@ -1,12 +1,15 @@
 package com.example.staj_deneme.Models;
 
+import javax.crypto.Mac;
+
 public class WorkOrderViewModel {
     WorkOrderModel workOrderModel;
     String machineName;
-
-    public WorkOrderViewModel(WorkOrderModel workOrderModel, String machineName) {
+    MachineModel machineModel;
+    public WorkOrderViewModel(WorkOrderModel workOrderModel, String machineName, MachineModel machineModel) {
         this.workOrderModel = workOrderModel;
         this.machineName = machineName;
+        this.machineModel = machineModel;
     }
 
     public WorkOrderModel getWorkOrderModel() {
@@ -23,5 +26,13 @@ public class WorkOrderViewModel {
 
     public void setMachineName(String machineName) {
         this.machineName = machineName;
+    }
+
+    public MachineModel getMachineModel() {
+        return machineModel;
+    }
+
+    public void setMachineModel(MachineModel machineModel) {
+        this.machineModel = machineModel;
     }
 }

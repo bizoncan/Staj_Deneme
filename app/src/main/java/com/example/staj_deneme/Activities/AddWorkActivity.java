@@ -244,6 +244,18 @@ public class AddWorkActivity extends AppCompatActivity {
                                 }, 500);
                             }
                         }
+                        else{
+                            new AlertDialog.Builder(AddWorkActivity.this)
+                                    .setTitle("Hata")
+                                    .setMessage("İş emri kaldırıldı veya bir hata meydana geldi.")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Tamam", (dialog, which) -> {
+                                        Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    })
+                                    .show();
+                        }
                     }
 
                     @Override
@@ -514,6 +526,16 @@ public class AddWorkActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        new AlertDialog.Builder(AddWorkActivity.this)
+                                .setTitle("Hata")
+                                .setMessage("İşelm sırasında bir hata meydana gedli işlem tamamlanamadı.")
+                                .setCancelable(false)
+                                .setPositiveButton("Tamam", (dialog, which) -> {
+                                    Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                })
+                                .show();
                     }
                 }
 

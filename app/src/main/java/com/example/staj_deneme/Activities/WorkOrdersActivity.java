@@ -15,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.staj_deneme.Adapter.WorkOrderAdapter;
 import com.example.staj_deneme.InterFaces.WorkOrderInterface;
+import com.example.staj_deneme.Models.MachineModel;
 import com.example.staj_deneme.Models.WorkOrderModel;
 import com.example.staj_deneme.Models.WorkOrderViewModel;
 import com.example.staj_deneme.R;
@@ -33,6 +34,7 @@ public class WorkOrdersActivity extends BaseActivity {
     private WorkOrderAdapter adapter;
     private List<String> machineNameList;
     private List<WorkOrderModel> workOrders;
+    private List<MachineModel> machineModels ;
     private RecyclerView workOrderRecyclerView;
     private Integer UserId;
     private SwipeRefreshLayout srl;
@@ -61,12 +63,13 @@ public class WorkOrdersActivity extends BaseActivity {
 
         machineNameList = new ArrayList<>();
         workOrders = new ArrayList<>();
+        machineModels = new ArrayList<>();
     }
 
 
 
     private void setupRecyclerView() {
-        adapter = new WorkOrderAdapter(workOrders, machineNameList);
+        adapter = new WorkOrderAdapter(workOrders, machineNameList, machineModels);
         workOrderRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         workOrderRecyclerView.setAdapter(adapter);
 
@@ -104,6 +107,7 @@ public class WorkOrdersActivity extends BaseActivity {
     private void refreshWorkOrders() {
         workOrders.clear();
         machineNameList.clear();
+        machineModels.clear();
         adapter.notifyDataSetChanged();
         loadWorkOrders();
         srl.setRefreshing(false);
@@ -113,14 +117,15 @@ public class WorkOrdersActivity extends BaseActivity {
         for (WorkOrderViewModel w : tempWorkOrder) {
             if (w.getWorkOrderModel().getUserId() == UserId && !w.getWorkOrderModel().isClosed()) {
                 workOrders.add(w.getWorkOrderModel());
-                if(w.getMachineName() != null)
-                    machineNameList.add(w.getMachineName());
-                else{
-                    machineNameList.add("Makine adı yok");
+                if(w.getWorkOrderModel().getMachineId() != null){
+                    machineModels.add(w.getMachineModel());
                 }
-
+                else{
+                    machineModels.add(null);
+                }
             }
         }
+
         updateEmptyState();
         adapter.notifyDataSetChanged();
     }

@@ -89,7 +89,7 @@ public class TakenWorksActivity extends BaseActivity {
                 if ( response.isSuccessful() && response.body() != null){
                     for (WorkOrderViewModel w : response.body()) {
                         workModelList.add(w.getWorkOrderModel());
-                        machineNameList.add(w.getMachineName());
+                        machineNameList.add(w.getMachineModel().getName());
                     }
                     userCheck();
                 }
