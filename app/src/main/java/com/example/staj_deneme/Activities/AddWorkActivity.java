@@ -528,7 +528,7 @@ public class AddWorkActivity extends AppCompatActivity {
                         }
                         new AlertDialog.Builder(AddWorkActivity.this)
                                 .setTitle("Hata")
-                                .setMessage("İşelm sırasında bir hata meydana gedli işlem tamamlanamadı.")
+                                .setMessage("İşlem sırasında bir hata meydana geldi işlem tamamlanamadı.")
                                 .setCancelable(false)
                                 .setPositiveButton("Tamam", (dialog, which) -> {
                                     Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
