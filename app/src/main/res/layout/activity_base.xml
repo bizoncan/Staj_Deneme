@@ -80,12 +80,14 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/listview_background"
-                    android:dividerHeight="8dp"
+                    android:background="@android:color/transparent"
+                    android:divider="?android:attr/listDivider"
+                    android:dividerHeight="1dp"
                     android:elevation="8dp"
                     android:overScrollMode="never"
                     android:scrollbarStyle="outsideOverlay"
                     android:visibility="gone"
+                    tools:listitem="@layout/notification_layout"
                     tools:visibility="gone" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
