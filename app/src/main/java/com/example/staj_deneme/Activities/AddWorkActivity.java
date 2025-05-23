@@ -27,6 +27,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.staj_deneme.Models.WorkImagePostModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import com.example.staj_deneme.Adapter.SliderAdapter;
@@ -72,7 +74,7 @@ public class AddWorkActivity extends AppCompatActivity {
     WorkOrderModel workOrderModel;
     WorkModel workModel;
     boolean isMachinePartFilled = false;
-
+    boolean isFinishing;
     private static final int CAMERA_REQUEST = 100;
     private long startTime = 0L;
     private long timeElapsed = 0L;
@@ -84,6 +86,8 @@ public class AddWorkActivity extends AppCompatActivity {
     Date dateIn;
 
     ViewPager2 viewPager;
+
+    Integer currentId;
 
     Boolean isPhotoTaken = false;
 
@@ -99,6 +103,8 @@ public class AddWorkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_work);
+        currentId =0;
+        isFinishing = false;
 
         setupToolbar();
         machineDropdown = findViewById(R.id.machineId_spinner);
@@ -155,6 +161,7 @@ public class AddWorkActivity extends AppCompatActivity {
         sliderImages = new ArrayList<>();
         sliderAdapter = new SliderAdapter(AddWorkActivity.this, sliderImages);
         viewPager.setAdapter(sliderAdapter);
+
     }
 
     private void setupToolbar() {
@@ -233,6 +240,7 @@ public class AddWorkActivity extends AppCompatActivity {
                     public void onResponse(Call<WorkOrderModel> call, Response<WorkOrderModel> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             workOrderModel = response.body();
+                            checkOpenedReports(workOrderModel.id);
                             checkUser();
                             if (workOrderModel.getMachineId() != null) {
                                 machineId = workOrderModel.getMachineId();
@@ -262,6 +270,31 @@ public class AddWorkActivity extends AppCompatActivity {
                     public void onFailure(Call<WorkOrderModel> call, Throwable t) {
                     }
                 });
+    }
+
+    private void checkOpenedReports(int id) {
+        WorkInterface workInterface = RetrofitClient.getApiWorkService();
+        workInterface.getWork(id).enqueue(new Callback<WorkModel>() {
+            @Override
+            public void onResponse(Call<WorkModel> call, Response<WorkModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    workModel = response.body();
+                    if (workModel.isOpened()) {
+                        workTypeEdt.setText(workModel.getTitle());
+                        workDescEdt.setText(workModel.getDesc());
+
+                    }
+                } else {
+                    Toast.makeText(AddWorkActivity.this, "Geçerli işe ait devam eden bir rapor bulunamadı" ,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WorkModel> call, Throwable t) {
+
+            }
+        });
     }
 
     private void checkUser() {
@@ -428,7 +461,7 @@ public class AddWorkActivity extends AppCompatActivity {
                 sliderImages.add(captureImageUri);
                 sliderAdapter.setImageList(sliderImages);
                 // Optional: Display a success message
-                Toast.makeText(this, "Image captured successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Resim başarıyla eklendi.", Toast.LENGTH_SHORT).show();
             }
             /*
              * tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
@@ -471,13 +504,36 @@ public class AddWorkActivity extends AppCompatActivity {
         workModel.setWorkOrderEndDate(dateFormat.format(new Date()));
         workModel.setUserId(workOrderModel.getUserId());
         workModel.setWorkOrderId(workOrderModel.getId());
-        workModel.setOpened(true);
+
+
+        workModel.setPastWork(false);
+        workOrderModel.setWorkOrderEndDate(dateFormat.format(new Date()));
+
+        isFinishing = true;
+        add_work(workModel);
+        updateOrders();
+    }
+    public void is_ekle(View view){
+        if (workTypeEdt.getText().toString().isEmpty() || workDescEdt.getText().toString().isEmpty()
+                || workDateEdt.getText().toString().isEmpty()) {
+            Toast.makeText(AddWorkActivity.this, "Gerekli alanları doldurunuz", Toast.LENGTH_LONG).show();
+            return;
+        }
+        workModel.setMachineId(machineId);
+        workModel.setMachinePartId(machinePartId);
+        workModel.setTitle(workTypeEdt.getText().toString());
+        workModel.setDesc(workDescEdt.getText().toString());
+        workModel.setWorkOrderStartDate(workOrderModel.getWorkOrderTempStartDate());
+        workModel.setWorkOrderEndDate(dateFormat.format(new Date()));
+        workModel.setUserId(workOrderModel.getUserId());
+        workModel.setWorkOrderId(workOrderModel.getId());
+
 
         workModel.setPastWork(false);
         workOrderModel.setWorkOrderEndDate(dateFormat.format(new Date()));
 
         add_work(workModel);
-        updateOrders();
+
     }
 
     private void updateOrders() {
@@ -502,50 +558,194 @@ public class AddWorkActivity extends AppCompatActivity {
     }
 
     public void add_work(WorkModel workModel) {
-        if (!workModel.isClosed()) {
-            workModel.setClosed(true);
-            WorkInterface workInterface = RetrofitClient.getApiWorkService();
-            workInterface.addWork(workModel).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    Log.d("Retrofit", "Response code: " + response.code());
-                    Log.d("Retrofit", "Response message: " + response.message());
-                    if (response.isSuccessful()) {
-                        resimleri_ekle();
-                        Toast.makeText(AddWorkActivity.this, "İşlem Başarılı", Toast.LENGTH_LONG).show();
-                        Intent sayfa = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
-                        startActivity(sayfa);
-                    } else {
-                        Toast.makeText(AddWorkActivity.this, "Bir hata meydana geldi" + response.errorBody(),
-                                Toast.LENGTH_LONG).show();
-                        try {
-                            String errorBody = response.errorBody() != null ? response.errorBody().string()
-                                    : "No error body";
-                            Log.e("Retrofit", "Error body: " + errorBody);
+        if (isFinishing) {
+           if(workModel.isOpened()){
+                if(!workModel.isClosed()){
+                    workModel.setClosed(true);
+                    WorkInterface workInterface = RetrofitClient.getApiWorkService();
+                    workInterface.updateWork(workModel).enqueue(new Callback<Integer>() {
+                        @Override
+                        public void onResponse(Call<Integer> call, Response<Integer> response) {
+                            Log.d("Retrofit", "Response code: " + response.code());
+                            Log.d("Retrofit", "Response message: " + response.message());
+                            if (response.isSuccessful()) {
+                                currentId = response.body();
+                                resimleri_ekle();
+                                Toast.makeText(AddWorkActivity.this, "İşlem Başarılı", Toast.LENGTH_LONG).show();
+                                Intent sayfa = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                                startActivity(sayfa);
+                            } else {
+                                Toast.makeText(AddWorkActivity.this, "Bir hata meydana geldi" + response.errorBody(),
+                                        Toast.LENGTH_LONG).show();
+                                try {
+                                    String errorBody = response.errorBody() != null ? response.errorBody().string()
+                                            : "No error body";
+                                    Log.e("Retrofit", "Error body: " + errorBody);
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                new AlertDialog.Builder(AddWorkActivity.this)
+                                        .setTitle("Hata")
+                                        .setMessage("İşlem sırasında bir hata meydana geldi işlem tamamlanamadı.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Tamam", (dialog, which) -> {
+                                            Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        })
+                                        .show();
+                            }
                         }
-                        new AlertDialog.Builder(AddWorkActivity.this)
-                                .setTitle("Hata")
-                                .setMessage("İşlem sırasında bir hata meydana geldi işlem tamamlanamadı.")
-                                .setCancelable(false)
-                                .setPositiveButton("Tamam", (dialog, which) -> {
-                                    Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                })
-                                .show();
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(AddWorkActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        @Override
+                        public void onFailure(Call<Integer> call, Throwable t) {
+                            Toast.makeText(AddWorkActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
-            });
-        } else {
-            Toast.makeText(AddWorkActivity.this, "İşlem tamamlanıyor bekleyin", Toast.LENGTH_LONG).show();
+                else{
+                    Toast.makeText(AddWorkActivity.this, "İşlem tamamlanıyor bekleyin", Toast.LENGTH_LONG).show();
+                }
+           }
+           else{
+               if (!workModel.isClosed()) {
+                   workModel.setClosed(true);
+                   workModel.setOpened(true);
+                   WorkInterface workInterface = RetrofitClient.getApiWorkService();
+                   workInterface.addWork(workModel).enqueue(new Callback<Integer>() {
+                       @Override
+                       public void onResponse(Call<Integer> call, Response<Integer> response) {
+                           Log.d("Retrofit", "Response code: " + response.code());
+                           Log.d("Retrofit", "Response message: " + response.message());
+                           if (response.isSuccessful()) {
+                               currentId = response.body();
+                               resimleri_ekle();
+                               Toast.makeText(AddWorkActivity.this, "İşlem Başarılı", Toast.LENGTH_LONG).show();
+                               Intent sayfa = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                               startActivity(sayfa);
+                           } else {
+                               Toast.makeText(AddWorkActivity.this, "Bir hata meydana geldi" + response.errorBody(),
+                                       Toast.LENGTH_LONG).show();
+                               try {
+                                   String errorBody = response.errorBody() != null ? response.errorBody().string()
+                                           : "No error body";
+                                   Log.e("Retrofit", "Error body: " + errorBody);
+
+                               } catch (IOException e) {
+                                   e.printStackTrace();
+                               }
+                               new AlertDialog.Builder(AddWorkActivity.this)
+                                       .setTitle("Hata")
+                                       .setMessage("İşlem sırasında bir hata meydana geldi işlem tamamlanamadı.")
+                                       .setCancelable(false)
+                                       .setPositiveButton("Tamam", (dialog, which) -> {
+                                           Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                                           startActivity(intent);
+                                           finish();
+                                       })
+                                       .show();
+                           }
+                       }
+
+                       @Override
+                       public void onFailure(Call<Integer> call, Throwable t) {
+                           Toast.makeText(AddWorkActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+                       }
+                   });
+               } else {
+                   Toast.makeText(AddWorkActivity.this, "İşlem tamamlanıyor bekleyin", Toast.LENGTH_LONG).show();
+               }
+           }
+        }
+        else{
+            if(workModel.isOpened()){
+                WorkInterface workInterface = RetrofitClient.getApiWorkService();
+                workInterface.updateWork(workModel).enqueue(new Callback<Integer>() {
+                    @Override
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
+                        Log.d("Retrofit", "Response code: " + response.code());
+                        Log.d("Retrofit", "Response message: " + response.message());
+                        if (response.isSuccessful()) {
+                            currentId = response.body();
+                            resimleri_ekle();
+                            Toast.makeText(AddWorkActivity.this, "İşlem Başarılı", Toast.LENGTH_LONG).show();
+                            Intent sayfa = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                            startActivity(sayfa);
+                        } else {
+                            Toast.makeText(AddWorkActivity.this, "Bir hata meydana geldi" + response.errorBody(),
+                                    Toast.LENGTH_LONG).show();
+                            try {
+                                String errorBody = response.errorBody() != null ? response.errorBody().string()
+                                        : "No error body";
+                                Log.e("Retrofit", "Error body: " + errorBody);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            new AlertDialog.Builder(AddWorkActivity.this)
+                                    .setTitle("Hata")
+                                    .setMessage("İşlem sırasında bir hata meydana geldi işlem tamamlanamadı.")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Tamam", (dialog, which) -> {
+                                        Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    })
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Integer> call, Throwable t) {
+                        Toast.makeText(AddWorkActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            else{
+                workModel.setOpened(true);
+                WorkInterface workInterface = RetrofitClient.getApiWorkService();
+                workInterface.addWork(workModel).enqueue(new Callback<Integer>() {
+                    @Override
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
+                        Log.d("Retrofit", "Response code: " + response.code());
+                        Log.d("Retrofit", "Response message: " + response.message());
+                        if (response.isSuccessful()) {
+                            currentId = response.body();
+                            resimleri_ekle();
+                            Toast.makeText(AddWorkActivity.this, "İşlem Başarılı", Toast.LENGTH_LONG).show();
+                            Intent sayfa = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                            startActivity(sayfa);
+                        } else {
+                            Toast.makeText(AddWorkActivity.this, "Bir hata meydana geldi" + response.errorBody(),
+                                    Toast.LENGTH_LONG).show();
+                            try {
+                                String errorBody = response.errorBody() != null ? response.errorBody().string()
+                                        : "No error body";
+                                Log.e("Retrofit", "Error body: " + errorBody);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            new AlertDialog.Builder(AddWorkActivity.this)
+                                    .setTitle("Hata")
+                                    .setMessage("İşlem sırasında bir hata meydana geldi işlem tamamlanamadı.")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Tamam", (dialog, which) -> {
+                                        Intent intent = new Intent(AddWorkActivity.this, WorkOrdersActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    })
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Integer> call, Throwable t) {
+                        Toast.makeText(AddWorkActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         }
     }
 
@@ -576,14 +776,15 @@ public class AddWorkActivity extends AppCompatActivity {
             }
         }
         if (base64images.size() > 0) {
+            WorkImagePostModel workImagePostModel = new WorkImagePostModel(base64images, currentId);
             ImageApiInterface imageApiInterface = RetrofitClient.getApiImageService();
-            imageApiInterface.addImageDataWork(base64images).enqueue(new Callback<Void>() {
+            imageApiInterface.addImageDataWork(workImagePostModel).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(AddWorkActivity.this, "oldu galiba", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddWorkActivity.this, "Resimler başarıyla eklendi.", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(AddWorkActivity.this, "Bir hata meydana geldi" + response.errorBody(),
+                        Toast.makeText(AddWorkActivity.this, "Resimler eklenirken bir hata meydana geldi." + response.errorBody(),
                                 Toast.LENGTH_LONG).show();
                         try {
                             String errorBody = response.errorBody() != null ? response.errorBody().string()
@@ -601,6 +802,37 @@ public class AddWorkActivity extends AppCompatActivity {
                     Toast.makeText(AddWorkActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
             });
+        }
+    }
+    public void fotografKaldir(View view){
+        if(sliderImages != null && sliderImages.size() > 0){
+            new AlertDialog.Builder(AddWorkActivity.this)
+                    .setTitle("Uyarı")
+                    .setMessage("Bu fotoğrafı silmek istediğinizden emin misiniz.")
+                    .setCancelable(false)
+                    .setPositiveButton("Sil", (dialog, which) -> {
+                        sliderImages.remove(viewPager.getCurrentItem());
+                        selectedImageUris.remove(viewPager.getCurrentItem());
+                        sliderAdapter.setImageList(sliderImages);
+                        Toast.makeText(AddWorkActivity.this, "Fotoğraf silindi", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("İptal", (dialog, which) -> {
+                        // Kullanıcı iptal ettiğinde yapılacak işlemler
+                    })
+                    .show();
+
+        }
+        else{
+            new AlertDialog.Builder(AddWorkActivity.this)
+                    .setTitle("Uyarı")
+                    .setMessage("Herhangi bir fotoğraf eklenmedi.")
+                    .setCancelable(false)
+                    .setPositiveButton("Tamam", (dialog, which) -> {
+                        sliderImages.remove(viewPager.getCurrentItem());
+                        selectedImageUris.remove(viewPager.getCurrentItem());
+                        sliderAdapter.setImageList(sliderImages);
+                    })
+                    .show();
         }
     }
 }

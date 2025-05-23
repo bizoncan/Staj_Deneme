@@ -28,7 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="35dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main"
@@ -180,8 +181,9 @@
                 android:id="@+id/button8"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="İş Bilgilerini Ekle"
+                android:layout_marginTop="8dp"
+
+                android:text="İşi Sonlandır"
                 android:textColor="@color/white"
                 android:onClick="hata_ekle"
                 app:cornerRadius="8dp"
@@ -189,8 +191,21 @@
                 app:backgroundTint="#CB2F2F"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/workEndDate_layout"/>
-
+                app:layout_constraintTop_toBottomOf="@id/isGuncelle"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/isGuncelle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Rapora bilgileri ekle"
+                android:textColor="@color/white"
+                android:onClick="is_ekle"
+                app:cornerRadius="8dp"
+                app:elevation="4dp"
+                app:backgroundTint="#CB2F2F"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_slider_card"/>
             <!-- Resim İşlem Butonları -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button9"
@@ -206,7 +221,7 @@
                 app:backgroundTint="#CB2F2F"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/button8"/>
+                app:layout_constraintTop_toBottomOf="@id/workEndDate_layout"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button10"
@@ -222,7 +237,7 @@
                 app:backgroundTint="#CB2F2F"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@id/button8"/>
+                app:layout_constraintTop_toBottomOf="@id/workEndDate_layout"/>
 
             <!-- Çekilen Resimler Başlığı -->
             <TextView
@@ -237,20 +252,35 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/button9" />
-
+            <ImageButton
+                android:id="@+id/fotograf_kaldir_btn"
+                android:onClick="fotografKaldir"
+                android:layout_width="41dp"
+                android:layout_height="41dp"
+                app:layout_constraintStart_toEndOf="@+id/images_textview"
+                app:layout_constraintTop_toTopOf="@+id/images_textview"
+                android:layout_gravity="end|top"
+                android:layout_marginStart="15dp"
+                android:scaleType="fitCenter"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_delete_24"
+                app:tint="#CB2F2F"
+                android:contentDescription="Fotoğrafı kaldır"  />
             <!-- Resim Slider -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/image_slider_card"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="80dp"
+
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/images_textview">
+
+
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
@@ -258,7 +288,8 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:clipChildren="false"
-                    android:paddingBottom="16dp" />
+                    android:paddingBottom="0dp"
+                />
             </androidx.cardview.widget.CardView>
 
             <!-- Butonlar arası guideline -->

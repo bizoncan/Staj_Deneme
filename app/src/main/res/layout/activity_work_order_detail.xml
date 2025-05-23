@@ -159,7 +159,7 @@
                 android:layout_marginTop="16dp"
                 android:minHeight="56dp"
                 android:onClick="isEmriAl"
-                android:text="Raporu Girmeye Başla"
+                android:text="İşi Başlat"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 app:backgroundTint="#CB2F2F"

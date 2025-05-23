@@ -1,6 +1,7 @@
 package com.example.staj_deneme.InterFaces;
 
 import com.example.staj_deneme.Models.ImageCollectionModel;
+import com.example.staj_deneme.Models.WorkImagePostModel;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface ImageApiInterface {
     @POST("api/ImageData/addImageData")
     Call<Void> addImageData(@Body List<String> imageCollectionModel);
     @POST("api/ImageData/addImageDataWork")
-    Call<Void> addImageDataWork(@Body List<String> imageCollectionModel);
+    Call<Void> addImageDataWork(@Body WorkImagePostModel workImagePostModel);
     @GET("api/ImageData/{errorId}")
     Call<List<String>> getImages(@Path("errorId") int errorId);
 }

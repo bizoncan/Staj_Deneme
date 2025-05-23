@@ -90,6 +90,7 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     public void setImageList(ArrayList<Object> newImageList) {
         notifyDataSetChanged(); // **Adapter'e verilerin değiştiğini bildir**
     }
+
     private Bitmap resizeBitmap(Bitmap original, int maxWidth, int maxHeight) {
         int width = original.getWidth();
         int height = original.getHeight();
@@ -106,5 +107,10 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
 
         // Yeni boyutta bitmap'i oluştur
         return Bitmap.createScaledBitmap(original, width, height, false);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 }
