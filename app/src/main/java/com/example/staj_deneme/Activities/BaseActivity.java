@@ -25,7 +25,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.staj_deneme.InterFaces.MachineApiInterface;
 import com.example.staj_deneme.InterFaces.RecieveNotificationInterface;
+import com.example.staj_deneme.Models.MachineAndMachinePartModel;
 import com.example.staj_deneme.Models.NotificationModel;
 import com.example.staj_deneme.Models.NotificationResponseModel;
 import com.example.staj_deneme.Models.WorkOrderModel;
@@ -281,6 +283,7 @@ public class BaseActivity extends AppCompatActivity {
                             not_size = response.body().getNotificationList().size() +
                                     response.body().getWorkNotificationList().size();
                             notificationText.setText(Integer.toString(not_size));
+                            checkMachineNames();
                         }
 
                     }
@@ -289,14 +292,15 @@ public class BaseActivity extends AppCompatActivity {
                             if(!idList.contains(Integer.toString(w.getId()))){
                                 typeList.add("İş Emri");
                                 idList.add(Integer.toString(w.getId()));
-                                titleList.add(w.getTitle());
+                                titleList.add("Başlık: "+w.getTitle());
                                 workOrderIdList.add(Integer.toString(w.getId()));
                                 userIdList.add("0");
                                 if(w.getMachineId()== null)machineIdList.add(null);
                                 else machineIdList.add(Integer.toString(w.getMachineId()));
                                 if(w.getMachinePartId()==null)machinePartIdList.add(null) ;
                                 else machinePartIdList.add(Integer.toString(w.getMachinePartId()));
-                                descList.add(w.getDesc());
+                                descList.add("Açıklama: "+w.getDesc());
+                                checkMachineNames();
                             }
                         }
                         else {
@@ -304,15 +308,15 @@ public class BaseActivity extends AppCompatActivity {
                                 if(!idList.contains(Integer.toString(w.getId()))){
                                     typeList.add("İş Emri");
                                     idList.add(Integer.toString(w.getId()));
-                                    titleList.add(w.getTitle());
+                                    titleList.add("Başlık: "+w.getTitle());
                                     workOrderIdList.add(Integer.toString(w.getId()));
                                     userIdList.add(Integer.toString(w.getUserId()));
                                     if(w.getMachineId()== null)machineIdList.add(null);
                                     else machineIdList.add(Integer.toString(w.getMachineId()));
                                     if(w.getMachinePartId()==null)machinePartIdList.add(null) ;
                                     else machinePartIdList.add(Integer.toString(w.getMachinePartId()));
-                                    descList.add(w.getDesc());
-
+                                    descList.add("Açıklama: "+w.getDesc());
+                                    checkMachineNames();
                                 }
 
                             }
@@ -345,6 +349,37 @@ public class BaseActivity extends AppCompatActivity {
         });
 
     }
+
+    private void checkMachineNames() {
+        MachineApiInterface machineApiInterface = RetrofitClient.getApiServiceMachine();
+        machineApiInterface.getMachineWithParts().enqueue(new Callback<MachineAndMachinePartModel>() {
+            @Override
+            public void onResponse(Call<MachineAndMachinePartModel> call, Response<MachineAndMachinePartModel> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    MachineAndMachinePartModel machineAndMachinePartModels = response.body();
+
+                        for(int i = 0; i< machineIdList.size(); i++){
+                            if(machineIdList.get(i) != null && machineIdList.get(i).equals(Integer.toString(machineAndMachinePartModels.getMachineModels().get(0).getId()))){
+                                machineIdList.set(i,machineAndMachinePartModels.getMachineModels().get(0).getName());
+                            }
+                            if(machinePartIdList.get(i) != null && machinePartIdList.get(i).equals(Integer.toString(machineAndMachinePartModels.getMachinePartModels().get(0).getId()))){
+                                machinePartIdList.set(i,machineAndMachinePartModels.getMachinePartModels().get(0).getName());
+                            }
+                        }
+
+                    adadpter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MachineAndMachinePartModel> call, Throwable t) {
+                Log.e("API ERROR", t.getMessage());
+            }
+        });
+
+
+    }
+
     private void initializePolling() {
         // Handler'ı Main Looper ile oluşturduğundan emin ol
         pollingHandler = new Handler(Looper.getMainLooper());

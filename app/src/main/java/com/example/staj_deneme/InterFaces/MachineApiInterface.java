@@ -1,5 +1,6 @@
 package com.example.staj_deneme.InterFaces;
 
+import com.example.staj_deneme.Models.MachineAndMachinePartModel;
 import com.example.staj_deneme.Models.MachineModel;
 
 import java.util.List;
@@ -14,5 +15,6 @@ public interface MachineApiInterface {
     Call<List<MachineModel>> getAll();
     @POST("api/Machine")
     Call<Void> add(@Body MachineModel machineModel);
-
+    @GET("api/Machine/GetMachineWithParts")
+    Call<MachineAndMachinePartModel> getMachineWithParts();
 }
