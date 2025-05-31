@@ -304,7 +304,7 @@ public class BaseActivity extends AppCompatActivity {
                             }
                         }
                         else {
-                            if (w.userId == userId){
+                            if (w.userId!=null &&w.userId == userId){
                                 if(!idList.contains(Integer.toString(w.getId()))){
                                     typeList.add("İş Emri");
                                     idList.add(Integer.toString(w.getId()));
