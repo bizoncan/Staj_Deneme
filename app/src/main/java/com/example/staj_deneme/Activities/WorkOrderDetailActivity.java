@@ -36,7 +36,6 @@ import retrofit2.Response;
 public class WorkOrderDetailActivity extends AppCompatActivity {
     private WorkOrderModel workOrderModel;
     private TextView title, desc, startDate, endDate, workOrderUser;
-    //private View light1, light2;
     private MaterialButton workOrderAdd;
     private MaterialToolbar toolbar;
 
@@ -56,8 +55,6 @@ public class WorkOrderDetailActivity extends AppCompatActivity {
         desc = findViewById(R.id.workOrderDescDetail_txt);
         startDate = findViewById(R.id.workOrderStartDateDetail_txt);
         endDate = findViewById(R.id.workOrderEndDateDetail_txt);
-//        light1 = findViewById(R.id.lightDetailView1);
-//        light2 = findViewById(R.id.lightDetailView2);
         workOrderAdd = findViewById(R.id.workOrderGet_btn);
         workOrderUser = findViewById(R.id.workOrderUser_txt);
     }
@@ -120,12 +117,10 @@ public class WorkOrderDetailActivity extends AppCompatActivity {
         String formattedDate = outputFormat.format(date);
 
         if (workOrderModel.isOpened()) {
-           // setGreen(light1);
             startDate.setText("Başlangıç: " + formattedDate);
         }
 
         if (workOrderModel.isClosed) {
-            //setGreen(light2);
             endDate.setText("Bitiş: " + workOrderModel.getWorkOrderEndDate());
             workOrderAdd.setEnabled(false);
             workOrderAdd.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.black));
@@ -159,38 +154,6 @@ public class WorkOrderDetailActivity extends AppCompatActivity {
     }
 
     public void isEmriAl(View view) {
-       /* if (workOrderModel.isOpened()) {
-            workOrderAdd.setEnabled(false);
-            Toast.makeText(WorkOrderDetailActivity.this, "Bu iş halihazırda alınmış durumda.", Toast.LENGTH_LONG)
-                    .show();
-        } else if (workOrderModel.isClosed()) {
-            workOrderAdd.setEnabled(false);
-            Toast.makeText(WorkOrderDetailActivity.this, "Bu iş tamamlanmış durumda.", Toast.LENGTH_LONG).show();
-        } else {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));
-            String currentDate = dateFormat.format(new Date());
-            workOrderModel.setWorkOrderTempStartDate(currentDate);
-            workOrderModel.setOpened(true);
-
-            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-            String us_na = sharedPreferences.getString("Username", "");
-            WorkOrderInterface workOrderInterface = RetrofitClient.getApiWorkOrderService();
-            workOrderInterface.getUserId(us_na).enqueue(new Callback<Integer>() {
-                @Override
-                public void onResponse(Call<Integer> call, Response<Integer> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        workOrderModel.setUserId(response.body());
-                        addInfos();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Integer> call, Throwable t) {
-                    Log.e("pop", t.getMessage());
-                }
-            });
-        }*/
         Intent intent = new Intent(WorkOrderDetailActivity.this, AddWorkActivity.class);
         intent.putExtra("workOrderId", workOrderModel.getId());
         startActivity(intent);

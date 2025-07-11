@@ -49,115 +49,113 @@ public class ErrorDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_error_details);
-    errorDetailListView = findViewById(R.id.errorDetails_listview);
-    transformationLayout = findViewById(R.id.error_transformation_layout);
-    errorModelList = new ArrayList<>();
-    errorInfoModels = new ArrayList<>();
-    errorSupInfoModels = new ArrayList<>();
-    errorAdapter = new ErrorAdapter(errorModelList,errorInfoModels,ErrorDetailsActivity.this,errorSupInfoModels);
-    errorDetailListView.setAdapter(errorAdapter);
-    errorDetailListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent sayfa = new Intent(ErrorDetailsActivity.this, ErrorInfoActivity.class);
-            sayfa.putExtra("ErrorId",errorSupInfoModels.get(position).getId());
-            startActivity(sayfa);
-        }
-    });
-    expandableListView = findViewById(R.id.ex_listview);
-
-    listGroup = new ArrayList<>();
-    listItem = new HashMap<>();
-    //init_data();
-    expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-        @Override
-        public void onGroupExpand(int groupPosition) {
-            // Do nothing - this allows multiple groups to be expanded
-        }
-    });
-    adapterEx = new ExpandableListViewAdapter(ErrorDetailsActivity.this,listGroup,listItem);
-    expandableListView.setAdapter(adapterEx);
-    if(getIntent().getStringExtra("machineId")== null){
-        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        Call<List<ErrorSupInfoModel>> call = errorInterface.getErrorSupModel();
-        pendingCalls.add(call);
-        call.enqueue(new Callback<List<ErrorSupInfoModel>>() {
-           @Override
-           public void onResponse(Call<List<ErrorSupInfoModel>> call, Response<List<ErrorSupInfoModel>> response) {
-               if(response.body() != null && response.isSuccessful()) {
-                   errorSupInfoModels.addAll(response.body());
-                   errorAdapter.notifyDataSetChanged();
-
-                   addItems(errorSupInfoModels);
-
-               }
-               else{
-                   Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan"+response.errorBody().toString(),Toast.LENGTH_LONG).show();
-                   Log.e("HATA:", response.errorBody().toString());
-
-               }
-               Log.d("API_RESPONSE", "Response code: " + response.code());
-           }
-
-           @Override
-           public void onFailure(Call<List<ErrorSupInfoModel>> call, Throwable t) {
-               Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan" + t.getMessage(),Toast.LENGTH_LONG).show();
-               Log.e("HATA33:", t.getMessage());
-           }
-       });
-    }
-    else if (getIntent().getStringExtra("machinePartId")==null && getIntent().getStringExtra("machineId")!=null){
-        int mm = Integer.parseInt(getIntent().getStringExtra("machineId"));
-        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        Call<List<ErrorSupInfoModel>> call = errorInterface.getErrorSupModelByMachine(mm);
-        pendingCalls.add(call);
-        call.enqueue(new Callback<List<ErrorSupInfoModel>>() {
+        errorDetailListView = findViewById(R.id.errorDetails_listview);
+        transformationLayout = findViewById(R.id.error_transformation_layout);
+        errorModelList = new ArrayList<>();
+        errorInfoModels = new ArrayList<>();
+        errorSupInfoModels = new ArrayList<>();
+        errorAdapter = new ErrorAdapter(errorModelList,errorInfoModels,ErrorDetailsActivity.this,errorSupInfoModels);
+        errorDetailListView.setAdapter(errorAdapter);
+        errorDetailListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onResponse(Call<List<ErrorSupInfoModel>> call, Response<List<ErrorSupInfoModel>> response) {
-                if (response.body() != null && response.isSuccessful()){
-                    errorSupInfoModels.addAll(response.body());
-                    addItems(errorSupInfoModels);
-                    errorAdapter.notifyDataSetChanged();
-                }
-                  else{
-                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent sayfa = new Intent(ErrorDetailsActivity.this, ErrorInfoActivity.class);
+                sayfa.putExtra("ErrorId",errorSupInfoModels.get(position).getId());
+                startActivity(sayfa);
             }
-
-            @Override
-            public void onFailure(Call<List<ErrorSupInfoModel>> call, Throwable t) {
-                Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
-                Log.e("pop",t.getMessage());
-            }
-
         });
-    }
-    else{
-        int mm = Integer.parseInt(getIntent().getStringExtra("machinePartId"));
-        ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        Call<List<ErrorSupInfoModel>> call = errorInterface.getErrorSupModelByMachinePart(mm);
-        pendingCalls.add(call);
-        call.enqueue(new Callback<List<ErrorSupInfoModel>>() {
-            @Override
-            public void onResponse(Call<List<ErrorSupInfoModel>> call, Response<List<ErrorSupInfoModel>> response) {
-                if (response.body() != null && response.isSuccessful()){
-                    errorSupInfoModels.addAll(response.body());
-                    addItems(errorSupInfoModels);
-                    errorAdapter.notifyDataSetChanged();
-                }
-                 else{
-                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
-                }
-            }
+        expandableListView = findViewById(R.id.ex_listview);
 
+        listGroup = new ArrayList<>();
+        listItem = new HashMap<>();
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
-            public void onFailure(Call<List<ErrorSupInfoModel>> call, Throwable t) {
-                Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
-                Log.e("pop",t.getMessage());
+            public void onGroupExpand(int groupPosition) {
             }
-
         });
-    }
+        adapterEx = new ExpandableListViewAdapter(ErrorDetailsActivity.this,listGroup,listItem);
+        expandableListView.setAdapter(adapterEx);
+        if(getIntent().getStringExtra("machineId")== null){
+            ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+            Call<List<ErrorSupInfoModel>> call = errorInterface.getErrorSupModel();
+            pendingCalls.add(call);
+            call.enqueue(new Callback<List<ErrorSupInfoModel>>() {
+                @Override
+                public void onResponse(Call<List<ErrorSupInfoModel>> call, Response<List<ErrorSupInfoModel>> response) {
+                    if(response.body() != null && response.isSuccessful()) {
+                        errorSupInfoModels.addAll(response.body());
+                        errorAdapter.notifyDataSetChanged();
+
+                        addItems(errorSupInfoModels);
+
+                    }
+                    else{
+                        Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan"+response.errorBody().toString(),Toast.LENGTH_LONG).show();
+                        Log.e("HATA:", response.errorBody().toString());
+
+                    }
+                    Log.d("API_RESPONSE", "Response code: " + response.code());
+                }
+
+                @Override
+                public void onFailure(Call<List<ErrorSupInfoModel>> call, Throwable t) {
+                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan" + t.getMessage(),Toast.LENGTH_LONG).show();
+                    Log.e("HATA33:", t.getMessage());
+                }
+            });
+        }
+        else if (getIntent().getStringExtra("machinePartId")==null && getIntent().getStringExtra("machineId")!=null){
+            int mm = Integer.parseInt(getIntent().getStringExtra("machineId"));
+            ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+            Call<List<ErrorSupInfoModel>> call = errorInterface.getErrorSupModelByMachine(mm);
+            pendingCalls.add(call);
+            call.enqueue(new Callback<List<ErrorSupInfoModel>>() {
+                @Override
+                public void onResponse(Call<List<ErrorSupInfoModel>> call, Response<List<ErrorSupInfoModel>> response) {
+                    if (response.body() != null && response.isSuccessful()){
+                        errorSupInfoModels.addAll(response.body());
+                        addItems(errorSupInfoModels);
+                        errorAdapter.notifyDataSetChanged();
+                    }
+                    else{
+                        Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<ErrorSupInfoModel>> call, Throwable t) {
+                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                    Log.e("pop",t.getMessage());
+                }
+
+            });
+        }
+        else{
+            int mm = Integer.parseInt(getIntent().getStringExtra("machinePartId"));
+            ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
+            Call<List<ErrorSupInfoModel>> call = errorInterface.getErrorSupModelByMachinePart(mm);
+            pendingCalls.add(call);
+            call.enqueue(new Callback<List<ErrorSupInfoModel>>() {
+                @Override
+                public void onResponse(Call<List<ErrorSupInfoModel>> call, Response<List<ErrorSupInfoModel>> response) {
+                    if (response.body() != null && response.isSuccessful()){
+                        errorSupInfoModels.addAll(response.body());
+                        addItems(errorSupInfoModels);
+                        errorAdapter.notifyDataSetChanged();
+                    }
+                    else{
+                        Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<ErrorSupInfoModel>> call, Throwable t) {
+                    Toast.makeText(ErrorDetailsActivity.this,"Noluyor böyle ulan",Toast.LENGTH_LONG).show();
+                    Log.e("pop",t.getMessage());
+                }
+
+            });
+        }
     }
     public void gorunur_ol(View view){
         if(opened){
@@ -179,7 +177,6 @@ public class ErrorDetailsActivity extends BaseActivity {
                     for(ErrorInfoModel e: response.body()){
                         tempErrorList.add(e);
                     }
-                    //addItems(tempErrorList);
                 }
             }
 

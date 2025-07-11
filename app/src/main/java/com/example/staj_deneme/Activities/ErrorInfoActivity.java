@@ -57,7 +57,7 @@ public class ErrorInfoActivity extends BaseActivity {
         viewPager = findViewById(R.id.viewPager);
         sliderImages =  new ArrayList<>();
         sliderAdapter = new SliderAdapter(ErrorInfoActivity.this,sliderImages);
-        
+
         viewPager.setAdapter(sliderAdapter);
         machineId = findViewById(R.id.errorMachineId_textview);
         machinePartId = findViewById(R.id.errorMachinePartId_textview);
@@ -170,8 +170,6 @@ public class ErrorInfoActivity extends BaseActivity {
                         vectorDrawable.getIntrinsicHeight(),
                         Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bb);
-
-// Draw the drawable onto the canvas
                 vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
                 vectorDrawable.draw(canvas);
 
@@ -188,8 +186,6 @@ public class ErrorInfoActivity extends BaseActivity {
                     vectorDrawable.getIntrinsicHeight(),
                     Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bb);
-
-// Draw the drawable onto the canvas
             vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
             vectorDrawable.draw(canvas);
 

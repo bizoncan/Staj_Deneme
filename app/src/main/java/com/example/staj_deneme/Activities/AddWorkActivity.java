@@ -817,7 +817,6 @@ public class AddWorkActivity extends AppCompatActivity {
                         Toast.makeText(AddWorkActivity.this, "Fotoğraf silindi", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("İptal", (dialog, which) -> {
-                        // Kullanıcı iptal ettiğinde yapılacak işlemler
                     })
                     .show();
 

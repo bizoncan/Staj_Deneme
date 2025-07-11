@@ -68,7 +68,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        //setContentView(R.layout.activity_base);
         typeList = new ArrayList<>();
         idList = new ArrayList<>();
         titleList = new ArrayList<>();
@@ -124,30 +123,13 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(int layoutResID) {
-
-
-        // 1. Ana layout'u inflate et
         drawerLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
-
-        // 2. İçerik container'ını bul
         FrameLayout contentContainer = drawerLayout.findViewById(R.id.content_container);
-
-        // 3. Alt sınıf layout'unu içerik container'a ekle
         getLayoutInflater().inflate(layoutResID, contentContainer, true);
-
-        // 4. Temel layout'u ayarla
         super.setContentView(drawerLayout);
-
-        // 5. Navigation elemanlarını bul ve ayarla
-
         setupNavigationElements();
         notificationText = findViewById(R.id.notificationCount_textview);
-
-
-        //startDatabasePolling();
-
     }
-
 
     private void setupNavigationElements() {
         navigationView = findViewById(R.id.navigationView);
@@ -186,7 +168,6 @@ public class BaseActivity extends AppCompatActivity {
         });
 
         setSupportActionBar(materialToolbar);
-        // ActionBarDrawerToggle kurulumu
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 drawerLayout,
                 materialToolbar,
@@ -195,7 +176,6 @@ public class BaseActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Toolbar click listener
         materialToolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.notification) {
 
@@ -204,25 +184,14 @@ public class BaseActivity extends AppCompatActivity {
             return false;
         });
 
-        // Navigation item listener
         navigationView.setNavigationItemSelectedListener(item -> {
             Intent sayfa = null;
-
-            /*if (item.getItemId() == R.id.home) {
-                sayfa = new Intent(getApplicationContext(), TestActivity.class);
-            } else if (item.getItemId() == R.id.person) {
-                sayfa = new Intent(getApplicationContext(), ErrorDetailsActivity.class);
-            } else if (item.getItemId() == R.id.nufus) {
-                sayfa = new Intent(getApplicationContext(), AddErrorManuelActivity.class);
-            } else*/ if (item.getItemId() == R.id.tarihi) {
+            if (item.getItemId() == R.id.tarihi) {
                 sayfa = new Intent(getApplicationContext(), TestLoginActivity.class);
             }
             else if (item.getItemId() == R.id.workorders) {
                 sayfa = new Intent(getApplicationContext(), WorkOrdersActivity.class);
             }
-            /*else if (item.getItemId() == R.id.myworks) {
-                sayfa = new Intent(getApplicationContext(), TakenWorksActivity.class);
-            }*/
             if (sayfa != null) {
                 startActivity(sayfa);
             }
@@ -242,7 +211,6 @@ public class BaseActivity extends AppCompatActivity {
         this.notificationListener = listener;
     }
 
-    // When the button is clicked in BaseActivity
     public void onNotificationButtonClick(View view) {
         if (notificationListener != null) {
             notificationListener.onNotificationButtonClicked();
@@ -255,7 +223,6 @@ public class BaseActivity extends AppCompatActivity {
         else{
             transformationLayout.finishTransform();
             opened=true;
-
         }
     }
 
@@ -324,8 +291,6 @@ public class BaseActivity extends AppCompatActivity {
                                 ss=ss+1;
                             }
                         }
-
-
                     }
                     not_size = response.body().getNotificationList().size() +
                             response.body().getWorkNotificationList().size()-ss;
@@ -358,15 +323,14 @@ public class BaseActivity extends AppCompatActivity {
                 if(response.isSuccessful() && response.body() != null){
                     MachineAndMachinePartModel machineAndMachinePartModels = response.body();
 
-                        for(int i = 0; i< machineIdList.size(); i++){
-                            if(machineIdList.get(i) != null && machineIdList.get(i).equals(Integer.toString(machineAndMachinePartModels.getMachineModels().get(0).getId()))){
-                                machineIdList.set(i,machineAndMachinePartModels.getMachineModels().get(0).getName());
-                            }
-                            if(machinePartIdList.get(i) != null && machinePartIdList.get(i).equals(Integer.toString(machineAndMachinePartModels.getMachinePartModels().get(0).getId()))){
-                                machinePartIdList.set(i,machineAndMachinePartModels.getMachinePartModels().get(0).getName());
-                            }
+                    for(int i = 0; i< machineIdList.size(); i++){
+                        if(machineIdList.get(i) != null && machineIdList.get(i).equals(Integer.toString(machineAndMachinePartModels.getMachineModels().get(0).getId()))){
+                            machineIdList.set(i,machineAndMachinePartModels.getMachineModels().get(0).getName());
                         }
-
+                        if(machinePartIdList.get(i) != null && machinePartIdList.get(i).equals(Integer.toString(machineAndMachinePartModels.getMachinePartModels().get(0).getId()))){
+                            machinePartIdList.set(i,machineAndMachinePartModels.getMachinePartModels().get(0).getName());
+                        }
+                    }
                     adadpter.notifyDataSetChanged();
                 }
             }
@@ -376,26 +340,20 @@ public class BaseActivity extends AppCompatActivity {
                 Log.e("API ERROR", t.getMessage());
             }
         });
-
-
     }
 
     private void initializePolling() {
-        // Handler'ı Main Looper ile oluşturduğundan emin ol
         pollingHandler = new Handler(Looper.getMainLooper());
         pollingRunnable = new Runnable() {
             @Override
             public void run() {
-                // Activity hala aktif mi kontrol et
                 if (!isFinishing() && !isDestroyed() && isPollingRunning) {
                     Log.d("PollingDebug", "checkForUpdates çağrılıyor: " + BaseActivity.this.getClass().getSimpleName() + " Instance: " + BaseActivity.this.hashCode());
                     checkForUpdates();
-
-                    // Sadece polling hala aktifse bir sonrakini zamanla
                     pollingHandler.postDelayed(this, POLL_INTERVAL);
                 } else {
                     Log.d("PollingDebug", "Polling durdu veya Activity sonlanıyor: " + BaseActivity.this.getClass().getSimpleName());
-                    isPollingRunning = false; // Bayrağı güncelle
+                    isPollingRunning = false;
                 }
             }
         };
@@ -405,13 +363,10 @@ public class BaseActivity extends AppCompatActivity {
             initializePolling();
         }
 
-        // Zaten çalışmıyorsa ve başlatılabiliyorsa başlat
         if (!isPollingRunning && pollingHandler != null && pollingRunnable != null) {
             Log.d("PollingDebug", "Polling başlatılıyor: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
             isPollingRunning = true;
-            // Önceki olası callback'leri temizle (garanti olsun)
             pollingHandler.removeCallbacks(pollingRunnable);
-            // Runnable'ı hemen çalıştır ve döngüyü başlat
             pollingHandler.post(pollingRunnable);
         } else if (isPollingRunning) {
             Log.d("PollingDebug", "Polling zaten çalışıyor: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
@@ -429,7 +384,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("ActivityLifecycle", "onResume: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
-        // Activity ön plana geldiğinde polling'i başlat
         startDatabasePolling();
     }
 
@@ -437,7 +391,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.d("ActivityLifecycle", "onPause: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
-        // Activity arka plana gittiğinde polling'i durdur
         stopDatabasePolling();
     }
 
@@ -445,15 +398,13 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d("ActivityLifecycle", "onDestroy: " + this.getClass().getSimpleName() + " Instance: " + this.hashCode());
-        // Activity yok edildiğinde polling'i kesin olarak durdur ve referansları temizle
         stopDatabasePolling();
-        pollingHandler = null; // Garbage Collector'a yardımcı ol
+        pollingHandler = null;
         pollingRunnable = null;
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.nav_menu, menu);
-        //new Handler().postDelayed(this::updateNotificationBadgePosition, 100);
         return true;
     }
     @Override
@@ -462,7 +413,6 @@ public class BaseActivity extends AppCompatActivity {
 
         MenuItem notificationItem = menu.findItem(R.id.notification);
         if (notificationItem != null && notificationText != null) {
-            // Wait until everything is laid out
             new Handler().postDelayed(()->{
                 View notificationView = materialToolbar.findViewById(R.id.notification);
                 if(notificationView != null){
@@ -472,12 +422,9 @@ public class BaseActivity extends AppCompatActivity {
                     notificationText.setX(location[0]+(notificationView.getWidth()*0.05f));
                     notificationText.setY(location[1]-(notificationText.getHeight()*0.55f));
                     Log.e("Badge", "Badge positioned at: " + notificationText.getX() + ", " + notificationText.getY());
-
                 }
                 else {
                     Log.e("Badge", "Notification view not found directly");
-
-                    // Try an alternative method - get the overflow menu button
                     View overflowButton = null;
                     for (int i = 0; i < materialToolbar.getChildCount(); i++) {
                         View child = materialToolbar.getChildAt(i);
@@ -491,8 +438,6 @@ public class BaseActivity extends AppCompatActivity {
                     if (overflowButton != null) {
                         int[] location = new int[2];
                         overflowButton.getLocationOnScreen(location);
-
-                        // Position relative to the overflow button (slightly to the left)
                         notificationText.setX(location[0] - notificationText.getWidth() - 10);
                         notificationText.setY(location[1] - (notificationText.getHeight() / 2));
                         notificationText.setVisibility(View.VISIBLE);
@@ -502,50 +447,8 @@ public class BaseActivity extends AppCompatActivity {
                         Log.e("Badge", "Could not find overflow button either");
                     }
                 }
-            }, 300); // Delay to ensure views are laid out
+            }, 300);
         }
-
         return result;
     }
-
-
-
-   /* private void updateNotificationBadgePosition() {
-        if (notificationText != null && materialToolbar != null) {
-            final MenuItem notificationItem = materialToolbar.getMenu().findItem(R.id.notification);
-            if (notificationItem != null) {
-                materialToolbar.post(() -> {
-                    // Try to find the action view in the toolbar
-                    for (int i = 0; i < materialToolbar.getChildCount(); i++) {
-                        View child = materialToolbar.getChildAt(i);
-                        // Look for the overflow menu or action items
-                        if (child instanceof ActionMenuView) {
-                            ActionMenuView menuView = (ActionMenuView) child;
-                            for (int j = 0; j < menuView.getChildCount(); j++) {
-                                View menuItem = menuView.getChildAt(j);
-                                if (menuItem.getId() == R.id.notification) {
-                                    // Found it, now position the badge
-                                    int[] location = new int[2];
-                                    menuItem.getLocationInWindow(location);
-
-                                    // Calculate center point of the notification icon
-                                    int centerX = location[0] + (menuItem.getWidth() / 2);
-                                    int centerY = location[1] + (menuItem.getHeight() / 2);
-
-                                    // Adjust badge position to be centered on icon
-                                    // Offset by half the badge width/height to center it properly
-                                    notificationText.setX(centerX - (notificationText.getWidth() / 2));
-                                    notificationText.setY(centerY - (notificationText.getHeight() / 2));
-
-                                    // Make sure it's visible
-                                    notificationText.setVisibility(View.VISIBLE);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-    }*/
 }

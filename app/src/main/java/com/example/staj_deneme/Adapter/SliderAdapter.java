@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder> {
 
     private Context context;
-    private ArrayList<Object> imageList; // URI, Bitmap ve String URL'leri destekler
+    private ArrayList<Object> imageList;
 
     public SliderAdapter(Context context, ArrayList<Object> imageList) {
         this.context = context;
@@ -39,11 +39,11 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
         Object image = imageList.get(position);
 
-        if (image instanceof String) { // URL türündeyse
+        if (image instanceof String) {
             Glide.with(holder.itemView.getContext()).load((String) image).into(holder.imageView);
-        } else if (image instanceof Uri) { // URI türündeyse
+        } else if (image instanceof Uri) {
             Glide.with(holder.itemView.getContext()).load((Uri) image).into(holder.imageView);
-        } else if (image instanceof Bitmap) { // Bitmap türündeyse
+        } else if (image instanceof Bitmap) {
             holder.imageView.setImageBitmap((Bitmap) image);
         }
         holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -65,11 +65,11 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
 
         ImageView dialogImageView = imageDialog.findViewById(R.id.dialogImageView);
 
-        if (image instanceof String) { // URL türündeyse
+        if (image instanceof String) {
             Glide.with(context).load((String) image).into(dialogImageView);
-        } else if (image instanceof Uri) { // URI türündeyse
+        } else if (image instanceof Uri) {
             Glide.with(context).load((Uri) image).into(dialogImageView);
-        } else if (image instanceof Bitmap) { // Bitmap türündeyse
+        } else if (image instanceof Bitmap) {
             Bitmap resizedBitmap = resizeBitmap((Bitmap) image, 1080, 1920);
             dialogImageView.setImageBitmap((Bitmap) resizedBitmap);
         }
@@ -88,14 +88,13 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         }
     }
     public void setImageList(ArrayList<Object> newImageList) {
-        notifyDataSetChanged(); // **Adapter'e verilerin değiştiğini bildir**
+        notifyDataSetChanged();
     }
 
     private Bitmap resizeBitmap(Bitmap original, int maxWidth, int maxHeight) {
         int width = original.getWidth();
         int height = original.getHeight();
 
-        // Boyut oranlarını koruyarak yeni boyutları hesapla
         float aspectRatio = (float) width / (float) height;
         if (width > height) {
             width = maxWidth;
@@ -105,7 +104,6 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
             width = (int) (height * aspectRatio);
         }
 
-        // Yeni boyutta bitmap'i oluştur
         return Bitmap.createScaledBitmap(original, width, height, false);
     }
 

@@ -88,9 +88,8 @@ public class TestErrorImage extends BaseActivity {
                 desc.setText(descList.get(position));
                 date.setText(dateList.get(position));
 
-                String imageData = imageList.get(position);  // Get the Base64 image string
+                String imageData = imageList.get(position);
 
-                // Check if the image data is not null or empty before decoding
                 if (imageData != null && !imageData.isEmpty()) {
                     try {
                         byte[] decodedBytes = Base64.decode(imageData, Base64.DEFAULT);
@@ -98,10 +97,10 @@ public class TestErrorImage extends BaseActivity {
                         imgURL.setImageBitmap(bitmap);
                     } catch (Exception e) {
                         Log.e("ImageDecodeError", "Error decoding image: " + e.getMessage());
-                        imgURL.setImageResource(R.drawable.baseline_home_24); // Set a default placeholder image
+                        imgURL.setImageResource(R.drawable.baseline_home_24);
                     }
                 } else {
-                    imgURL.setImageResource(R.drawable.baseline_home_24); // Use a placeholder if no image data
+                    imgURL.setImageResource(R.drawable.baseline_home_24);
                 }
                 return convertView;
             }

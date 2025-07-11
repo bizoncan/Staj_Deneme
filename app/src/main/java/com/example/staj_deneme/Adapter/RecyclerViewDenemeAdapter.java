@@ -58,7 +58,7 @@ public class RecyclerViewDenemeAdapter extends RecyclerView.Adapter<RecyclerView
             h.startDate.setText(w.getWorkOrderStartDate());
 
             if (w.isClosed()) {
-                setGreen(h.light2); // Tanımladığın method
+                setGreen(h.light2);
                 h.endDate.setText(w.getWorkOrderEndDate());
             } else {
                 h.endDate.setText("İş kaydı daha sonlanmadı.");
@@ -71,7 +71,6 @@ public class RecyclerViewDenemeAdapter extends RecyclerView.Adapter<RecyclerView
         return workOrders.size();
     }
 
-    // ViewHolder'lar
     public class WorkOrderViewHolder extends RecyclerView.ViewHolder {
         TextView title, desc, startDate, endDate;
         View light2;
@@ -92,8 +91,7 @@ public class RecyclerViewDenemeAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    // Bu metodu Activity'den de taşıyabilirsin
     private void setGreen(View view) {
-        view.setBackgroundResource(R.drawable.light_circle); // örnek
+        view.setBackgroundResource(R.drawable.light_circle);
     }
 }

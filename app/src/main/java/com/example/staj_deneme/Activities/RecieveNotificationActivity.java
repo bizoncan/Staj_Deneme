@@ -72,49 +72,45 @@ public class RecieveNotificationActivity extends AppCompatActivity {
         });
 
 
-    notificationsListView = findViewById(R.id.notificationsbase_listview);
-    titleList = new ArrayList<>();
-    machineIdList = new ArrayList<>();
-    descList = new ArrayList<>();
-    idList= new ArrayList<>();
-    adapter = new BaseAdapter() {
-        @Override
-        public int getCount() {
+        notificationsListView = findViewById(R.id.notificationsbase_listview);
+        titleList = new ArrayList<>();
+        machineIdList = new ArrayList<>();
+        descList = new ArrayList<>();
+        idList= new ArrayList<>();
+        adapter = new BaseAdapter() {
+            @Override
+            public int getCount() {
                 return titleList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return titleList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
-                convertView = LayoutInflater.from(RecieveNotificationActivity.this).inflate(R.layout.notification_layout,parent,false);
             }
-            TextView title_text = convertView.findViewById(R.id.title_textview);
-            TextView machineId_text = convertView.findViewById(R.id.machineId_textview);
-            TextView desc_text = convertView.findViewById(R.id.description_textview);
 
-            title_text.setText(titleList.get(position));
-            machineId_text.setText(machineIdList.get(position));
-            desc_text.setText(descList.get(position));
-            return convertView;
-        }
-    };
-    notificationText=findViewById(R.id.notification_textview);
-    notificationsListView.setAdapter(adapter);
-    startDatabasePolling();
+            @Override
+            public Object getItem(int position) {
+                return titleList.get(position);
+            }
 
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
 
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if(convertView == null){
+                    convertView = LayoutInflater.from(RecieveNotificationActivity.this).inflate(R.layout.notification_layout,parent,false);
+                }
+                TextView title_text = convertView.findViewById(R.id.title_textview);
+                TextView machineId_text = convertView.findViewById(R.id.machineId_textview);
+                TextView desc_text = convertView.findViewById(R.id.description_textview);
 
-
+                title_text.setText(titleList.get(position));
+                machineId_text.setText(machineIdList.get(position));
+                desc_text.setText(descList.get(position));
+                return convertView;
+            }
+        };
+        notificationText=findViewById(R.id.notification_textview);
+        notificationsListView.setAdapter(adapter);
+        startDatabasePolling();
 
     }
     public void bildirim_yukle(View view){
@@ -138,11 +134,11 @@ public class RecieveNotificationActivity extends AppCompatActivity {
             @Override
             public void run() {
                 checkForNewNotifications();
-                handler.postDelayed(this, POLL_INTERVAL); // Tekrar çalıştır
+                handler.postDelayed(this, POLL_INTERVAL);
             }
         };
 
-        handler.post(pollRunnable); // Başlat
+        handler.post(pollRunnable);
     }
     public void checkForNewNotifications(){
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();

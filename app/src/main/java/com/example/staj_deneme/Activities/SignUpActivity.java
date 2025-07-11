@@ -56,25 +56,25 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
         myAuth.createUserWithEmailAndPassword(email,sifre).addOnCompleteListener(task-> {
-                    if(task.isSuccessful())
-                    {
-                        Map<String,Object> userData=new HashMap<>();
-                        userData.put("Email",email);
+            if(task.isSuccessful())
+            {
+                Map<String,Object> userData=new HashMap<>();
+                userData.put("Email",email);
 
-                        firestore.collection("Kullanicilar").document(kullaniciNo.getText().toString().trim()).set(userData).addOnSuccessListener(e->{
-                            Intent sayfa = new Intent(this, LoginActivity.class);
-                            startActivity(sayfa);
-                                }).addOnFailureListener(e->{
-                            hataMesaji.setText("HATA: " + e.getMessage());
-                            hataMesaji.setVisibility(View.VISIBLE);
-                        });
-                    }
-                    else{
-                        hataMesaji.setVisibility(View.VISIBLE);
-                        hataMesaji.setText("HATA: " + task.getException().getMessage());
-
-                    }
+                firestore.collection("Kullanicilar").document(kullaniciNo.getText().toString().trim()).set(userData).addOnSuccessListener(e->{
+                    Intent sayfa = new Intent(this, LoginActivity.class);
+                    startActivity(sayfa);
+                }).addOnFailureListener(e->{
+                    hataMesaji.setText("HATA: " + e.getMessage());
+                    hataMesaji.setVisibility(View.VISIBLE);
                 });
+            }
+            else{
+                hataMesaji.setVisibility(View.VISIBLE);
+                hataMesaji.setText("HATA: " + task.getException().getMessage());
+
+            }
+        });
     }
     public boolean isInt(String s){
         try{

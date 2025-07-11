@@ -160,11 +160,11 @@ public class QrScanActivity extends AppCompatActivity {
             @Override
             public void run() {
                 checkForNewNotifications();
-                handler.postDelayed(this, POLL_INTERVAL); // Tekrar çalıştır
+                handler.postDelayed(this, POLL_INTERVAL);
             }
         };
 
-        handler.post(pollRunnable); // Başlat
+        handler.post(pollRunnable);
     }
     public void checkForNewNotifications(){
         RecieveNotificationInterface recieveNotification = RetrofitClient.getApiServiceNotification();

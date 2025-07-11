@@ -47,21 +47,21 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         firestore.collection("Kullanicilar").document(kullaniciNo.getText().toString().trim()).get().addOnSuccessListener(documentSnapshot -> {
-           if(documentSnapshot.exists()){
-               String email = documentSnapshot.getString("Email").trim();
-               if(email==null) {
-                   hataMesaji.setVisibility(View.VISIBLE);
-                   hataMesaji.setText("HATA: Kullanıcı bulunamadı");
-               }
-               else{
-                   emailIleGiris(email);
-                   Toast.makeText(this,"Giriş başarılı",Toast.LENGTH_LONG).show();
-               }
-           }
-           else{
-               hataMesaji.setVisibility(View.VISIBLE);
-               hataMesaji.setText("HATA: Bu kullanıcı numarası bulunamadı.");
-           }
+            if(documentSnapshot.exists()){
+                String email = documentSnapshot.getString("Email").trim();
+                if(email==null) {
+                    hataMesaji.setVisibility(View.VISIBLE);
+                    hataMesaji.setText("HATA: Kullanıcı bulunamadı");
+                }
+                else{
+                    emailIleGiris(email);
+                    Toast.makeText(this,"Giriş başarılı",Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                hataMesaji.setVisibility(View.VISIBLE);
+                hataMesaji.setText("HATA: Bu kullanıcı numarası bulunamadı.");
+            }
         }).addOnFailureListener(e->{
             hataMesaji.setVisibility(View.VISIBLE);
             hataMesaji.setText("HATA: "+ e.getMessage());

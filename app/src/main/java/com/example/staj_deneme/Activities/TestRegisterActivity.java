@@ -123,30 +123,30 @@ public class TestRegisterActivity extends AppCompatActivity {
             return false;
         }
         if (p.length()<9){
-           Toast.makeText(TestRegisterActivity.this,"Şifre dokuz karakterden uzun olamalıdır",Toast.LENGTH_LONG).show();
+            Toast.makeText(TestRegisterActivity.this,"Şifre dokuz karakterden uzun olamalıdır",Toast.LENGTH_LONG).show();
             hataMesaji.setText("Şifre dokuz karakterden uzun olamalıdır");
             hataMesaji.setVisibility(View.VISIBLE);
-           return false;
-       }
-       for(char ch: specialCharacters.toCharArray()) {
-           if (p.contains(String.valueOf(ch))) {
-               cc = true;
-               break;
-           }
+            return false;
+        }
+        for(char ch: specialCharacters.toCharArray()) {
+            if (p.contains(String.valueOf(ch))) {
+                cc = true;
+                break;
+            }
 
-       }
-       if (!cc) {
-           Toast.makeText(TestRegisterActivity.this,"Şifre en az bir özel karakter içermeli",Toast.LENGTH_LONG).show();
-           hataMesaji.setText("Şifre en az bir özel karakter içermeli");
-           hataMesaji.setVisibility(View.VISIBLE);
-           return false;
-       }
-       if (!p.chars().anyMatch(Character::isUpperCase)){
-           Toast.makeText(TestRegisterActivity.this,"Şifre en az bir büyük harf içermeli",Toast.LENGTH_LONG).show();
-           hataMesaji.setText("Şifre en az bir büyük harf içermeli");
-           hataMesaji.setVisibility(View.VISIBLE);
-           return false;
-       }
+        }
+        if (!cc) {
+            Toast.makeText(TestRegisterActivity.this,"Şifre en az bir özel karakter içermeli",Toast.LENGTH_LONG).show();
+            hataMesaji.setText("Şifre en az bir özel karakter içermeli");
+            hataMesaji.setVisibility(View.VISIBLE);
+            return false;
+        }
+        if (!p.chars().anyMatch(Character::isUpperCase)){
+            Toast.makeText(TestRegisterActivity.this,"Şifre en az bir büyük harf içermeli",Toast.LENGTH_LONG).show();
+            hataMesaji.setText("Şifre en az bir büyük harf içermeli");
+            hataMesaji.setVisibility(View.VISIBLE);
+            return false;
+        }
         if (!p.chars().anyMatch(Character::isDigit)){
             Toast.makeText(TestRegisterActivity.this,"Şifre en az bir rakam içermeli",Toast.LENGTH_LONG).show();
             hataMesaji.setText("Şifre en az bir rakam içermeli");
@@ -154,7 +154,7 @@ public class TestRegisterActivity extends AppCompatActivity {
             return false;
         }
 
-       return true;
+        return true;
     }
     public  void isUserExist(String username, String email,UserExistCallback userExistCallback){
 

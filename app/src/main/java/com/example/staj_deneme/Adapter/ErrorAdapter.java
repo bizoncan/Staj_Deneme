@@ -113,7 +113,6 @@ public class ErrorAdapter extends BaseAdapter {
         }*/
         holder.machindeId.setText("Makine adı: "+currSup.getMachineName());
 
-// Makine parça adı
         /*boolean foundPart = false;
         if (curr.getMachinePartId() != null) {
             for (ErrorInfoModel e : errorInfos) {
@@ -151,7 +150,6 @@ public class ErrorAdapter extends BaseAdapter {
         return convertView;
     }
     private void loadImage(ImageView imageView, String base64Image) {
-        // Consider using a background thread or image loading library
         if (base64Image != null) {
             try {
                 byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);

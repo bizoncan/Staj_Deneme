@@ -89,7 +89,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
         machinePartIdEditText.setText(getIntent().getStringExtra("machinePartID"));
         errorDateEdt = findViewById(R.id.errorDate_edt);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));//Türkiye Saat Dilimi
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));
         currentDate = dateFormat.format(new Date());
         errorDateEdt.setText(currentDate);
         errorTypeEdt=findViewById(R.id.errorType_edt);
@@ -111,7 +111,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
         String us_na = sharedPreferences.getString("Username","");
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        us_na = "admin";//değişecek
+        us_na = "admin";
 
         errorInterface.getUserId(us_na).enqueue(new Callback<Integer>() {
             @Override
@@ -138,8 +138,6 @@ public class NotificationAddErrorActivity extends BaseActivity {
     private void startTimer() {
         startTime = SystemClock.elapsedRealtime();
         isTimerRunning = true;
-
-        // Update timer every 10 milliseconds (0.01 second)
         timerHandler.postDelayed(timerRunnable, 10);
     }
     private void stopTimer() {
@@ -172,19 +170,15 @@ public class NotificationAddErrorActivity extends BaseActivity {
         if(!machinePartIdEditText.getText().toString().isEmpty()) errorModel.setMachinePartId(Integer.parseInt(machinePartIdEditText.getText().toString()));
         if(selectedImageUris.size() != 0) {
             try {
-                // Convert image to byte array
                 byte[] imageBytes = convertImageToByteArray(selectedImageUris.get(0));
 
                 String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-                // Set the Base64 string to your error model
                 errorModel.setErrorImage(base64Image);
 
-                // If you need to include the image type/extension
                 String imageType = getContentResolver().getType(selectedImageUris.get(0));
                 errorModel.setErrorImageType(imageType);
                 isPhotoTaken = true;
-                // Submit to API
             } catch (IOException e) {
                 Toast.makeText(NotificationAddErrorActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -274,16 +268,13 @@ public class NotificationAddErrorActivity extends BaseActivity {
             sliderAdapter.setImageList(sliderImages);
         }
         else if(requestCode== CAMERA_REQUEST && resultCode == RESULT_OK
-        && data != null ){
+                && data != null ){
             if (captureImageUri != null) {
                 selectedImageUris.add(captureImageUri);
                 sliderImages.add(captureImageUri);
                 sliderAdapter.setImageList(sliderImages);
                 Toast.makeText(this, "Image captured successfully", Toast.LENGTH_SHORT).show();
             }
-            /*tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
-            sliderImages.add((Bitmap) data.getExtras().get("data"));
-            sliderAdapter.setImageList(sliderImages);*/
         }
     }
     public void takePicture(View view){
@@ -296,9 +287,6 @@ public class NotificationAddErrorActivity extends BaseActivity {
             permissionsNeeded.add(Manifest.permission.CAMERA);
         }
 
-        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }*/
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -326,24 +314,20 @@ public class NotificationAddErrorActivity extends BaseActivity {
     }
     private Uri captureImageUri;
     private void openCamera() {
-        // Create content values with metadata for the new image
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Camera_Image_" + System.currentTimeMillis());
         values.put(MediaStore.Images.Media.DESCRIPTION, "Photo captured by app");
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
 
         try {
-            // Insert a new entry in the MediaStore and get the resulting URI
             captureImageUri = getContentResolver().insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     values
             );
 
-            // Create camera intent and tell it to save the full-resolution image to our URI
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
 
-            // Start camera activity without checking resolveActivity (optional safety check)
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
         } catch (Exception e) {
@@ -357,8 +341,6 @@ public class NotificationAddErrorActivity extends BaseActivity {
         @Override
         public void run() {
             timeElapsed = SystemClock.elapsedRealtime() - startTime;
-            // You can log the time for debugging if needed
-            // Log.d("Timer", "Time elapsed: " + timeElapsed + " ms");
 
             timerHandler.postDelayed(this, 10);
         }
@@ -367,14 +349,12 @@ public class NotificationAddErrorActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Make sure to stop the timer when the activity is destroyed
         timerHandler.removeCallbacks(timerRunnable);
     }
     private byte[] convertImageToByteArray(Uri imageUri) throws IOException {
         InputStream inputStream = getContentResolver().openInputStream(imageUri);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 
-        // This buffer size can be adjusted
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
 
@@ -401,7 +381,7 @@ public class NotificationAddErrorActivity extends BaseActivity {
     private byte[] compressImage(byte[] imageBytes) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream); // 70% quality
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
         return outputStream.toByteArray();
     }
 

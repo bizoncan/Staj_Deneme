@@ -1,5 +1,4 @@
 package com.example.staj_deneme.Activities;
-
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -55,7 +54,6 @@ import retrofit2.Response;
 
 public class AddErrorManuelActivity extends BaseActivity {
     EditText errorTypeEdt,errorDateEdt,errorDescEdt;
-    //Spinner machineIdSpinner,machinePartSpinner;
     TextInputLayout machineDropdownLayout,machinePartDropdownLayout;
     AutoCompleteTextView machineDropdown,machinePartDropdown;
     ArrayAdapter<String> adapter,mpAdapter;
@@ -95,50 +93,19 @@ public class AddErrorManuelActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_error_manuel);
         wait_Id = false;
-        //machineIdSpinner = findViewById(R.id.machineId_spinner);
         machineDropdown = findViewById(R.id.machineId_spinner);
         adapter = new ArrayAdapter<>(AddErrorManuelActivity.this, R.layout.dropdown_item,machineNameList);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fillMachineSpinner();
-        //machineIdSpinner.setAdapter(adapter);
         machineDropdown.setAdapter(adapter);
-        /*machineIdSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                machineName = parent.getItemAtPosition(position).toString();
-                machineId = machineIdList.get(machineNameList.indexOf(machineName));
-                fillMachinePartSpinner();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                machineId = null;
-            }
-        });*/
         machineDropdown.setOnItemClickListener((parent, view, position, id) -> {
             machineName = (String) parent.getItemAtPosition(position);
             machineId = machineIdList.get(machineNameList.indexOf(machineName));
             fillMachinePartSpinner();
         });
-       
 
-        //machinePartSpinner = findViewById(R.id.machinePartId_spinner);
+
         machinePartDropdown = findViewById(R.id.machinePartId_spinner);
         mpAdapter = new ArrayAdapter<>(AddErrorManuelActivity.this, R.layout.dropdown_item,machinePartNameList);
-        //mpAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        /*machinePartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                machinePartName = parent.getItemAtPosition(position).toString();
-                machinePartId = machinePartIdList.get(machinePartNameList.indexOf(machinePartName));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                machinePartId = null;
-            }
-        });
-        machinePartSpinner.setAdapter(mpAdapter);*/
         machinePartDropdown.setOnItemClickListener((parent, view, position, id) -> {
             machinePartName = parent.getItemAtPosition(position).toString();
             if (machinePartName != "-"){
@@ -153,7 +120,7 @@ public class AddErrorManuelActivity extends BaseActivity {
 
         errorDateEdt = findViewById(R.id.manuelerrordate_edittext);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));//Türkiye Saat Dilimi
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"));
         currentDate = dateFormat.format(new Date());
         errorDateEdt.setText(currentDate);
         errorTypeEdt=findViewById(R.id.manuelErrorType_edittext);
@@ -195,19 +162,15 @@ public class AddErrorManuelActivity extends BaseActivity {
         if(machinePartId != null) errorModel.setMachinePartId(machinePartId);
         if(selectedImageUris.size() != 0) {
             try {
-                // Convert image to byte array
                 byte[] imageBytes = convertImageToByteArray(selectedImageUris.get(0));
 
                 String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-                // Set the Base64 string to your error model
                 errorModel.setErrorImage(base64Image);
 
-                // If you need to include the image type/extension
                 String imageType = getContentResolver().getType(selectedImageUris.get(0));
                 errorModel.setErrorImageType(imageType);
                 isPhotoTaken = true;
-                // Submit to API
             } catch (IOException e) {
                 Toast.makeText(AddErrorManuelActivity.this, "Resim yüklenirken hata oluştu: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -267,7 +230,6 @@ public class AddErrorManuelActivity extends BaseActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs",MODE_PRIVATE);
         String us_na = sharedPreferences.getString("Username","");
         ErrorInterface errorInterface = RetrofitClient.getApiServiceError();
-        //us_na = "admin";//değişecek
 
         errorInterface.getUserId(us_na).enqueue(new Callback<Integer>() {
             @Override
@@ -300,7 +262,6 @@ public class AddErrorManuelActivity extends BaseActivity {
         InputStream inputStream = getContentResolver().openInputStream(imageUri);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 
-        // This buffer size can be adjusted
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
 
@@ -329,14 +290,9 @@ public class AddErrorManuelActivity extends BaseActivity {
     }
     private void requestCameraPermission() {
         List<String> permissionsNeeded = new ArrayList<>();
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissionsNeeded.add(Manifest.permission.CAMERA);
         }
-
-        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }*/
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -353,24 +309,20 @@ public class AddErrorManuelActivity extends BaseActivity {
     }
     private Uri captureImageUri;
     private void openCamera() {
-        // Create content values with metadata for the new image
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Camera_Image_" + System.currentTimeMillis());
         values.put(MediaStore.Images.Media.DESCRIPTION, "Photo captured by app");
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
 
         try {
-            // Insert a new entry in the MediaStore and get the resulting URI
             captureImageUri = getContentResolver().insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     values
             );
 
-            // Create camera intent and tell it to save the full-resolution image to our URI
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
 
-            // Start camera activity without checking resolveActivity (optional safety check)
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
         } catch (Exception e) {
@@ -388,30 +340,21 @@ public class AddErrorManuelActivity extends BaseActivity {
             selectedImageUris.add(data.getData());
             sliderImages.add(data.getData());
             sliderAdapter.setImageList(sliderImages);
-            // Optionally show the selected image in an ImageView
-            // imageView.setImageURI(selectedImageUri);
         }
         else if(requestCode== CAMERA_REQUEST && resultCode == RESULT_OK
-                ){
+        ){
             if (captureImageUri != null) {
-                // Add the URI to your collections
                 selectedImageUris.add(captureImageUri);
                 sliderImages.add(captureImageUri);
                 sliderAdapter.setImageList(sliderImages);
-                // Optional: Display a success message
                 Toast.makeText(this, "Image captured successfully", Toast.LENGTH_SHORT).show();
             }
-           /* tempBitmapPhotos.add((Bitmap) data.getExtras().get("data"));
-            sliderImages.add( data.getExtras().get("data"));
-            sliderAdapter.setImageList(sliderImages);*/
         }
     }
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
             timeElapsed = SystemClock.elapsedRealtime() - startTime;
-            // You can log the time for debugging if needed
-            // Log.d("Timer", "Time elapsed: " + timeElapsed + " ms");
 
             timerHandler.postDelayed(this, 10);
         }
@@ -468,7 +411,6 @@ public class AddErrorManuelActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Make sure to stop the timer when the activity is destroyed
         timerHandler.removeCallbacks(timerRunnable);
     }
     public void resimleri_ekle(){

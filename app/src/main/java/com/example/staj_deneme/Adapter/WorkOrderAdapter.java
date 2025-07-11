@@ -61,7 +61,6 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
         if (machineName ==""){
             machineName = "Makine bilgisi bulunamadı";
         }
-        //String machineName = machineNames.get(position);
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Date date = null;
@@ -75,13 +74,12 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
         holder.titleTextView.setText(workOrder.getTitle());
         holder.machineNameTextView.setText("Makine: " + machineName);
         holder.startDateTextView.setText("Başlangıç: " + formattedDate);
-       // holder.statusTextView.setText(workOrder.isClosed() ? "İş Bitti" : "İş Bitmedi");
         holder.statusLight.setBackgroundResource(workOrder.isClosed() ? R.color.green : R.color.redred);
         Glide.with(holder.itemView.getContext())
-                        .load(imageUrl)
-                        .placeholder(R.drawable.baseline_no_photography_24)
-                        .error(R.drawable.baseline_no_photography_24)
-                        .into(holder.imageView);
+                .load(imageUrl)
+                .placeholder(R.drawable.baseline_no_photography_24)
+                .error(R.drawable.baseline_no_photography_24)
+                .into(holder.imageView);
     }
 
     @Override

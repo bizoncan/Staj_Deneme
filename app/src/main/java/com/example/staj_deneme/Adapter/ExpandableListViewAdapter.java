@@ -85,39 +85,30 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         CheckBox checkBox = convertView.findViewById(R.id.childCheckbox);
         textView.setText(childText);
 
-        // Ensure the HashMap for this group exists
         if (!selectedItems.containsKey(groupPosition)) {
             selectedItems.put(groupPosition, new HashMap<>());
         }
 
-        // Get checked state for this item
         boolean isChecked = selectedItems.get(groupPosition).getOrDefault(childPosition, false);
 
-        // Important: Remove the listener before setting checked state to avoid recursive calls
         checkBox.setOnCheckedChangeListener(null);
         checkBox.setChecked(isChecked);
 
-        // Set a new listener
         checkBox.setOnCheckedChangeListener((buttonView, isChecked1) -> {
             if (isChecked1) {
-                // If this checkbox is being checked, uncheck all others in the same group
                 HashMap<Integer, Boolean> groupSelections = selectedItems.get(groupPosition);
 
-                // First clear all selections for this group
                 for (Integer key : groupSelections.keySet()) {
                     if (key != childPosition) {
                         groupSelections.put(key, false);
                     }
                 }
 
-                // Then set this item as selected
                 groupSelections.put(childPosition, true);
             } else {
-                // If unchecking, just update this item
                 selectedItems.get(groupPosition).put(childPosition, false);
             }
 
-            // Notify adapter to refresh all views
             notifyDataSetChanged();
         });
 
