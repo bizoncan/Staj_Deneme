@@ -14,17 +14,17 @@ Uygulamanın mevcut sürümünde aşağıdaki temel işlevler bulunmaktadır:
 ## Ekran Görüntüleri
 
 ### 1. Kullanıcı Giriş Ekranı
-!(images/Screenshot_20250522_112317.png)
+![Kullanıcı Giriş Ekranı](images/Screenshot_20250522_112317.png)
 
 ### 2. İş Emri Listesi Ekranı
-!(images/Screenshot_20250531_143216.png)
+![İş Emri Listesi Ekranı](images/Screenshot_20250531_143216.png)
 
 ### 3. İş Emri Detay Sayfası
-!(images/Screenshot_20250531_143235.png)
+![İş Emri Detay Sayfası](images/Screenshot_20250531_143235.png)
 
 ### 4. İş Raporu Ekleme Ekranı
-!(images/Screenshot_20250622_140034.png)
-!(images/Screenshot_20250622_140100.png)
+![İş Raporu Ekleme 1](images/Screenshot_20250622_140034.png)  
+![İş Raporu Ekleme 2](images/Screenshot_20250622_140100.png)
 
 ## Teknik Yapı
 
@@ -40,7 +40,7 @@ Uygulamanın mevcut sürümünde aşağıdaki temel işlevler bulunmaktadır:
 
 1.  Bu repoyu klonlayın:
     ```bash
-    git clone https://github.com/KULLANICI_ADINIZ/REPO_ADINIZ.git
+    git clone https://github.com/bizoncan/Staj_Deneme.git
     ```
 2.  Projeyi Android Studio'da açın.
 3.  Gradle senkronizasyonunun tamamlanmasını bekleyin ve projeyi derleyin.
