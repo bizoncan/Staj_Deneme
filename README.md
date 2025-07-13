@@ -45,4 +45,4 @@ Uygulamanın mevcut sürümünde aşağıdaki temel işlevler bulunmaktadır:
 2.  Projeyi Android Studio'da açın.
 3.  Gradle senkronizasyonunun tamamlanmasını bekleyin ve projeyi derleyin.
 
-> **Önemli Not:** Bu mobil uygulamanın çalışabilmesi için, API isteklerine cevap verecek olan **ASP.NET MVC Backend Projesi**'nin çalışır durumda olması gerekmektedir. Backend projesinin reposuna [buradan]([BACKEND_PROJESININ_GITHUB_LINKINI_BURAYA_EKLEYIN]) ulaşabilirsiniz.
+> **Önemli Not:** Bu mobil uygulamanın çalışabilmesi için, API'nin çalışır durumda olamsı gerekmektedir. Backend projesinin reposuna [buradan]([BACKEND_PROJESININ_GITHUB_LINKINI_BURAYA_EKLEYIN]) ulaşabilirsiniz.
