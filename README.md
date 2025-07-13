@@ -48,7 +48,3 @@ azın kamerasıyla yeni bir fotoğraf çekme veya galeriden mevcut bir fotoğraf
 3.  Gradle senkronizasyonunun tamamlanmasını bekleyin ve projeyi derleyin.
 
 > **Önemli Not:** Bu mobil uygulamanın çalışabilmesi için, API isteklerine cevap verecek olan **ASP.NET MVC Backend Projesi**'nin çalışır durumda olması gerekmektedir. Backend projesinin reposuna [buradan]([BACKEND_PROJESININ_GITHUB_LINKINI_BURAYA_EKLEYIN]) ulaşabilirsiniz.
-
-## Lisans
-
-Bu proje [MIT](https://choosealicense.com/licenses/mit/) lisansı altında dağıtılmaktadır. Daha fazla bilgi için `LICENSE` dosyasına bakınız.
